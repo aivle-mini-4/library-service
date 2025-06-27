@@ -1,0 +1,142 @@
+name: github-action
+run-name: ${{ github.actor }} is out building GitHub Actions
+
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:        
+      - '**' 
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build Maven Projects
+        run: |
+          mvn clean package -f ./admintask/pom.xml
+          mvn clean package -f ./monthlysubscriptionmanagement/pom.xml
+          mvn clean package -f ./userinfomanagement/pom.xml
+          mvn clean package -f ./authidentity/pom.xml
+          mvn clean package -f ./pointmanagement/pom.xml
+          mvn clean package -f ./scriptmanagement/pom.xml
+          mvn clean package -f ./userhistorymanagement/pom.xml
+          mvn clean package -f ./aiservice/pom.xml
+          mvn clean package -f ./booksmanagement/pom.xml
+          mvn clean package -f ./booksubstriptionmanagement/pom.xml
+
+      - name: Docker Build and push for Admintask
+        uses: docker/build-push-action@v4
+        with:
+          context: ./admintask
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/admintask:latest
+            ghcr.io/${{ github.repository }}/admintask:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Monthlysubscriptionmanagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./monthlysubscriptionmanagement
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/monthlysubscriptionmanagement:latest
+            ghcr.io/${{ github.repository }}/monthlysubscriptionmanagement:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Userinfomanagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./userinfomanagement
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/userinfomanagement:latest
+            ghcr.io/${{ github.repository }}/userinfomanagement:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Authidentity
+        uses: docker/build-push-action@v4
+        with:
+          context: ./authidentity
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/authidentity:latest
+            ghcr.io/${{ github.repository }}/authidentity:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Pointmanagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./pointmanagement
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/pointmanagement:latest
+            ghcr.io/${{ github.repository }}/pointmanagement:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Scriptmanagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./scriptmanagement
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/scriptmanagement:latest
+            ghcr.io/${{ github.repository }}/scriptmanagement:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Userhistorymanagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./userhistorymanagement
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/userhistorymanagement:latest
+            ghcr.io/${{ github.repository }}/userhistorymanagement:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Aiservice
+        uses: docker/build-push-action@v4
+        with:
+          context: ./aiservice
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/aiservice:latest
+            ghcr.io/${{ github.repository }}/aiservice:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Booksmanagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./booksmanagement
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/booksmanagement:latest
+            ghcr.io/${{ github.repository }}/booksmanagement:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Booksubstriptionmanagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./booksubstriptionmanagement
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/booksubstriptionmanagement:latest
+            ghcr.io/${{ github.repository }}/booksubstriptionmanagement:${{ github.ref_name }}
+            

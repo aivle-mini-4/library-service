@@ -1,0 +1,132 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+#<<< API Gateway / Routes
+      routes:
+        - id: admintask
+          uri: http://localhost:8082
+          predicates:
+            - Path=/authorapprovals/**, /pointpolicies/**, /pointPolicyViews/**
+        - id: monthlysubscriptionmanagement
+          uri: http://localhost:8083
+          predicates:
+            - Path=/subscribes/**, /subscribeViews/**
+        - id: userinfomanagement
+          uri: http://localhost:8084
+          predicates:
+            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, /writerPages/**, /adminPages/**, /userPages/**
+        - id: authidentity
+          uri: http://localhost:8085
+          predicates:
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
+        - id: pointmanagement
+          uri: http://localhost:8086
+          predicates:
+            - Path=/points/**, /pointViews/**
+        - id: scriptmanagement
+          uri: http://localhost:8087
+          predicates:
+            - Path=/manuscripts/**, /manuscriptPages/**
+        - id: userhistorymanagement
+          uri: http://localhost:8088
+          predicates:
+            - Path=/viewHistories/**, /favorites/**, /queryViewHistories/**, /queryFavoriteLists/**
+        - id: aiservice
+          uri: http://localhost:8089
+          predicates:
+            - Path=/aiServices/**, 
+        - id: booksmanagement
+          uri: http://localhost:8090
+          predicates:
+            - Path=/books/**, /registeredBestsellerViews/**, /registeredBookViews/**
+        - id: booksubstriptionmanagement
+          uri: http://localhost:8091
+          predicates:
+            - Path=/bookSubscriptions/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+#>>> API Gateway / Routes
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: admintask
+          uri: http://admintask:8080
+          predicates:
+            - Path=/authorapprovals/**, /pointpolicies/**, 
+        - id: monthlysubscriptionmanagement
+          uri: http://monthlysubscriptionmanagement:8080
+          predicates:
+            - Path=/subscribes/**, 
+        - id: userinfomanagement
+          uri: http://userinfomanagement:8080
+          predicates:
+            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, 
+        - id: authidentity
+          uri: http://authidentity:8080
+          predicates:
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
+        - id: pointmanagement
+          uri: http://pointmanagement:8080
+          predicates:
+            - Path=/points/**, 
+        - id: scriptmanagement
+          uri: http://scriptmanagement:8080
+          predicates:
+            - Path=/manuscripts/**, 
+        - id: userhistorymanagement
+          uri: http://userhistorymanagement:8080
+          predicates:
+            - Path=/viewHistories/**, /favorites/**, 
+        - id: aiservice
+          uri: http://aiservice:8080
+          predicates:
+            - Path=/aiServices/**, 
+        - id: booksmanagement
+          uri: http://booksmanagement:8080
+          predicates:
+            - Path=/books/**, 
+        - id: booksubstriptionmanagement
+          uri: http://booksubstriptionmanagement:8080
+          predicates:
+            - Path=/bookSubscriptions/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
