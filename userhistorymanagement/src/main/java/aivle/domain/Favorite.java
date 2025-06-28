@@ -12,7 +12,7 @@ import java.util.Collections;
 
 
 @Entity
-@Table(name="Favorite_table")
+@Table(name = "Favorite_table")
 @Data
 
 //<<< DDD / Aggregate Root
@@ -43,13 +43,22 @@ private Integer userId;
     public void registerFavorite(RegisterFavoriteCommand registerFavoriteCommand){
         
         //implement business logic here:
-        
+        this.bookId = registerFavoriteCommand.getBookId();
+        this.userId = registerFavoriteCommand.getUserId();
 
         aivle.external.FavoriteQuery favoriteQuery = new aivle.external.FavoriteQuery();
-        // favoriteQuery.set??()        
-          = FavoriteApplication.applicationContext
-            .getBean(aivle.external.Service.class)
-            .favorite(favoriteQuery);
+        favoriteQuery.setBookId(this.bookId);
+        favoriteQuery.setUserId(this.userId);
+        
+        
+        aivle.external.Service externalService =
+            UserhistorymanagementApplication.applicationContext
+                .getBean(aivle.external.Service.class);
+
+        
+        externalService.favorite(favoriteQuery);
+
+        repository().save(this);
 
         FavoriteRegistrerd favoriteRegistrerd = new FavoriteRegistrerd(this);
         favoriteRegistrerd.publishAfterCommit();
@@ -59,7 +68,7 @@ private Integer userId;
     public void deleteFavorite(DeleteFavoriteCommand deleteFavoriteCommand){
         
         //implement business logic here:
-        
+        repository().deleteById(deleteFavoriteCommand.getId());
 
 
         FavoriteDeleted favoriteDeleted = new FavoriteDeleted(this);

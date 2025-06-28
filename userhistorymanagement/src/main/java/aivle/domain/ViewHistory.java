@@ -47,7 +47,7 @@ public class ViewHistory {
 
     //<<< Clean Arch / Port Method
     public static void registerViewHistory(
-        월구독자도서열람됨 월구독자도서열람됨
+        MonthlyBookSubscribed MonthlyBookSubscribed
     ) {
         //implement business logic here:
 
@@ -60,7 +60,7 @@ public class ViewHistory {
         /** Example 2:  finding and process
         
 
-        repository().findById(월구독자도서열람됨.get???()).ifPresent(viewHistory->{
+        repository().findById(MonthlyBookSubscribed.get???()).ifPresent(viewHistory->{
             
             viewHistory // do something
             repository().save(viewHistory);
