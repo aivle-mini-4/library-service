@@ -1,6 +1,6 @@
 package aivle.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -19,5 +19,5 @@ public class ManuscriptPage {
     private Long authorId;
     private String title;
     private String content;
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 }

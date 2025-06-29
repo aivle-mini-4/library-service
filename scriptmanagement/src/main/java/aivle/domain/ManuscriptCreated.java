@@ -1,13 +1,14 @@
 package aivle.domain;
 
-import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalDateTime;
+
+import org.springframework.beans.BeanUtils;
+
 import lombok.*;
 
-//<<< DDD / Domain Event
-@Data
+@Getter
+@Setter
 @ToString
 public class ManuscriptCreated extends AbstractEvent {
 
@@ -15,14 +16,13 @@ public class ManuscriptCreated extends AbstractEvent {
     private Long authorId;
     private String title;
     private String content;
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
     public ManuscriptCreated(Manuscript aggregate) {
-        super(aggregate);
+        BeanUtils.copyProperties(aggregate, this);
     }
 
     public ManuscriptCreated() {
         super();
     }
 }
-//>>> DDD / Domain Event
