@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import java.util.List;
+import java.util.ArrayList;
 
 
 
@@ -20,6 +23,9 @@ public class ManuscriptController {
 
     @Autowired
     ManuscriptRepository manuscriptRepository;
+
+    @Autowired
+    ManuscriptPageRepository manuscriptPageRepository;
 
     @PostMapping
     public Manuscript createManuscript(@RequestBody Manuscript manuscript) {
@@ -42,5 +48,18 @@ public class ManuscriptController {
         Manuscript manuscript = manuscriptRepository.findById(id).orElseThrow(() -> new RuntimeException("Manuscript not found"));
         PublicationRequested publicationRequested = new PublicationRequested(manuscript);
         publicationRequested.publishAfterCommit();
+    }
+
+    @GetMapping
+    public List<ManuscriptPage> getAllManuscript() {
+        Iterable<ManuscriptPage> pages = manuscriptPageRepository.findAll();
+        List<ManuscriptPage> result = new ArrayList<>();
+        pages.forEach(result::add);
+        return result;
+    }
+
+    @GetMapping("/{id}")
+    public ManuscriptPage getManuscript(@PathVariable Long id) {
+        return manuscriptPageRepository.findById(id).orElseThrow(() -> new RuntimeException("ManuscriptPage not found"));
     }
 }
