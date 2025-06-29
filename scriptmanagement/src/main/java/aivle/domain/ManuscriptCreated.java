@@ -7,8 +7,7 @@ import org.springframework.beans.BeanUtils;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @ToString
 public class ManuscriptCreated extends AbstractEvent {
 
