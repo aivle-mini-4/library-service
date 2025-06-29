@@ -1,5 +1,8 @@
-package aivle.domain;
+package aivle.domain.event;
 
+import aivle.domain.entity.AdminAccount;
+import aivle.domain.entity.AuthorAccount;
+import aivle.domain.entity.UserAccount;
 import aivle.infra.AbstractEvent;
 import lombok.Data;
 import lombok.ToString;

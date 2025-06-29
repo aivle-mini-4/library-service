@@ -1,8 +1,9 @@
-package aivle.domain;
+package aivle.domain.repository;
 
-import aivle.domain.*;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import aivle.domain.entity.UserAccount;
 
 //<<< PoEAA / Repository
 @RepositoryRestResource(

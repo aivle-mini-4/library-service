@@ -1,4 +1,4 @@
-package aivle.domain;
+package aivle.domain.entity;
 
 import java.util.Date;
 
@@ -11,13 +11,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import aivle.AuthidentityApplication;
+import aivle.domain.command.LoginCommand;
+import aivle.domain.command.LogoutCommand;
+import aivle.domain.command.SignupCommand;
+import aivle.domain.enums.UserRole;
+import aivle.domain.event.Logged;
+import aivle.domain.event.SignedUp;
+import aivle.domain.repository.AdminAccountRepository;
 import lombok.Data;
 
 @Entity
-@Table(name = "UserAccount_table")
+@Table(name = "AdminAccount_table")
 @Data
 //<<< DDD / Aggregate Root
-public class UserAccount {
+public class AdminAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,15 +32,15 @@ public class UserAccount {
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
-    private UserRole roles = UserRole.USER;
-    private Date createdAt;
-    private Date updatedAt;
+    private UserRole roles = UserRole.ADMIN;
+    private String createdAt;
+    private String updatedAt;
 
-    public static UserAccountRepository repository() {
-        UserAccountRepository userAccountRepository = AuthidentityApplication.applicationContext.getBean(
-            UserAccountRepository.class
+    public static AdminAccountRepository repository() {
+        AdminAccountRepository adminAccountRepository = AuthidentityApplication.applicationContext.getBean(
+            AdminAccountRepository.class
         );
-        return userAccountRepository;
+        return adminAccountRepository;
     }
 
     public void signup(SignupCommand signupCommand) {
@@ -41,8 +48,8 @@ public class UserAccount {
         
         this.setEmail(signupCommand.getEmail());
         this.setPassword(signupCommand.getPassword());
-        this.setCreatedAt(new Date());
-        this.setUpdatedAt(new Date());
+        this.setCreatedAt(new Date().toString());
+        this.setUpdatedAt(new Date().toString());
         
         repository().save(this);
 
@@ -50,20 +57,17 @@ public class UserAccount {
         signedUp.publishAfterCommit();
     }
 
-
-    public void logout(LogoutCommand logoutCommand) {
-        //implement business logic here:
-
-        Loggedout loggedout = new Loggedout(this);
-        loggedout.publishAfterCommit();
-    }
-
-
     public void login(LoginCommand loginCommand) {
         //implement business logic here:
 
         Logged logged = new Logged(this);
         logged.publishAfterCommit();
+    }
+
+
+    public void logout(LogoutCommand logoutCommand) {
+        //implement business logic here:
+
     }
 
 }

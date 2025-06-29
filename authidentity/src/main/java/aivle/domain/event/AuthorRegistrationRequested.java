@@ -1,10 +1,9 @@
-package aivle.domain;
+package aivle.domain.event;
 
-import aivle.domain.*;
+import aivle.domain.entity.AuthorAccount;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
-import lombok.*;
+import lombok.Data;
+import lombok.ToString;
 
 //<<< DDD / Domain Event
 @Data

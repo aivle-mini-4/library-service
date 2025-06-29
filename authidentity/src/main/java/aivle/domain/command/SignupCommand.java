@@ -1,7 +1,5 @@
-package aivle.domain;
+package aivle.domain.command;
 
-import java.time.LocalDate;
-import java.util.*;
 import lombok.Data;
 
 @Data

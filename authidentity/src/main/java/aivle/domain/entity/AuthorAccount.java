@@ -1,4 +1,4 @@
-package aivle.domain;
+package aivle.domain.entity;
 
 import java.util.Date;
 
@@ -11,6 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import aivle.AuthidentityApplication;
+import aivle.domain.command.LoginCommand;
+import aivle.domain.command.LogoutCommand;
+import aivle.domain.command.RequestAuthorRegistrationCommand;
+import aivle.domain.enums.UserRole;
+import aivle.domain.event.AuthorRegistrationRequested;
+import aivle.domain.event.Logged;
+import aivle.domain.event.Loggedout;
+import aivle.domain.repository.AuthorAccountRepository;
 import lombok.Data;
 
 @Entity

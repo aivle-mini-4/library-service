@@ -1,4 +1,4 @@
-package aivle.domain;
+package aivle.domain.command;
 
 import lombok.Data;
 
