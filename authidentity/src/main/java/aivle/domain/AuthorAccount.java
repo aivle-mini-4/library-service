@@ -26,7 +26,7 @@ public class AuthorAccount  {
     private String email;    
     private String password;    
     @Enumerated(EnumType.STRING)
-    private UserRole roles;    
+    private UserRole roles = UserRole.AUTHOR;    
     private Date createdAt;    
     private Date updatedAt;
 
@@ -41,16 +41,15 @@ public class AuthorAccount  {
     public void requestAuthorRegistration(RequestAuthorRegistrationCommand requestAuthorRegistrationCommand){
 
         AuthorAccount authorAccount = new AuthorAccount();
-        // private String password;
-        // private String email;
-        // private String selfIntroduction;
-        // private String portfolio;
+
         authorAccount.setEmail(requestAuthorRegistrationCommand.getEmail());
         authorAccount.setPassword(requestAuthorRegistrationCommand.getPassword());
-        authorAccount.setRoles(requestAuthorRegistrationCommand.getRoles());
         authorAccount.setCreatedAt(new Date());
         authorAccount.setUpdatedAt(new Date());
+
+        repository().save(authorAccount);
         
+
 
         AuthorRegistrationRequested authorRegistrationRequested = new AuthorRegistrationRequested(this);
         authorRegistrationRequested.publishAfterCommit();
@@ -66,8 +65,7 @@ public class AuthorAccount  {
         Loggedout loggedout = new Loggedout(this);
         loggedout.publishAfterCommit();
     }
-//>>> Clean Arch / Port Method
-//<<< Clean Arch / Port Method
+
     public void login(LoginCommand loginCommand){
         
         //implement business logic here:
@@ -77,7 +75,6 @@ public class AuthorAccount  {
         Logged logged = new Logged(this);
         logged.publishAfterCommit();
     }
-//>>> Clean Arch / Port Method
 
 
 

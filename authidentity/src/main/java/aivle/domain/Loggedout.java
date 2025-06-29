@@ -1,10 +1,8 @@
 package aivle.domain;
 
-import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
-import lombok.*;
+import lombok.Data;
+import lombok.ToString;
 
 //<<< DDD / Domain Event
 @Data
@@ -14,6 +12,14 @@ public class Loggedout extends AbstractEvent {
     private Long id;
 
     public Loggedout(UserAccount aggregate) {
+        super(aggregate);
+    }
+
+    public Loggedout(AdminAccount aggregate) {
+        super(aggregate);
+    }
+
+    public Loggedout(AuthorAccount aggregate) {
         super(aggregate);
     }
 

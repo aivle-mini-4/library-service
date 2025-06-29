@@ -1,10 +1,8 @@
 package aivle.domain;
 
-import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
-import lombok.*;
+import lombok.Data;
+import lombok.ToString;
 
 //<<< DDD / Domain Event
 @Data
@@ -17,6 +15,14 @@ public class Logged extends AbstractEvent {
     private String roles;
 
     public Logged(UserAccount aggregate) {
+        super(aggregate);
+    }
+
+    public Logged(AdminAccount aggregate) {
+        super(aggregate);
+    }
+
+    public Logged(AuthorAccount aggregate) {
         super(aggregate);
     }
 

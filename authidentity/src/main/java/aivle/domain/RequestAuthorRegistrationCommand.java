@@ -9,5 +9,4 @@ public class RequestAuthorRegistrationCommand {
     private String email;
     private String selfIntroduction;
     private String portfolio;
-    private UserRole roles;
 }

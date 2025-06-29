@@ -1,10 +1,10 @@
 package aivle.domain;
 
-import aivle.domain.*;
+import java.util.Date;
+
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
-import lombok.*;
+import lombok.Data;
+import lombok.ToString;
 
 //<<< DDD / Domain Event
 @Data
@@ -19,6 +19,10 @@ public class SignedUp extends AbstractEvent {
     private Date updatedAt;
 
     public SignedUp(UserAccount aggregate) {
+        super(aggregate);
+    }
+
+    public SignedUp(AdminAccount aggregate) {
         super(aggregate);
     }
 

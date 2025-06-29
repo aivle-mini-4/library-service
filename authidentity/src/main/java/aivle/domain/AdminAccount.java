@@ -1,13 +1,16 @@
 package aivle.domain;
 
-import aivle.AuthidentityApplication;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import aivle.AuthidentityApplication;
 import lombok.Data;
 
 @Entity
@@ -19,15 +22,11 @@ public class AdminAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String email;
-
     private String password;
-
-    private String roles;
-
+    @Enumerated(EnumType.STRING)
+    private UserRole roles = UserRole.ADMIN;
     private String createdAt;
-
     private String updatedAt;
 
     public static AdminAccountRepository repository() {
@@ -37,16 +36,20 @@ public class AdminAccount {
         return adminAccountRepository;
     }
 
-    //<<< Clean Arch / Port Method
     public void signup(SignupCommand signupCommand) {
         //implement business logic here:
+        
+        this.setEmail(signupCommand.getEmail());
+        this.setPassword(signupCommand.getPassword());
+        this.setCreatedAt(new Date().toString());
+        this.setUpdatedAt(new Date().toString());
+        
+        repository().save(this);
 
         SignedUp signedUp = new SignedUp(this);
         signedUp.publishAfterCommit();
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
     public void login(LoginCommand loginCommand) {
         //implement business logic here:
 
@@ -54,13 +57,11 @@ public class AdminAccount {
         logged.publishAfterCommit();
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
+
     public void logout(LogoutCommand logoutCommand) {
         //implement business logic here:
 
     }
-    //>>> Clean Arch / Port Method
 
 }
 //>>> DDD / Aggregate Root
