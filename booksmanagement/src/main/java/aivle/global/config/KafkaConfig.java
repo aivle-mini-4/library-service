@@ -1,4 +1,4 @@
-package aivle.config;
+package aivle.global.config;
 
 import aivle.infra.messaging.KafkaProcessor;
 import org.springframework.cloud.stream.annotation.EnableBinding;
