@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.beans.BeanUtils;
 
 @Data
-@ToString
 public class PublicationRequested extends AbstractEvent {
 
     private Long id;

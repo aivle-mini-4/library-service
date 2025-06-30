@@ -8,7 +8,6 @@ import org.springframework.beans.BeanUtils;
 import lombok.*;
 
 @Data
-@ToString
 public class ManuscriptCreated extends AbstractEvent {
 
     private Long id;
