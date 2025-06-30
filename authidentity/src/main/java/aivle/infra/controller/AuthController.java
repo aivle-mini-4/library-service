@@ -3,6 +3,8 @@ package aivle.infra.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +30,7 @@ import aivle.infra.security.JwtUserDetailsService;
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
+@Transactional
 public class AuthController {
 
     @Autowired
@@ -68,36 +71,42 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
-        // 이메일 중복 체크
-        if (userAccountRepository.findByEmail(signupRequest.getEmail()).isPresent() ||
-            authorAccountRepository.findByEmail(signupRequest.getEmail()).isPresent() ||
-            adminAccountRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Email already exists");
+        try {
+            // 이메일 중복 체크
+            if (userAccountRepository.findByEmail(signupRequest.getEmail()).isPresent() ||
+                authorAccountRepository.findByEmail(signupRequest.getEmail()).isPresent() ||
+                adminAccountRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
+                return ResponseEntity.badRequest().body("Email already exists");
+            }
+
+            // 비밀번호 암호화
+            String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
+
+            // 사용자 계정 생성
+            UserAccount userAccount = new UserAccount();
+            userAccount.setEmail(signupRequest.getEmail());
+            userAccount.setPassword(encodedPassword);
+            userAccount.setCreatedAt(new java.util.Date());
+            userAccount.setUpdatedAt(new java.util.Date());
+
+            // 저장 후 flush하여 즉시 데이터베이스에 반영
+            userAccountRepository.save(userAccount);
+            userAccountRepository.flush();
+
+            // 토큰 생성 (username과 role을 직접 전달)
+            final String token = jwtTokenUtil.generateToken(signupRequest.getEmail(), "USER");
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("email", signupRequest.getEmail());
+            response.put("role", "ROLE_USER");
+            response.put("message", "User registered successfully");
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Registration failed: " + e.getMessage());
         }
-
-        // 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
-
-        // 사용자 계정 생성
-        UserAccount userAccount = new UserAccount();
-        userAccount.setEmail(signupRequest.getEmail());
-        userAccount.setPassword(encodedPassword);
-        userAccount.setCreatedAt(new java.util.Date());
-        userAccount.setUpdatedAt(new java.util.Date());
-
-        userAccountRepository.save(userAccount);
-
-        // 로그인 토큰 생성
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(signupRequest.getEmail());
-        final String token = jwtTokenUtil.generateToken(userDetails);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", token);
-        response.put("email", signupRequest.getEmail());
-        response.put("role", "ROLE_USER");
-        response.put("message", "User registered successfully");
-
-        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/validate")
