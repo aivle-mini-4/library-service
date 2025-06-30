@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class AuthorAccountController {
         method = RequestMethod.POST,
         produces = "application/json;charset=UTF-8"
     )
+    @PreAuthorize("hasRole('USER') or hasRole('AUTHOR')")
     public AuthorAccount requestAuthorRegistration(
         HttpServletRequest request,
         HttpServletResponse response,
@@ -55,6 +57,7 @@ public class AuthorAccountController {
         method = RequestMethod.DELETE,
         produces = "application/json;charset=UTF-8"
     )
+    @PreAuthorize("hasRole('AUTHOR')")
     public AuthorAccount logout(
         @PathVariable(value = "id") Long id,
         @RequestBody LogoutCommand logoutCommand,
@@ -80,6 +83,7 @@ public class AuthorAccountController {
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
+    @PreAuthorize("hasRole('AUTHOR')")
     public AuthorAccount login(
         @PathVariable(value = "id") Long id,
         @RequestBody LoginCommand loginCommand,

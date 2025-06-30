@@ -48,7 +48,10 @@ public class UserAccount {
         //implement business logic here:
         
         this.setEmail(signupCommand.getEmail());
-        this.setPassword(signupCommand.getPassword());
+        // 비밀번호 암호화
+        org.springframework.security.crypto.password.PasswordEncoder passwordEncoder = 
+            AuthidentityApplication.applicationContext.getBean(org.springframework.security.crypto.password.PasswordEncoder.class);
+        this.setPassword(passwordEncoder.encode(signupCommand.getPassword()));
         this.setCreatedAt(new Date());
         this.setUpdatedAt(new Date());
         

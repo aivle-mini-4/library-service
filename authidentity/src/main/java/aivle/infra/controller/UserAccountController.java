@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class UserAccountController {
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public UserAccount signup(
         @PathVariable(value = "id") Long id,
         @RequestBody SignupCommand signupCommand,
@@ -58,6 +60,7 @@ public class UserAccountController {
         method = RequestMethod.DELETE,
         produces = "application/json;charset=UTF-8"
     )
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public UserAccount logout(
         @PathVariable(value = "id") Long id,
         @RequestBody LogoutCommand logoutCommand,
@@ -82,6 +85,7 @@ public class UserAccountController {
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public UserAccount login(
         @PathVariable(value = "id") Long id,
         @RequestBody LoginCommand loginCommand,
