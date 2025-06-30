@@ -1,12 +1,10 @@
 package aivle.domain;
 
-import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalDateTime;
 import lombok.*;
+import org.springframework.beans.BeanUtils;
 
-//<<< DDD / Domain Event
 @Data
 @ToString
 public class PublicationRequested extends AbstractEvent {
@@ -15,14 +13,14 @@ public class PublicationRequested extends AbstractEvent {
     private Long authorId;
     private String title;
     private String content;
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
     public PublicationRequested(Manuscript aggregate) {
         super(aggregate);
+        BeanUtils.copyProperties(aggregate, this);
     }
 
     public PublicationRequested() {
         super();
     }
 }
-//>>> DDD / Domain Event

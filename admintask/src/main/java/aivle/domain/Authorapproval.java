@@ -4,9 +4,8 @@ import aivle.AdmintaskApplication;
 import aivle.domain.AuthorApproved;
 import aivle.domain.AuthorRejected;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.*;
@@ -22,9 +21,10 @@ public class Authorapproval {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long authorid;
+    private Long authorId;
 
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private ApprovalState state;
 
     private Date appliedAt;
 
@@ -36,13 +36,31 @@ public class Authorapproval {
 
     private String reason;
 
-    @PostPersist
-    public void onPostPersist() {
-        AuthorApproved authorApproved = new AuthorApproved(this);
-        authorApproved.publishAfterCommit();
+    // @PostPersist
+    // public void onPostPersist() {
+    //     AuthorApproved authorApproved = new AuthorApproved(this);
+    //     authorApproved.publishAfterCommit();
 
-        AuthorRejected authorRejected = new AuthorRejected(this);
-        authorRejected.publishAfterCommit();
+    //     AuthorRejected authorRejected = new AuthorRejected(this);
+    //     authorRejected.publishAfterCommit();
+    // }
+
+
+    public void approve(Long authorId) {
+    this.state = ApprovalState.APPROVED;
+    this.authorId = authorId;
+    this.resultAt = new Date();
+    AuthorApproved event = new AuthorApproved(this);
+    event.publishAfterCommit();
+    }
+
+    public void reject(Long authorId, String reason) {
+        this.state = ApprovalState.REJECTED;
+        this.authorId = authorId;
+        this.reason = reason;
+        this.rejectedAt = new Date();
+        AuthorRejected event = new AuthorRejected(this);
+        event.publishAfterCommit();
     }
 
     public static AuthorapprovalRepository repository() {
@@ -57,24 +75,26 @@ public class Authorapproval {
         AuthorRegistrationRequested authorRegistrationRequested
     ) {
         //implement business logic here:
-
-        /** Example 1:  new item 
+        // 1. 신규 작가 승인 요청 생성
         Authorapproval authorapproval = new Authorapproval();
+        authorapproval.setAuthorId(authorRegistrationRequested.getAuthorId());
+        authorapproval.setState(ApprovalState.PENDING);
+        authorapproval.setAppliedAt(new Date());
+        // 필요하다면 추가 정보 세팅 (예: reason 등)
+
         repository().save(authorapproval);
 
-        */
 
-        /** Example 2:  finding and process
-        
+        // example2
 
-        repository().findById(authorRegistrationRequested.get???()).ifPresent(authorapproval->{
+        // repository().findById(authorRegistrationRequested.get???()).ifPresent(authorapproval->{
             
-            authorapproval // do something
-            repository().save(authorapproval);
+        //     authorapproval // do something
+        //     repository().save(authorapproval);
 
 
-         });
-        */
+        //  });
+
 
     }
     //>>> Clean Arch / Port Method

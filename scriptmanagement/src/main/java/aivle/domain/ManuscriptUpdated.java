@@ -1,12 +1,9 @@
 package aivle.domain;
 
-import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalDateTime;
 import lombok.*;
 
-//<<< DDD / Domain Event
 @Data
 @ToString
 public class ManuscriptUpdated extends AbstractEvent {
@@ -15,7 +12,7 @@ public class ManuscriptUpdated extends AbstractEvent {
     private Long authorId;
     private String title;
     private String content;
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
     public ManuscriptUpdated(Manuscript aggregate) {
         super(aggregate);
@@ -25,4 +22,3 @@ public class ManuscriptUpdated extends AbstractEvent {
         super();
     }
 }
-//>>> DDD / Domain Event

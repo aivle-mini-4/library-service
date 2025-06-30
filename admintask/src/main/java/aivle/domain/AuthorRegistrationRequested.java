@@ -13,4 +13,6 @@ public class AuthorRegistrationRequested extends AbstractEvent {
     private String email;
     private String selfIntroduction;
     private String portfolio;
+    private Long authorId;
+    public Long getAuthorId() { return authorId; }
 }

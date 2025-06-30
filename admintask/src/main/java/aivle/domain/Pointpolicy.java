@@ -5,13 +5,13 @@ import aivle.domain.PointPolicyCreated;
 import aivle.domain.PointPolicyDeleted;
 import aivle.domain.PointPolicyUpdated;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.*;
 import lombok.Data;
+
 
 @Entity
 @Table(name = "Pointpolicy_table")
@@ -27,7 +27,8 @@ public class Pointpolicy {
 
     private String description;
 
-    private String pointType;
+    @Enumerated(EnumType.STRING)
+    private PointType pointType;
 
     private Integer amount;
 
@@ -37,6 +38,12 @@ public class Pointpolicy {
 
     private Date updatedAt;
 
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
     @PostPersist
     public void onPostPersist() {
         PointPolicyCreated pointPolicyCreated = new PointPolicyCreated(this);
@@ -45,6 +52,7 @@ public class Pointpolicy {
 
     @PreUpdate
     public void onPreUpdate() {
+        this.updatedAt = LocalDateTime.now();
         PointPolicyUpdated pointPolicyUpdated = new PointPolicyUpdated(this);
         pointPolicyUpdated.publishAfterCommit();
     }

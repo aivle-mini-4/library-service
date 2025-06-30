@@ -3,6 +3,8 @@ package aivle.infra;
 import aivle.config.kafka.KafkaProcessor;
 import aivle.domain.*;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class SubscribeViewViewHandler {
             SubscribeView subscribeView = new SubscribeView();
             // view 객체에 이벤트의 Value 를 set 함
             subscribeView.setId(signedUp.getId());
-            subscribeView.setIsSubscribed(False);
+            subscribeView.setIsSubscribed(false);
             // view 레파지 토리에 save
             subscribeViewRepository.save(subscribeView);
         } catch (Exception e) {
@@ -46,8 +48,8 @@ public class SubscribeViewViewHandler {
             if (subscribeViewOptional.isPresent()) {
                 SubscribeView subscribeView = subscribeViewOptional.get();
                 // view 객체에 이벤트의 eventDirectValue 를 set 함
-                subscribeView.setIsSubscribed(True);
-                subscribeView.setUpdatedAt(CURRENT_TIMESTAMP);
+                subscribeView.setIsSubscribed(true);
+                subscribeView.setUpdatedAt(new Date());
                 // view 레파지 토리에 save
                 subscribeViewRepository.save(subscribeView);
             }
@@ -70,8 +72,8 @@ public class SubscribeViewViewHandler {
             if (subscribeViewOptional.isPresent()) {
                 SubscribeView subscribeView = subscribeViewOptional.get();
                 // view 객체에 이벤트의 eventDirectValue 를 set 함
-                subscribeView.setIsSubscribed(False);
-                subscribeView.setUpdatedAt(CURRENT_TIMESTAMP);
+                subscribeView.setIsSubscribed(false);
+                subscribeView.setUpdatedAt(new Date());
                 // view 레파지 토리에 save
                 subscribeViewRepository.save(subscribeView);
             }

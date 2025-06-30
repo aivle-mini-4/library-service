@@ -1,6 +1,5 @@
 package aivle.domain;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
