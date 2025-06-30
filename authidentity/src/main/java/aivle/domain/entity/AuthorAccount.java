@@ -14,11 +14,11 @@ import aivle.AuthidentityApplication;
 import aivle.domain.command.LoginCommand;
 import aivle.domain.command.LogoutCommand;
 import aivle.domain.command.RequestAuthorRegistrationCommand;
-import aivle.domain.enums.UserRole;
 import aivle.domain.event.AuthorRegistrationRequested;
 import aivle.domain.event.Logged;
 import aivle.domain.event.Loggedout;
 import aivle.domain.repository.AuthorAccountRepository;
+import aivle.domain.valueobject.UserRole;
 import lombok.Data;
 
 @Entity

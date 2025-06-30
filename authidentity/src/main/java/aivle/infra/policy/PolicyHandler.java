@@ -1,16 +1,16 @@
-package aivle.infra;
+package aivle.infra.policy;
 
-import aivle.config.kafka.KafkaProcessor;
-import aivle.domain.*;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.naming.NameParser;
-import javax.naming.NameParser;
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
+
+import aivle.config.kafka.KafkaProcessor;
+import aivle.domain.repository.AdminAccountRepository;
+import aivle.domain.repository.AuthorAccountRepository;
+import aivle.domain.repository.UserAccountRepository;
 
 //<<< Clean Arch / Inbound Adaptor
 @Service

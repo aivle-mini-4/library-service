@@ -1,14 +1,23 @@
-package aivle.infra;
+package aivle.infra.controller;
 
-import aivle.domain.*;
 import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import aivle.domain.command.LoginCommand;
+import aivle.domain.command.LogoutCommand;
+import aivle.domain.command.RequestAuthorRegistrationCommand;
+import aivle.domain.entity.AuthorAccount;
+import aivle.domain.repository.AuthorAccountRepository;
 
 //<<< Clean Arch / Inbound Adaptor
 

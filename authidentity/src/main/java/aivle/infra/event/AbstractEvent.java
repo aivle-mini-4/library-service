@@ -1,9 +1,5 @@
-package aivle.infra;
+package aivle.infra.event;
 
-import aivle.AuthidentityApplication;
-import aivle.config.kafka.KafkaProcessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
@@ -11,6 +7,12 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.MimeTypeUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import aivle.AuthidentityApplication;
+import aivle.config.kafka.KafkaProcessor;
 
 //<<< Clean Arch / Outbound Adaptor
 public class AbstractEvent {
