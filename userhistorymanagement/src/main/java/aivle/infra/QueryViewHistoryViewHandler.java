@@ -30,9 +30,7 @@ public class QueryViewHistoryViewHandler {
             // view 객체에 이벤트의 Value 를 set 함
             queryViewHistory.setId(viewHistoryRegistered.getId());
             queryViewHistory.setBookId(viewHistoryRegistered.getBookId());
-            queryViewHistory.setUserId(
-                String.valueOf(viewHistoryRegistered.getUserId())
-            );
+            queryViewHistory.setUserId(viewHistoryRegistered.getUserId());
             
             // view 레파지 토리에 save
             queryViewHistoryRepository.save(queryViewHistory);

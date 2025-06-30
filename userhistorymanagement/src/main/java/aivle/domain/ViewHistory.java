@@ -22,7 +22,7 @@ public class ViewHistory {
 
     private Long bookId;
 
-    private String userId;
+    private Long userId;
 
     @PostPersist
     public void onPostPersist() {
