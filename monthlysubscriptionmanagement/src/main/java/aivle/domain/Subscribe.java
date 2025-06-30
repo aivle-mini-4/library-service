@@ -27,10 +27,7 @@ public class Subscribe {
     private Date updatedAt;
 
     public static SubscribeRepository repository() {
-        SubscribeRepository subscribeRepository = MonthlysubscriptionmanagementApplication.applicationContext.getBean(
-            SubscribeRepository.class
-        );
-        return subscribeRepository;
+        return MonthlysubscriptionmanagementApplication.applicationContext.getBean(SubscribeRepository.class);
     }
 
     //<<< Clean Arch / Port Method
@@ -38,6 +35,8 @@ public class Subscribe {
         SubscribeRequestCommand subscribeRequestCommand
     ) {
         //implement business logic here:
+        this.isSubscribed = true;
+        this.updatedAt = new Date();
 
         Subscribed subscribed = new Subscribed(this);
         subscribed.publishAfterCommit();
@@ -49,6 +48,8 @@ public class Subscribe {
         UnsubscribeRequestCommand unsubscribeRequestCommand
     ) {
         //implement business logic here:
+        this.isSubscribed = false;
+        this.updatedAt = new Date();
 
         UnSubscribed unSubscribed = new UnSubscribed(this);
         unSubscribed.publishAfterCommit();

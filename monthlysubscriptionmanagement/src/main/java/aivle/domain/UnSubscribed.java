@@ -12,9 +12,12 @@ import lombok.*;
 public class UnSubscribed extends AbstractEvent {
 
     private Long id;
+    private Date updatedAt;
 
     public UnSubscribed(Subscribe aggregate) {
         super(aggregate);
+        this.id = aggregate.getId();
+        this.updatedAt = aggregate.getUpdatedAt();
     }
 
     public UnSubscribed() {

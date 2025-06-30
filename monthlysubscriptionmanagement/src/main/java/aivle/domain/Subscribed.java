@@ -18,6 +18,10 @@ public class Subscribed extends AbstractEvent {
 
     public Subscribed(Subscribe aggregate) {
         super(aggregate);
+        this.id = aggregate.getId();
+        this.name = aggregate.getName();
+        this.isSubscribed = aggregate.getIsSubscribed();
+        this.updatedAt = aggregate.getUpdatedAt();
     }
 
     public Subscribed() {
