@@ -1,13 +1,12 @@
-package aivle.domain.event;
+package aivle.application.dto;
 
-import aivle.infrastructure.messaging.AbstractEvent;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class BookRegistered extends AbstractEvent {
-    private Long id;
+public class BookViewDto {
+    private Long bookId;
     private Long authorId;
     private String title;
     private String content;

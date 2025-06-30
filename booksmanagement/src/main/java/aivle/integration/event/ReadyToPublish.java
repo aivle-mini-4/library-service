@@ -1,13 +1,10 @@
-package aivle.domain.event;
+package aivle.integration.event;
 
 import aivle.infrastructure.messaging.AbstractEvent;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
-public class BookRegistered extends AbstractEvent {
-    private Long id;
+public class ReadyToPublish extends AbstractEvent {
     private Long authorId;
     private String title;
     private String content;
@@ -15,5 +12,4 @@ public class BookRegistered extends AbstractEvent {
     private String summary;
     private String coverImageUrl;
     private Integer price;
-    private Long views;
 }

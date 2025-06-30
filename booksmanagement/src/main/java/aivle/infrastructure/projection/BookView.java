@@ -1,4 +1,4 @@
-package aivle.domain.model;
+package aivle.infrastructure.projection;
 
 import aivle.common.entity.BaseEntity;
 import lombok.Builder;
@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import static lombok.AccessLevel.PROTECTED;
@@ -16,11 +14,10 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Book extends BaseEntity {
+public class BookView extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long bookId;
 
     private Long authorId;
 
@@ -34,7 +31,8 @@ public class Book extends BaseEntity {
     private Long views;
 
     @Builder
-    public Book(Long authorId, String title, String content, String category, String summary, String coverImageUrl, Integer price) {
+    public BookView(Long bookId, Long authorId, String title, String content, String category, String summary, String coverImageUrl, Integer price, Long views) {
+        this.bookId = bookId;
         this.authorId = authorId;
         this.title = title;
         this.content = content;
@@ -42,6 +40,6 @@ public class Book extends BaseEntity {
         this.summary = summary;
         this.coverImageUrl = coverImageUrl;
         this.price = price;
-        this.views = 0L;
+        this.views = views;
     }
 }
