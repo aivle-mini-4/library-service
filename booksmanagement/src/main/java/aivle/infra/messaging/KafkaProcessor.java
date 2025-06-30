@@ -1,4 +1,4 @@
-package aivle.config.kafka;
+package aivle.infra.messaging;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.Output;

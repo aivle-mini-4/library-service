@@ -1,9 +1,6 @@
-package aivle.domain;
+package aivle.domain.event;
 
-import aivle.domain.*;
-import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
+import aivle.domain.model.Book;
 import lombok.*;
 
 //<<< DDD / Domain Event
@@ -21,7 +18,7 @@ public class BookRegistered extends AbstractEvent {
     private String content;
     private Integer views;
 
-    public BookRegistered(Books aggregate) {
+    public BookRegistered(Book aggregate) {
         super(aggregate);
     }
 

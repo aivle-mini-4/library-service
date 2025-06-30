@@ -1,4 +1,4 @@
-package aivle.domain;
+package aivle.domain.model;
 
 import java.time.LocalDate;
 import java.util.Date;

@@ -1,12 +1,13 @@
-package aivle.infra;
+package aivle.infra.policy;
 
-import aivle.config.kafka.KafkaProcessor;
-import aivle.domain.*;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.naming.NameParser;
-import javax.naming.NameParser;
+import aivle.infra.messaging.KafkaProcessor;
+
 import javax.transaction.Transactional;
+
+import aivle.domain.event.ReadyToPublish;
+import aivle.domain.model.Book;
+import aivle.domain.model.ViewHistoryRegistered;
+import aivle.domain.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class PolicyHandler {
 
     @Autowired
-    BooksRepository booksRepository;
+    BookRepository bookRepository;
 
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString) {}
@@ -41,7 +42,7 @@ public class PolicyHandler {
         //Whenever 도서열람수 >= 5 Then 베스트셀러등록(배지 부여)
 
         // Sample Logic //
-        Books.assignBestsellerBadge(event);
+        Book.assignBestsellerBadge(event);
     }
 
     @StreamListener(
@@ -57,7 +58,7 @@ public class PolicyHandler {
         );
 
         // Sample Logic //
-        Books.registerBook(event);
+        Book.registerBook(event);
     }
 }
 //>>> Clean Arch / Inbound Adaptor

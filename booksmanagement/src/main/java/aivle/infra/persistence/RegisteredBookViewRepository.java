@@ -1,7 +1,6 @@
-package aivle.infra;
+package aivle.infra.persistence;
 
-import aivle.domain.*;
-import java.util.List;
+import aivle.domain.model.RegisteredBookView;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

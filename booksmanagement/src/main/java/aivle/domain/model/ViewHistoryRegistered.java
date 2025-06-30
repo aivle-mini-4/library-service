@@ -1,8 +1,6 @@
-package aivle.domain;
+package aivle.domain.model;
 
-import aivle.domain.*;
-import aivle.infra.AbstractEvent;
-import java.util.*;
+import aivle.domain.event.AbstractEvent;
 import lombok.*;
 
 @Data

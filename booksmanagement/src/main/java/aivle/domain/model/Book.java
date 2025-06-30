@@ -1,23 +1,18 @@
-package aivle.domain;
+package aivle.domain.model;
 
 import aivle.BooksmanagementApplication;
-import aivle.domain.BestsellerRegistered;
-import aivle.domain.BookDeleted;
-import aivle.domain.BookRegistered;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+
 import javax.persistence.*;
+
+import aivle.domain.event.BookDeleted;
+import aivle.domain.repository.BookRepository;
+import aivle.domain.event.ReadyToPublish;
 import lombok.Data;
 
 @Entity
 @Table(name = "Books_table")
 @Data
-//<<< DDD / Aggregate Root
-public class Books {
+public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,11 +40,11 @@ public class Books {
         bookDeleted.publishAfterCommit();
     }
 
-    public static BooksRepository repository() {
-        BooksRepository booksRepository = BooksmanagementApplication.applicationContext.getBean(
-            BooksRepository.class
+    public static BookRepository repository() {
+        BookRepository bookRepository = BooksmanagementApplication.applicationContext.getBean(
+            BookRepository.class
         );
-        return booksRepository;
+        return bookRepository;
     }
 
     //<<< Clean Arch / Port Method
@@ -59,7 +54,7 @@ public class Books {
         //implement business logic here:
 
         /** Example 1:  new item 
-        Books books = new Books();
+        Book books = new Book();
         repository().save(books);
 
         */
@@ -84,7 +79,7 @@ public class Books {
         //implement business logic here:
 
         /** Example 1:  new item 
-        Books books = new Books();
+        Book books = new Book();
         repository().save(books);
 
         BookRegistered bookRegistered = new BookRegistered(books);

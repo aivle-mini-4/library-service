@@ -1,7 +1,7 @@
-package aivle.infra;
+package aivle.domain.event;
 
 import aivle.BooksmanagementApplication;
-import aivle.config.kafka.KafkaProcessor;
+import aivle.infra.messaging.KafkaProcessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;

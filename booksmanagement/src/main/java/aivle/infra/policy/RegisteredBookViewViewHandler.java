@@ -1,10 +1,11 @@
-package aivle.infra;
+package aivle.infra.policy;
 
-import aivle.config.kafka.KafkaProcessor;
-import aivle.domain.*;
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import aivle.infra.messaging.KafkaProcessor;
+
+import aivle.domain.event.BookDeleted;
+import aivle.domain.event.BookRegistered;
+import aivle.domain.model.RegisteredBookView;
+import aivle.infra.persistence.RegisteredBookViewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;

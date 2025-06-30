@@ -1,9 +1,6 @@
-package aivle.domain;
+package aivle.domain.event;
 
-import aivle.domain.*;
-import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
+import aivle.domain.model.Book;
 import lombok.*;
 
 //<<< DDD / Domain Event
@@ -13,7 +10,7 @@ public class BookDeleted extends AbstractEvent {
 
     private Long id;
 
-    public BookDeleted(Books aggregate) {
+    public BookDeleted(Book aggregate) {
         super(aggregate);
     }
 
