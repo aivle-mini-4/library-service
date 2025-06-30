@@ -12,7 +12,6 @@ public class BooksmanagementApplication {
     public static ApplicationContext applicationContext;
 
     public static void main(String[] args) {
-        applicationContext =
-            SpringApplication.run(BooksmanagementApplication.class, args);
+        applicationContext = SpringApplication.run(BooksmanagementApplication.class, args);
     }
 }
