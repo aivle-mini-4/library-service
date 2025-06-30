@@ -12,8 +12,8 @@ import lombok.*;
 public class ViewHistoryRegistered extends AbstractEvent {
 
     private Long id;
-    private Integer bookId;
-    private Integer userId;
+    private Long bookId;
+    private Long userId;
 
     public ViewHistoryRegistered(ViewHistory aggregate) {
         super(aggregate);

@@ -12,20 +12,6 @@ public class FavoriteHateoasProcessor
 
     @Override
     public EntityModel<Favorite> process(EntityModel<Favorite> model) {
-        model.add(
-            Link
-                .of(
-                    model.getRequiredLink("self").getHref() +
-                    "/registerfavorite"
-                )
-                .withRel("registerfavorite")
-        );
-        model.add(
-            Link
-                .of(model.getRequiredLink("self").getHref() + "/deletefavorite")
-                .withRel("deletefavorite")
-        );
-
         return model;
     }
 }

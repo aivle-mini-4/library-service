@@ -8,6 +8,6 @@ import lombok.Data;
 public class RegisterFavoriteCommand {
 
     private Long id;
-    private Integer bookId;
-    private Integer userId;
+    private Long bookId;
+    private Long userId;
 }

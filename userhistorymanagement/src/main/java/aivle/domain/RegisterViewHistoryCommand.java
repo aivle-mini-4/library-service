@@ -8,6 +8,6 @@ import lombok.Data;
 public class RegisterViewHistoryCommand {
 
     private Long id;
-    private Integer bookId;
-    private String userId;
+    private Long bookId;
+    private Long userId;
 }
