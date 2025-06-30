@@ -1,23 +1,20 @@
 package aivle.domain;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 import javax.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
-//<<< EDA / CQRS
 @Entity
 @Table(name = "ManuscriptPage_table")
 @Data
+@ToString
 public class ManuscriptPage {
 
     @Id
-    //@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
     private Long authorId;
     private String title;
     private String content;
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 }

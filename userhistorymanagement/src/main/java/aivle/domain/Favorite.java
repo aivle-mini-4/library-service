@@ -7,29 +7,30 @@ import lombok.Data;
 import java.util.Date;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
 
 
 @Entity
-@Table(name="Favorite_table")
+@Table(name = "Favorite_table")
 @Data
 
 //<<< DDD / Aggregate Root
 public class Favorite  {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    
-    
-    
-private Long id;    
-    
-    
-private Integer bookId;    
-    
-    
-private Integer userId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;    
+        
+    // null 허용X
+    @Column(nullable = false)
+    private Integer bookId;    
+        
+    // null 허용X
+    @Column(nullable = false)
+    private Integer userId;
 
 
     public static FavoriteRepository repository(){
@@ -38,36 +39,48 @@ private Integer userId;
     }
 
 
-
 //<<< Clean Arch / Port Method
     public void registerFavorite(RegisterFavoriteCommand registerFavoriteCommand){
         
         //implement business logic here:
-        
+        try {
+            this.bookId = registerFavoriteCommand.getBookId();
+            this.userId = registerFavoriteCommand.getUserId();
 
-        aivle.external.FavoriteQuery favoriteQuery = new aivle.external.FavoriteQuery();
-        // favoriteQuery.set??()        
-          = FavoriteApplication.applicationContext
-            .getBean(aivle.external.Service.class)
-            .favorite(favoriteQuery);
+            aivle.external.FavoriteQuery favoriteQuery = new aivle.external.FavoriteQuery();
+            favoriteQuery.setBookId(this.bookId);
+            favoriteQuery.setUserId(this.userId);
+            
+            aivle.external.Service externalService =
+                UserhistorymanagementApplication.applicationContext
+                    .getBean(aivle.external.Service.class);
 
-        FavoriteRegistrerd favoriteRegistrerd = new FavoriteRegistrerd(this);
-        favoriteRegistrerd.publishAfterCommit();
+            
+            externalService.favorite(favoriteQuery);
+
+            repository().save(this);
+
+            FavoriteRegistrerd favoriteRegistrerd = new FavoriteRegistrerd(this);
+            favoriteRegistrerd.publishAfterCommit();
+        } catch (Execption e) {
+            throw new RuntimeException("RegisterFavorite command 실패", e);
+        }
     }
 //>>> Clean Arch / Port Method
 //<<< Clean Arch / Port Method
     public void deleteFavorite(DeleteFavoriteCommand deleteFavoriteCommand){
         
         //implement business logic here:
-        
+        try {
+            repository().deleteById(deleteFavoriteCommand.getId());
 
 
-        FavoriteDeleted favoriteDeleted = new FavoriteDeleted(this);
-        favoriteDeleted.publishAfterCommit();
+            FavoriteDeleted favoriteDeleted = new FavoriteDeleted(this);
+            favoriteDeleted.publishAfterCommit();
+        } catch (Exception e) {
+            throw new RuntimeException("DeleteFavorite command 실패", e);
+        }
     }
 //>>> Clean Arch / Port Method
-
-
-
 }
 //>>> DDD / Aggregate Root
