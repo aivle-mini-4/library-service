@@ -18,6 +18,10 @@ public class AuthorRejected extends AbstractEvent {
 
     public AuthorRejected(Authorapproval aggregate) {
         super(aggregate);
+        this.id = aggregate.getId();
+        this.authorId = aggregate.getAuthorid();
+        this.resultAt = aggregate.getResultAt();
+        this.state = aggregate.getState();
     }
 
     public AuthorRejected() {

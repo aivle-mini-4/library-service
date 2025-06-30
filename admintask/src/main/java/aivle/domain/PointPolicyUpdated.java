@@ -21,6 +21,13 @@ public class PointPolicyUpdated extends AbstractEvent {
 
     public PointPolicyUpdated(Pointpolicy aggregate) {
         super(aggregate);
+        this.id = aggregate.getId();
+        this.name = aggregate.getName();
+        this.description = aggregate.getDescription();
+        this.pointType = aggregate.getPointType();
+        this.amount = aggregate.getAmount();
+        this.isActive = aggregate.getIsActive();
+        this.updatedAt = aggregate.getUpdatedAt();
     }
 
     public PointPolicyUpdated() {

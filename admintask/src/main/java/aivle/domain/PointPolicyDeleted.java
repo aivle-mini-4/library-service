@@ -12,9 +12,12 @@ import lombok.*;
 public class PointPolicyDeleted extends AbstractEvent {
 
     private Long id;
+    private final String name;
 
     public PointPolicyDeleted(Pointpolicy aggregate) {
         super(aggregate);
+        this.id = aggregate.getId();
+        this.name = aggregate.getName();
     }
 
     public PointPolicyDeleted() {
