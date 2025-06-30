@@ -27,15 +27,22 @@ public class Pointpolicy {
 
     private String description;
 
-    private String pointType;
+    @Enumerated(EnumType.STRING)
+    private PointType pointType;
 
     private Integer amount;
 
     private Boolean isActive;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 
     @PostPersist
     public void onPostPersist() {
@@ -45,6 +52,7 @@ public class Pointpolicy {
 
     @PreUpdate
     public void onPreUpdate() {
+        this.updatedAt = LocalDateTime.now();
         PointPolicyUpdated pointPolicyUpdated = new PointPolicyUpdated(this);
         pointPolicyUpdated.publishAfterCommit();
     }
