@@ -2,9 +2,10 @@ package aivle.domain;
 
 import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.*;
 import lombok.*;
+
 
 //<<< DDD / Domain Event
 @Data
@@ -14,12 +15,12 @@ public class AuthorRejected extends AbstractEvent {
     private Long id;
     private String resultAt;
     private Long authorId;
-    private String state;
+    private ApprovalState state;
 
     public AuthorRejected(Authorapproval aggregate) {
         super(aggregate);
         this.id = aggregate.getId();
-        this.authorId = aggregate.getAuthorid();
+        this.authorId = aggregate.getAuthorId();
         this.resultAt = aggregate.getResultAt();
         this.state = aggregate.getState();
     }

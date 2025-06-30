@@ -13,7 +13,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 //<<< Clean Arch / Inbound Adaptor
-@Serviceㅅ
+@Service
 @Transactional
 public class PolicyHandler {
 

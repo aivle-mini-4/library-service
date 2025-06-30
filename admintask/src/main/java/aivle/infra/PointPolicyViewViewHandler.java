@@ -1,5 +1,6 @@
 package aivle.infra;
 
+import java.util.Date;
 import aivle.config.kafka.KafkaProcessor;
 import aivle.domain.*;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class PointPolicyViewViewHandler {
             pointPolicyView.setAmount(pointPolicyCreated.getAmount());
             pointPolicyView.setIsActive(pointPolicyCreated.getIsActive());
             pointPolicyView.setCreatedAt(
-                Date.valueOf(pointPolicyCreated.getCreatedAt())
+                Timestamp.valueOf(pointPolicyCreated.getCreatedAt())
             );
             // view 레파지 토리에 save
             pointPolicyViewRepository.save(pointPolicyView);

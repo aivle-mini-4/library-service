@@ -2,6 +2,7 @@ package aivle.infra;
 
 import aivle.domain.*;
 import java.util.Optional;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -23,7 +24,7 @@ public class AuthorapprovalController {
     // [CREATE] 작가 승인 요청 생성 (보통 시스템 내부에서 호출)
     @PostMapping
     public Authorapproval createApproval(@RequestBody Authorapproval approval) {
-        approval.setState("PENDING");
+        approval.setState(ApprovalState.PENDING);
         approval.setAppliedAt(new Date());
         return authorapprovalRepository.save(approval);
     }

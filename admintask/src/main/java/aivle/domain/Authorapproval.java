@@ -4,9 +4,8 @@ import aivle.AdmintaskApplication;
 import aivle.domain.AuthorApproved;
 import aivle.domain.AuthorRejected;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.*;
@@ -22,7 +21,7 @@ public class Authorapproval {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long authorid;
+    private Long authorId;
 
     @Enumerated(EnumType.STRING)
     private ApprovalState state;
@@ -48,15 +47,15 @@ public class Authorapproval {
 
 
     public void approve(Long authorId) {
-    this.state = "APPROVED";
-    this.authorid = authorId;
+    this.state = ApprovalState.APPROVED;
+    this.authorId = authorId;
     this.resultAt = new Date();
     AuthorApproved event = new AuthorApproved(this);
     event.publishAfterCommit();
     }
 
     public void reject(Long authorId, String reason) {
-        this.state = "REJECTED";
+        this.state = ApprovalState.REJECTED;
         this.authorId = authorId;
         this.reason = reason;
         this.rejectedAt = new Date();
@@ -78,8 +77,8 @@ public class Authorapproval {
         //implement business logic here:
         // 1. 신규 작가 승인 요청 생성
         Authorapproval authorapproval = new Authorapproval();
-        authorapproval.setAuthorid(authorRegistrationRequested.getAuthorId());
-        authorapproval.setState("PENDING");
+        authorapproval.setAuthorId(authorRegistrationRequested.getAuthorId());
+        authorapproval.setState(ApprovalState.PENDING);
         authorapproval.setAppliedAt(new Date());
         // 필요하다면 추가 정보 세팅 (예: reason 등)
 
