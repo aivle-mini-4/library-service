@@ -91,7 +91,6 @@ public class AuthController {
 
             // 저장 후 flush하여 즉시 데이터베이스에 반영
             userAccountRepository.save(userAccount);
-            userAccountRepository.flush();
 
             // 토큰 생성 (username과 role을 직접 전달)
             final String token = jwtTokenUtil.generateToken(signupRequest.getEmail(), "USER");
@@ -105,7 +104,7 @@ public class AuthController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Registration failed: " + e.getMessage());
+            return ResponseEntity.status(500).body("Registration failed: " + e.getMessage());
         }
     }
 
