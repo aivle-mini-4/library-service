@@ -1,7 +1,7 @@
 package aivle.domain.event;
 
 import aivle.domain.entity.AuthorAccount;
-import aivle.infra.AbstractEvent;
+import aivle.infra.event.AbstractEvent;
 import lombok.Data;
 import lombok.ToString;
 
