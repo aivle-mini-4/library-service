@@ -3,7 +3,7 @@ server:
 
 # JWT 설정
 jwt:
-  secret: aivleSecretKeyForJWTTokenGeneration2024
+  secret: aivleSecretKeyForJWTTokenGeneration2024WithMoreThan256BitsToMeetSecurityRequirements
   expiration: 86400
 
 spring:
@@ -13,6 +13,10 @@ spring:
 
 spring:
   profiles: default
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   jpa:
     properties:
       hibernate:
