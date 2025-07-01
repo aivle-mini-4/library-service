@@ -1,10 +1,11 @@
-package aivle.infra;
+package aivle.infra.processor;
 
-import aivle.domain.*;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
 import org.springframework.stereotype.Component;
+
+import aivle.domain.entity.AuthorAccount;
 
 @Component
 public class AuthorAccountHateoasProcessor
@@ -18,9 +19,9 @@ public class AuthorAccountHateoasProcessor
             Link
                 .of(
                     model.getRequiredLink("self").getHref() +
-                    "/requestauthorregistration"
+                    "/signup"
                 )
-                .withRel("requestauthorregistration")
+                .withRel("signup")
         );
         model.add(
             Link
