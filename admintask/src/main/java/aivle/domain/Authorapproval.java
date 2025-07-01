@@ -1,15 +1,17 @@
 package aivle.domain;
 
+
 import aivle.AdmintaskApplication;
 import aivle.domain.AuthorApproved;
 import aivle.domain.AuthorRejected;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.*;
 import lombok.Data;
+
 
 @Entity
 @Table(name = "Authorapproval_table")
@@ -17,51 +19,64 @@ import lombok.Data;
 //<<< DDD / Aggregate Root
 public class Authorapproval {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+
     private Long authorId;
+
 
     @Enumerated(EnumType.STRING)
     private ApprovalState state;
 
-    private Date appliedAt;
 
-    private Date resultAt;
+    private LocalDateTime appliedAt;
 
-    private Date rejectedAt;
+
+    private LocalDateTime resultAt;
+
+
+    private LocalDateTime rejectedAt;
+
 
     private Long adminId;
 
+
     private String reason;
+
 
     // @PostPersist
     // public void onPostPersist() {
     //     AuthorApproved authorApproved = new AuthorApproved(this);
     //     authorApproved.publishAfterCommit();
 
+
     //     AuthorRejected authorRejected = new AuthorRejected(this);
     //     authorRejected.publishAfterCommit();
     // }
 
 
+
     public void approve(Long authorId) {
     this.state = ApprovalState.APPROVED;
     this.authorId = authorId;
-    this.resultAt = new Date();
+    this.resultAt = LocalDateTime.now();
     AuthorApproved event = new AuthorApproved(this);
     event.publishAfterCommit();
     }
+
 
     public void reject(Long authorId, String reason) {
         this.state = ApprovalState.REJECTED;
         this.authorId = authorId;
         this.reason = reason;
-        this.rejectedAt = new Date();
+        this.rejectedAt = LocalDateTime.now();
         AuthorRejected event = new AuthorRejected(this);
         event.publishAfterCommit();
     }
+
 
     public static AuthorapprovalRepository repository() {
         AuthorapprovalRepository authorapprovalRepository = AdmintaskApplication.applicationContext.getBean(
@@ -69,6 +84,7 @@ public class Authorapproval {
         );
         return authorapprovalRepository;
     }
+
 
     //<<< Clean Arch / Port Method
     public static void authorRouting(
@@ -79,25 +95,31 @@ public class Authorapproval {
         Authorapproval authorapproval = new Authorapproval();
         authorapproval.setAuthorId(authorRegistrationRequested.getAuthorId());
         authorapproval.setState(ApprovalState.PENDING);
-        authorapproval.setAppliedAt(new Date());
-        // 필요하다면 추가 정보 세팅 (예: reason 등)
+        authorapproval.setAppliedAt(LocalDateTime.now());
+
+
 
         repository().save(authorapproval);
 
 
+
         // example2
 
+
         // repository().findById(authorRegistrationRequested.get???()).ifPresent(authorapproval->{
-            
+           
         //     authorapproval // do something
         //     repository().save(authorapproval);
+
 
 
         //  });
 
 
+
     }
     //>>> Clean Arch / Port Method
+
 
 }
 //>>> DDD / Aggregate Root

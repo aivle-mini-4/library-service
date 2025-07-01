@@ -37,7 +37,7 @@ public class PointPolicyViewViewHandler {
             pointPolicyView.setAmount(pointPolicyCreated.getAmount());
             pointPolicyView.setIsActive(pointPolicyCreated.getIsActive());
             pointPolicyView.setCreatedAt(
-                Timestamp.valueOf(pointPolicyCreated.getCreatedAt())
+                pointPolicyCreated.getCreatedAt()
             );
             // view 레파지 토리에 save
             pointPolicyViewRepository.save(pointPolicyView);
@@ -69,9 +69,7 @@ public class PointPolicyViewViewHandler {
                 );
                 pointPolicyView.setAmount(pointPolicyUpdated.getAmount());
                 pointPolicyView.setIsActive(pointPolicyUpdated.getIsActive());
-                pointPolicyView.setUpdatedAt(
-                    Date.valueOf(pointPolicyUpdated.getUpdatedAt())
-                );
+                pointPolicyView.setUpdatedAt(pointPolicyUpdated.getUpdatedAt());
                 // view 레파지 토리에 save
                 pointPolicyViewRepository.save(pointPolicyView);
             }

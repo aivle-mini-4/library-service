@@ -6,7 +6,7 @@ import aivle.domain.PointPolicyDeleted;
 import aivle.domain.PointPolicyUpdated;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Collections;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.*;
@@ -34,14 +34,14 @@ public class Pointpolicy {
 
     private Boolean isActive;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PostPersist

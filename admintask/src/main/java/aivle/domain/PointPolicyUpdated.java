@@ -2,7 +2,7 @@ package aivle.domain;
 
 import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.*;
 import lombok.*;
 
@@ -17,17 +17,10 @@ public class PointPolicyUpdated extends AbstractEvent {
     private PointType pointType;
     private Integer amount;
     private Boolean isActive;
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     public PointPolicyUpdated(Pointpolicy aggregate) {
         super(aggregate);
-        this.id = aggregate.getId();
-        this.name = aggregate.getName();
-        this.description = aggregate.getDescription();
-        this.pointType = aggregate.getPointType();
-        this.amount = aggregate.getAmount();
-        this.isActive = aggregate.getIsActive();
-        this.updatedAt = aggregate.getUpdatedAt();
     }
 
     public PointPolicyUpdated() {

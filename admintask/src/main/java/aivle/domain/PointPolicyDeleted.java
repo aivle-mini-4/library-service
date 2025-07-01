@@ -2,7 +2,7 @@ package aivle.domain;
 
 import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.*;
 import lombok.*;
 
@@ -16,8 +16,6 @@ public class PointPolicyDeleted extends AbstractEvent {
 
     public PointPolicyDeleted(Pointpolicy aggregate) {
         super(aggregate);
-        this.id = aggregate.getId();
-        this.name = aggregate.getName();
     }
 
     public PointPolicyDeleted() {

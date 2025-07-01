@@ -2,7 +2,7 @@ package aivle.infra;
 
 import aivle.domain.*;
 import java.util.Optional;
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -25,7 +25,7 @@ public class AuthorapprovalController {
     @PostMapping
     public Authorapproval createApproval(@RequestBody Authorapproval approval) {
         approval.setState(ApprovalState.PENDING);
-        approval.setAppliedAt(new Date());
+        approval.setAppliedAt(LocalDateTime.now());
         return authorapprovalRepository.save(approval);
     }
 
