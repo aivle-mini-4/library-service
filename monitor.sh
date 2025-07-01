@@ -1,28 +1,75 @@
 #!/bin/bash
 
 echo "=== Kafka 이벤트 모니터링 ==="
-echo "1. 모든 토픽 리스트 보기"
-echo "2. 특정 토픽의 메시지 실시간 모니터링"
-echo "3. 특정 토픽의 메시지 실시간 모니터링 (처음부터)"
-echo "4. 특정 토픽의 메시지 히스토리 보기"
-echo "5. 컨슈머 그룹 리스트 보기"
-echo "6. 토픽 상세 정보 보기"
-echo "7. 특정 토픽 재생성"
-echo "8. 토픽 생성"
-echo "9. 토픽 제거"
-echo "10. 메뉴 다시 보기"
-echo "11. 종료"
+echo "0. 종료"
+echo "1. Docker Compose 시작"
+echo "2. Docker Compose 정지"
+echo "3. 모든 토픽 리스트 보기"
+echo "4. 특정 토픽의 메시지 실시간 모니터링"
+echo "5. 특정 토픽의 메시지 실시간 모니터링 (처음부터)"
+echo "6. 특정 토픽의 메시지 히스토리 보기"
+echo "7. 컨슈머 그룹 리스트 보기"
+echo "8. 토픽 상세 정보 보기"
+echo "9. 특정 토픽 재생성"
+echo "10. 토픽 생성"
+echo "11. 토픽 제거"
+echo "12. 메뉴 다시 보기"
 echo "=========================="
 
 while true; do
-    read -p "선택하세요 (1-11): " choice
+    read -p "선택하세요 (0-12): " choice
 
     case $choice in
+        0)
+            echo "종료합니다."
+            exit 0
+            ;;
         1)
+            echo "Docker Compose 시작 중..."
+            cd infra
+            docker-compose up -d
+            cd ..
+            echo "✅ Docker Compose 시작 완료!"
+            ;;
+        2)
+            echo "실행 중인 Docker Compose 프로젝트:"
+            cd infra
+            running_composes=($(docker-compose ps --services 2>/dev/null | grep -v "No such service"))
+            cd ..
+            
+            if [ ${#running_composes[@]} -eq 0 ]; then
+                echo "실행 중인 Docker Compose 프로젝트가 없습니다."
+            else
+                echo "0. 모든 프로젝트 정지"
+                for i in "${!running_composes[@]}"; do
+                    echo "$((i+1)). ${running_composes[$i]}"
+                done
+                
+                read -p "정지할 프로젝트 번호를 선택하세요 (0-${#running_composes[@]}): " compose_choice
+                
+                if [ "$compose_choice" = "0" ]; then
+                    echo "모든 Docker Compose 프로젝트 정지 중..."
+                    cd infra
+                    docker-compose down
+                    cd ..
+                    echo "✅ 모든 프로젝트 정지 완료!"
+                elif [ "$compose_choice" -ge 1 ] && [ "$compose_choice" -le ${#running_composes[@]} ]; then
+                    selected_compose=${running_composes[$((compose_choice-1))]}
+                    echo "'$selected_compose' 프로젝트 정지 중..."
+                    cd infra
+                    docker-compose stop "$selected_compose"
+                    cd ..
+                    echo "✅ '$selected_compose' 프로젝트 정지 완료!"
+                else
+                    echo "잘못된 선택입니다."
+                fi
+            fi
+            ;;
+        3)
             echo "모든 토픽 리스트:"
             docker exec kafka kafka-topics --list --bootstrap-server localhost:9092
             ;;
-        2)
+        4)
             read -p "모니터링할 토픽 이름을 입력하세요: " topic
             echo "토픽 '$topic'의 실시간 메시지 모니터링 (현재 시간 이후부터, Ctrl+C로 종료):"
             docker exec kafka kafka-console-consumer \
@@ -30,7 +77,7 @@ while true; do
                 --topic $topic \
                 --group realtime-monitor-group
             ;;
-        3)
+        5)
             read -p "모니터링할 토픽 이름을 입력하세요: " topic
             echo "토픽 '$topic'의 실시간 메시지 모니터링 (처음부터, Ctrl+C로 종료):"
             docker exec kafka kafka-console-consumer \
@@ -39,7 +86,7 @@ while true; do
                 --from-beginning \
                 --group from-beginning-monitor-group
             ;;
-        4)
+        6)
             read -p "히스토리를 볼 토픽 이름을 입력하세요: " topic
             read -p "메시지 개수를 입력하세요 (기본값: 10): " count
             count=${count:-10}
@@ -50,18 +97,18 @@ while true; do
                 --max-messages $count \
                 --from-beginning
             ;;
-        5)
+        7)
             echo "컨슈머 그룹 리스트:"
             docker exec kafka kafka-consumer-groups --bootstrap-server localhost:9092 --list
             ;;
-        6)
+        8)
             read -p "상세 정보를 볼 토픽 이름을 입력하세요: " topic
             echo "토픽 '$topic' 상세 정보:"
             docker exec kafka kafka-topics --describe --bootstrap-server localhost:9092 --topic $topic
             ;;
 
 
-        7)
+        9)
             read -p "초기화할 토픽 이름을 입력하세요: " topic
             echo "⚠️  경고: 토픽 '$topic'의 모든 메시지를 삭제하고 재생성합니다!"
             read -p "정말 수행하시겠습니까? (y/N): " confirm
@@ -123,7 +170,7 @@ while true; do
             fi
             ;;
 
-        8)
+        10)
             read -p "생성할 토픽 이름을 입력하세요: " topic
             read -p "파티션 개수를 입력하세요 (기본값: 1): " partitions
             partitions=${partitions:-1}
@@ -137,7 +184,7 @@ while true; do
                 --partitions $partitions \
                 --replication-factor $rf
             ;;
-        9)
+        11)
             read -p "제거할 토픽 이름을 입력하세요: " topic
             echo "⚠️  경고: 토픽 '$topic'이 완전히 삭제됩니다!"
             read -p "정말 삭제하시겠습니까? (y/N): " confirm
@@ -148,25 +195,23 @@ while true; do
                 echo "삭제가 취소되었습니다."
             fi
             ;;
-        10)
+        12)
             # 메뉴 다시 보기
             echo "=== Kafka 이벤트 모니터링 ==="
-            echo "1. 모든 토픽 리스트 보기"
-            echo "2. 특정 토픽의 메시지 실시간 모니터링"
-            echo "3. 특정 토픽의 메시지 실시간 모니터링 (처음부터)"
-            echo "4. 특정 토픽의 메시지 히스토리 보기"
-            echo "5. 컨슈머 그룹 리스트 보기"
-            echo "6. 토픽 상세 정보 보기"
-            echo "7. 특정 토픽의 모든 메시지 삭제"
-            echo "8. 토픽 생성"
-            echo "9. 토픽 제거"
-            echo "10. 메뉴 다시 보기"
-            echo "11. 종료"
+            echo "0. 종료"
+            echo "1. Docker Compose 시작"
+            echo "2. Docker Compose 정지"
+            echo "3. 모든 토픽 리스트 보기"
+            echo "4. 특정 토픽의 메시지 실시간 모니터링"
+            echo "5. 특정 토픽의 메시지 실시간 모니터링 (처음부터)"
+            echo "6. 특정 토픽의 메시지 히스토리 보기"
+            echo "7. 컨슈머 그룹 리스트 보기"
+            echo "8. 토픽 상세 정보 보기"
+            echo "9. 특정 토픽 재생성"
+            echo "10. 토픽 생성"
+            echo "11. 토픽 제거"
+            echo "12. 메뉴 다시 보기"
             echo "=========================="
-            ;;
-        11)
-            echo "종료합니다."
-            exit 0
             ;;
         *)
             echo "잘못된 선택입니다."

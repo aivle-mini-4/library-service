@@ -18,6 +18,7 @@ import aivle.domain.event.Logged;
 import aivle.domain.event.Loggedout;
 import aivle.domain.event.SignedUp;
 import aivle.domain.repository.UserAccountRepository;
+import aivle.domain.valueobject.EmailValidator;
 import aivle.domain.valueobject.UserRole;
 import lombok.Data;
 
@@ -93,7 +94,13 @@ public class UserAccount {
     }
 
     public void signup(SignupCommand signupCommand) {
-        //implement business logic here:
+        // 이메일 유효성 검사
+        EmailValidator.validateEmail(signupCommand.getEmail());
+        
+        // 기존 이메일 중복 검사
+        if (repository().findByEmail(signupCommand.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다: " + signupCommand.getEmail());
+        }
         
         this.setEmail(signupCommand.getEmail());
         // 비밀번호 암호화
@@ -103,9 +110,11 @@ public class UserAccount {
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
         
-        repository().save(this);
+        // 저장하고 flush하여 id 즉시 생성
+        UserAccount savedAccount = repository().saveAndFlush(this);
 
-        SignedUp signedUp = new SignedUp(this);
+        // 저장된 엔티티로 이벤트 publish (id가 설정된 객체)
+        SignedUp signedUp = new SignedUp(savedAccount);
         signedUp.publishAfterCommit();
     }
 

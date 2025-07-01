@@ -18,6 +18,7 @@ import aivle.domain.event.AuthorSignup;
 import aivle.domain.event.Logged;
 import aivle.domain.event.Loggedout;
 import aivle.domain.repository.AuthorAccountRepository;
+import aivle.domain.valueobject.EmailValidator;
 import aivle.domain.valueobject.UserRole;
 import lombok.Data;
 
@@ -110,10 +111,13 @@ public class AuthorAccount  {
     }
 
     public void signup(AuthorSignupCommand authorSignupCommand){
+        // 이메일 유효성 검사
+        EmailValidator.validateEmail(authorSignupCommand.getEmail());
+        
         // 작가 회원가입 + 작가권한요청 이벤트
         // 이메일 중복 체크
         if (repository().findByEmail(authorSignupCommand.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists: " + authorSignupCommand.getEmail());
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다: " + authorSignupCommand.getEmail());
         }
 
         // 현재 객체에 정보 설정
@@ -128,11 +132,11 @@ public class AuthorAccount  {
             AuthidentityApplication.applicationContext.getBean(org.springframework.security.crypto.password.PasswordEncoder.class);
         this.setPassword(passwordEncoder.encode(authorSignupCommand.getPassword()));
 
-        // 저장
-        repository().save(this);
+        // 저장하고 flush하여 id 즉시 생성
+        AuthorAccount savedAccount = repository().saveAndFlush(this);
 
-        // 이벤트 publish
-        AuthorSignup authorSignup = new AuthorSignup(this);
+        // 저장된 엔티티로 이벤트 publish (id가 설정된 객체)
+        AuthorSignup authorSignup = new AuthorSignup(savedAccount);
         authorSignup.publishAfterCommit();
     }
 

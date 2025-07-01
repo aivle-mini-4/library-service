@@ -2,7 +2,7 @@ package aivle.domain.repository;
 
 import java.util.Optional;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import aivle.domain.entity.AdminAccount;
@@ -13,7 +13,7 @@ import aivle.domain.entity.AdminAccount;
     path = "adminAccounts"
 )
 public interface AdminAccountRepository
-    extends PagingAndSortingRepository<AdminAccount, Long> {
+    extends JpaRepository<AdminAccount, Long> {
     
     Optional<AdminAccount> findByEmail(String email);
 }

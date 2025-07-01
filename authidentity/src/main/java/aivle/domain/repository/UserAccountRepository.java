@@ -2,7 +2,7 @@ package aivle.domain.repository;
 
 import java.util.Optional;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import aivle.domain.entity.UserAccount;
@@ -13,7 +13,7 @@ import aivle.domain.entity.UserAccount;
     path = "userAccounts"
 )
 public interface UserAccountRepository
-    extends PagingAndSortingRepository<UserAccount, Long> {
+    extends JpaRepository<UserAccount, Long> {
     
     Optional<UserAccount> findByEmail(String email);
 }

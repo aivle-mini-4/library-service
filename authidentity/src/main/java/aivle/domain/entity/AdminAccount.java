@@ -17,6 +17,7 @@ import aivle.domain.command.SignupCommand;
 import aivle.domain.event.Logged;
 import aivle.domain.event.SignedUp;
 import aivle.domain.repository.AdminAccountRepository;
+import aivle.domain.valueobject.EmailValidator;
 import aivle.domain.valueobject.UserRole;
 import lombok.Data;
 
@@ -92,7 +93,13 @@ public class AdminAccount {
     }
 
     public void signup(SignupCommand signupCommand) {
-        //implement business logic here:
+        // 이메일 유효성 검사
+        EmailValidator.validateEmail(signupCommand.getEmail());
+        
+        // 기존 이메일 중복 검사
+        if (repository().findByEmail(signupCommand.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다: " + signupCommand.getEmail());
+        }
         
         this.setEmail(signupCommand.getEmail());
         
@@ -104,9 +111,11 @@ public class AdminAccount {
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
         
-        repository().save(this);
+        // 저장하고 flush하여 id 즉시 생성
+        AdminAccount savedAccount = repository().saveAndFlush(this);
 
-        SignedUp signedUp = new SignedUp(this);
+        // 저장된 엔티티로 이벤트 publish (id가 설정된 객체)
+        SignedUp signedUp = new SignedUp(savedAccount);
         signedUp.publishAfterCommit();
     }
 
