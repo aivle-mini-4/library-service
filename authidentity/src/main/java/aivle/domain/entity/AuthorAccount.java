@@ -11,9 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import aivle.AuthidentityApplication;
+import aivle.domain.command.AuthorSignupCommand;
 import aivle.domain.command.LoginCommand;
 import aivle.domain.command.LogoutCommand;
-import aivle.domain.command.RequestAuthorRegistrationCommand;
 import aivle.domain.event.AuthorRegistrationRequested;
 import aivle.domain.event.Logged;
 import aivle.domain.event.Loggedout;
@@ -109,24 +109,24 @@ public class AuthorAccount  {
         return authorAccountRepository;
     }
 
-    public void signup(RequestAuthorRegistrationCommand requestAuthorRegistrationCommand){
+    public void signup(AuthorSignupCommand authorSignupCommand){
         // 작가 회원가입 + 작가권한요청 이벤트
         // 이메일 중복 체크
-        if (repository().findByEmail(requestAuthorRegistrationCommand.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists: " + requestAuthorRegistrationCommand.getEmail());
+        if (repository().findByEmail(authorSignupCommand.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists: " + authorSignupCommand.getEmail());
         }
 
         // 현재 객체에 정보 설정
-        this.setEmail(requestAuthorRegistrationCommand.getEmail());
-        this.setSelfIntroduction(requestAuthorRegistrationCommand.getSelfIntroduction());
-        this.setPortfolio(requestAuthorRegistrationCommand.getPortfolio());
+        this.setEmail(authorSignupCommand.getEmail());
+        this.setSelfIntroduction(authorSignupCommand.getSelfIntroduction());
+        this.setPortfolio(authorSignupCommand.getPortfolio());
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
 
         // 비밀번호 암호화
         org.springframework.security.crypto.password.PasswordEncoder passwordEncoder = 
             AuthidentityApplication.applicationContext.getBean(org.springframework.security.crypto.password.PasswordEncoder.class);
-        this.setPassword(passwordEncoder.encode(requestAuthorRegistrationCommand.getPassword()));
+        this.setPassword(passwordEncoder.encode(authorSignupCommand.getPassword()));
 
         // 저장
         repository().save(this);

@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**", "/h2-console/**", "/userAccounts/signup", 
+                .antMatchers("/auth/login", "/auth/validate", "/h2-console/**", "/userAccounts/signup", 
                            "/authorAccounts/signup", "/adminAccounts/signup").permitAll()
                 .anyRequest().authenticated()
                 .and()

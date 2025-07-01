@@ -3,7 +3,7 @@ package aivle.domain.command;
 import lombok.Data;
 
 @Data
-public class RequestAuthorRegistrationCommand {
+public class AuthorSignupCommand {
 
     private String password;
     private String email;

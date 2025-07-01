@@ -12,7 +12,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,10 +19,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import aivle.domain.entity.UserAccount;
-import aivle.domain.repository.AdminAccountRepository;
-import aivle.domain.repository.AuthorAccountRepository;
-import aivle.domain.repository.UserAccountRepository;
 import aivle.infra.security.CustomUserDetails;
 import aivle.infra.security.JwtTokenUtil;
 import aivle.infra.security.JwtUserDetailsService;
@@ -43,18 +38,6 @@ public class AuthController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
-    @Autowired
-    private UserAccountRepository userAccountRepository;
-
-    @Autowired
-    private AuthorAccountRepository authorAccountRepository;
-
-    @Autowired
-    private AdminAccountRepository adminAccountRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest loginRequest) throws Exception {
         authenticate(loginRequest.getEmail(), loginRequest.getPassword());
@@ -69,46 +52,6 @@ public class AuthController {
         response.put("role", userDetails.getAuthorities().iterator().next().getAuthority());
 
         return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
-        try {
-            // 이메일 중복 체크
-            if (userAccountRepository.findByEmail(signupRequest.getEmail()).isPresent() ||
-                authorAccountRepository.findByEmail(signupRequest.getEmail()).isPresent() ||
-                adminAccountRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
-                return ResponseEntity.badRequest().body("Email already exists");
-            }
-
-            // 비밀번호 암호화
-            String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
-
-            // 사용자 계정 생성
-            UserAccount userAccount = new UserAccount();
-            userAccount.setEmail(signupRequest.getEmail());
-            userAccount.setPassword(encodedPassword);
-            userAccount.setCreatedAt(java.time.LocalDateTime.now());
-            userAccount.setUpdatedAt(java.time.LocalDateTime.now());
-
-            // 저장 후 flush하여 즉시 데이터베이스에 반영
-            userAccountRepository.save(userAccount);
-
-            // 토큰 생성 (사용자 ID만 담기)
-            final String token = jwtTokenUtil.generateTokenWithUserIdOnly(userAccount.getId().toString());
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", token);
-            response.put("email", signupRequest.getEmail());
-            response.put("userId", userAccount.getId());
-            response.put("role", "ROLE_USER");
-            response.put("message", "User registered successfully");
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Registration failed: " + e.getMessage());
-        }
     }
 
     @PostMapping("/validate")
@@ -157,16 +100,6 @@ public class AuthController {
 
     // Request DTOs
     public static class LoginRequest {
-        private String email;
-        private String password;
-
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-    }
-
-    public static class SignupRequest {
         private String email;
         private String password;
 

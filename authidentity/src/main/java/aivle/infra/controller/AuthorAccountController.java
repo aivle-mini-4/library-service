@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import aivle.domain.command.RequestAuthorRegistrationCommand;
+import aivle.domain.command.AuthorSignupCommand;
 import aivle.domain.entity.AuthorAccount;
 import aivle.domain.repository.AuthorAccountRepository;
 
@@ -32,14 +32,14 @@ public class AuthorAccountController {
     public AuthorAccount signup(
         HttpServletRequest request,
         HttpServletResponse response,
-        @RequestBody RequestAuthorRegistrationCommand requestAuthorRegistrationCommand
+        @RequestBody AuthorSignupCommand authorSignupCommand
     ) throws Exception {
         System.out.println(
             "##### /authorAccount/signup  called #####"
         );
         AuthorAccount authorAccount = new AuthorAccount();
         authorAccount.signup(
-            requestAuthorRegistrationCommand
+            authorSignupCommand
         );
         return authorAccount;
     }
