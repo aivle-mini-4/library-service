@@ -14,7 +14,7 @@ public class SubscribeCommandHandler {
     @Transactional
     public Subscribe handle(SubscribeRequestCommand command) {
         Subscribe subscribe = new Subscribe();
-        subscribe.setName(command.getName());
+        subscribe.setUserId(command.getUserId());
         subscribe.subscribeRequest(command);
         return repository.save(subscribe);
     }

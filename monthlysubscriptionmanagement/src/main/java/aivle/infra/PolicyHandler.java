@@ -5,6 +5,7 @@ import aivle.domain.*;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.naming.NameParser;
@@ -30,9 +31,10 @@ public class PolicyHandler {
         System.out.println("회원가입 이벤트 감지: " + signedUp.toJson());
 
         Subscribe subscribe = new Subscribe();
-        subscribe.setName(signedUp.getEmail());  // 또는 signedUp.getId()로 매핑 가능
+        subscribe.setUserId(signedUp.getId());
+        // subscribe.setName(signedUp.getEmail());
         subscribe.setIsSubscribed(false);        // 기본값: 구독 안 함
-        subscribe.setUpdatedAt(new Date());
+        subscribe.setUpdatedAt(LocalDateTime.now());
 
         subscribeRepository.save(subscribe);
     }
