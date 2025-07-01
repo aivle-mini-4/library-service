@@ -15,6 +15,7 @@ public class AuthorRejected extends AbstractEvent {
     private Long id;
     private String resultAt;
     private Long authorId;
+    private Long adminId;
     private ApprovalState state;
 
     public AuthorRejected(Authorapproval aggregate) {

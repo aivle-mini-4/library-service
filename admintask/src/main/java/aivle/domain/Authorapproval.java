@@ -70,9 +70,9 @@ public class Authorapproval {
     }
 
 
-    public void reject(Long authorId, String reason) {
+    public void reject(Long adminId, String reason) {
         this.state = ApprovalState.REJECTED;
-        this.authorId = authorId;
+        this.adminId = adminId;
         this.reason = reason;
         this.rejectedAt = LocalDateTime.now();
         AuthorRejected event = new AuthorRejected(this);

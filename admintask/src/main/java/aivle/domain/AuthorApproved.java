@@ -21,7 +21,6 @@ public class AuthorApproved extends AbstractEvent {
 
     public AuthorApproved(Authorapproval aggregate) {
         super(aggregate);
-        logger.info("approve() 호출 후: authorId={}, adminId={}, resultAt={}", this.authorId, this.adminId, this.resultAt);
     }
 
     public AuthorApproved() {
