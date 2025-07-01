@@ -36,7 +36,7 @@ public class AiService {
     private static ProcessingResult processBook(String title, String content) {
         // 1. 책 표지 이미지 생성
         ImageRequest imgReq = new ImageRequest();
-        imgReq.setPrompt("다음 책 제목과 내용을 바탕으로 책 표지 이미지를 생성하세요.\n책 제목: '" + title + "'\n" + "책 내용: " + content);
+        imgReq.setPrompt("다음 책 제목과 내용을 바탕으로 표지 아트워크만 배경 없이(책 프레임이나 책등, 책상, 펜 등 주변 소품 일체 없이) 포스터 형태로 표지만 출력해 주세요.\n\n책 제목: '" + title + "'\n" + "책 내용: " + content);
         ImageResponse imgRes = openAIClient.generateImage(apiKey, imgReq);
         String coverUrl = imgRes.getData()[0].getUrl();
 
@@ -44,10 +44,10 @@ public class AiService {
         String summary = callChat("다음 책 내용을 요약하세요.\n책 내용: " + content);
 
         // 3. 카테고리 선정
-        String categories = callChat("다음 책 제목과 내용을 보고, 가장 적절한 하나의 카테고리(예: 소설, 에세이, 자기계발 등)만 한 단어로 응답하세요. 그 외 다른 설명은 하지 마십시오.\n\n책 제목: '" + title + "'\n" + "책 내용: " + content);
+        String categories = callChat("다음 책 제목과 내용을 바탕으로, 가장 적절한 하나의 카테고리(예: 소설, 에세이, 자기계발 등)만 한 단어로 응답하세요. 그 외 다른 설명은 하지 마십시오.\n\n책 제목: '" + title + "'\n" + "책 내용: " + content);
 
         // 4. 구독료 산정
-        String price = callChat("다음 책 내용과 분량을 바탕으로 구독료를 제안하세요. 이 책에 적절한 구독료를 숫자(예: 2500)로만 한 줄로 응답하세요. 그 외 다른 설명은 하지 마십시오. 구독료의 범위는 2000포인트에서 5000포인트 사이로, 100단위로 제안하세요.\n\n책 내용: " + content);
+        String price = callChat("다음 책 내용과 분량을 바탕으로 구독료를 제안하세요. 이 책에 적절한 구독료를 숫자(예: 250)로만 한 줄로 응답하세요. 그 외 다른 설명은 하지 마십시오. 구독료의 범위는 200포인트에서 500포인트 사이로, 10단위로 제안하세요.\n\n책 내용: " + content);
 
         return new ProcessingResult(coverUrl, summary, categories, price);
     }
