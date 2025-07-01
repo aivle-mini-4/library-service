@@ -11,6 +11,65 @@
 - 토큰 검증 및 갱신
 - 마이크로서비스 간 이벤트 기반 통신 (Kafka)
 
+## 프로젝트 파일 구조
+
+```
+authidentity/
+├── src/main/java/aivle/
+│   ├── AuthidentityApplication.java          # 메인 애플리케이션 클래스
+│   │
+│   ├── config/                              # 설정 관련
+│   │   ├── SecurityConfig.java              # Spring Security 설정
+│   │   └── kafka/                           # Kafka 설정
+│   │
+│   ├── domain/                              # 도메인 레이어 (핵심 비즈니스 로직)
+│   │   ├── entity/                          # 엔티티
+│   │   │   ├── UserAccount.java             # 일반 사용자 엔티티
+│   │   │   ├── AuthorAccount.java           # 작가 엔티티
+│   │   │   └── AdminAccount.java            # 관리자 엔티티
+│   │   │
+│   │   ├── command/                         # 명령 객체
+│   │   │   ├── SignupCommand.java           # 회원가입 명령
+│   │   │   ├── LoginCommand.java            # 로그인 명령
+│   │   │   ├── LogoutCommand.java           # 로그아웃 명령
+│   │   │   └── RequestAuthorRegistrationCommand.java  # 작가 등록 요청 명령
+│   │   │
+│   │   ├── event/                           # 이벤트 객체
+│   │   │   ├── SignedUp.java                # 회원가입 완료 이벤트
+│   │   │   ├── Logged.java                  # 로그인 이벤트
+│   │   │   ├── Loggedout.java               # 로그아웃 이벤트
+│   │   │   └── AuthorRegistrationRequested.java  # 작가 등록 요청 이벤트
+│   │   │
+│   │   ├── repository/                      # 리포지토리 인터페이스
+│   │   └── valueobject/                     # 값 객체
+│   │
+│   └── infra/                               # 인프라 레이어 (외부 시스템 연동)
+│       ├── controller/                      # 컨트롤러 (API 엔드포인트)
+│       │   ├── AuthController.java          # 통합 인증 컨트롤러
+│       │   ├── UserAccountController.java   # 사용자 계정 컨트롤러
+│       │   ├── AuthorAccountController.java # 작가 계정 컨트롤러
+│       │   └── AdminAccountController.java  # 관리자 계정 컨트롤러
+│       │
+│       ├── security/                        # 보안 관련
+│       │   ├── JwtTokenUtil.java            # JWT 토큰 유틸리티
+│       │   ├── JwtAuthenticationFilter.java # JWT 인증 필터
+│       │   ├── JwtUserDetailsService.java   # 사용자 상세 서비스
+│       │   ├── CustomUserDetails.java       # 커스텀 사용자 상세
+│       │   ├── JwtUserInfo.java             # JWT 사용자 정보
+│       │   └── JwtAuthenticationEntryPoint.java  # JWT 인증 진입점
+│       │
+│       ├── event/                           # 이벤트 처리
+│       ├── policy/                          # 정책 처리
+│       └── processor/                       # 프로세서
+│
+├── src/main/resources/
+│   └── application.yml                      # 애플리케이션 설정
+│
+├── Dockerfile                               # Docker 이미지 빌드
+├── pom.xml                                  # Maven 의존성 관리
+└── README.md                                # 프로젝트 문서
+```
+
 ## 아키텍처 개요
 
 ### 1. 전체 시스템 구조

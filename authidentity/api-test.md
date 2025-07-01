@@ -8,12 +8,13 @@ Username: sa
 Password: (비어있음)
 
 ## 기본 API 테스트
+source .venv/bin/activate
 
 ### 1. 일반 사용자 회원가입
 
 ```bash
 # 일반 사용자 회원가입 (JWT 토큰 반환)
-http POST localhost:8085/auth/signup \
+http POST localhost:8085/userAccounts/signup \
   email=user@example.com \
   password=password123
 ```
@@ -24,7 +25,7 @@ http POST localhost:8085/auth/signup \
   "token": "eyJhbGciOiJIUzUxMiJ9...",
   "email": "user@example.com",
   "userId": 1,
-  "role": "ROLE_USER",
+  "role": "USER",
   "message": "User registered successfully"
 }
 ```
