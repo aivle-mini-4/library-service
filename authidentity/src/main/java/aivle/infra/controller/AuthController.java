@@ -114,11 +114,18 @@ public class AuthController {
     @PostMapping("/validate")
     public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
         try {
+            System.out.println("=== Token Validation Debug ===");
+            System.out.println("Original token: " + token);
+            
             String jwtToken = token.substring(7);
+            System.out.println("JWT token: " + jwtToken);
+            
             String userId = jwtTokenUtil.extractUserId(jwtToken);
+            System.out.println("Extracted userId: " + userId);
             
             // 사용자 ID로 사용자 정보 조회
             UserDetails userDetails = userDetailsService.loadUserByUserId(userId);
+            System.out.println("UserDetails found: " + userDetails.getUsername());
             
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
                 Map<String, Object> response = new HashMap<>();
@@ -128,10 +135,13 @@ public class AuthController {
                 response.put("role", userDetails.getAuthorities().iterator().next().getAuthority());
                 return ResponseEntity.ok(response);
             } else {
+                System.out.println("Token validation failed");
                 return ResponseEntity.badRequest().body("Invalid token");
             }
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Invalid token");
+            System.out.println("Exception during token validation: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Invalid token: " + e.getMessage());
         }
     }
 

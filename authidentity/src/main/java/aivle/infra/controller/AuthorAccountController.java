@@ -1,21 +1,15 @@
 package aivle.infra.controller;
 
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import aivle.domain.command.LoginCommand;
-import aivle.domain.command.LogoutCommand;
 import aivle.domain.command.RequestAuthorRegistrationCommand;
 import aivle.domain.entity.AuthorAccount;
 import aivle.domain.repository.AuthorAccountRepository;
@@ -44,52 +38,9 @@ public class AuthorAccountController {
             "##### /authorAccount/signup  called #####"
         );
         AuthorAccount authorAccount = new AuthorAccount();
-        authorAccount.requestAuthorRegistration(
+        authorAccount.signup(
             requestAuthorRegistrationCommand
         );
-        return authorAccount;
-    }
-
-    @RequestMapping(
-        value = "/authorAccounts/{id}/logout",
-        method = RequestMethod.DELETE,
-        produces = "application/json;charset=UTF-8"
-    )
-    @PreAuthorize("hasRole('AUTHOR')")
-    public AuthorAccount logout(
-        @PathVariable(value = "id") Long id,
-        @RequestBody LogoutCommand logoutCommand,
-        HttpServletRequest request,
-        HttpServletResponse response
-    ) throws Exception {
-        System.out.println("##### /authorAccount/logout  called #####");
-        Optional<AuthorAccount> optionalAuthorAccount = authorAccountRepository.findById(
-            id
-        );
-
-        optionalAuthorAccount.orElseThrow(() -> new Exception("No Entity Found")
-        );
-        AuthorAccount authorAccount = optionalAuthorAccount.get();
-        authorAccount.logout(logoutCommand);
-
-        authorAccountRepository.delete(authorAccount);
-        return authorAccount;
-    }
-
-    @RequestMapping(
-        value = "/authorAccounts/login",
-        method = RequestMethod.POST,
-        produces = "application/json;charset=UTF-8"
-    )
-    public AuthorAccount login(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        @RequestBody LoginCommand loginCommand
-    ) throws Exception {
-        System.out.println("##### /authorAccount/login  called #####");
-        AuthorAccount authorAccount = new AuthorAccount();
-        authorAccount.login(loginCommand);
-        authorAccountRepository.save(authorAccount);
         return authorAccount;
     }
 }

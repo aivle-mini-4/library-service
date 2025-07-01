@@ -109,7 +109,8 @@ public class AuthorAccount  {
         return authorAccountRepository;
     }
 
-    public void requestAuthorRegistration(RequestAuthorRegistrationCommand requestAuthorRegistrationCommand){
+    public void signup(RequestAuthorRegistrationCommand requestAuthorRegistrationCommand){
+        // 작가 회원가입 + 작가권한요청 이벤트
         // 이메일 중복 체크
         if (repository().findByEmail(requestAuthorRegistrationCommand.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists: " + requestAuthorRegistrationCommand.getEmail());

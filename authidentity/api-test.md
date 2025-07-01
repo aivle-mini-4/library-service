@@ -9,10 +9,10 @@ Password: (비어있음)
 
 ## 기본 API 테스트
 
-### 1. 회원가입 (Signup)
+### 1. 일반 사용자 회원가입
 
 ```bash
-# 일반 사용자 회원가입
+# 일반 사용자 회원가입 (JWT 토큰 반환)
 http POST localhost:8085/auth/signup \
   email=user@example.com \
   password=password123
@@ -21,16 +21,18 @@ http POST localhost:8085/auth/signup \
 **예상 응답:**
 ```json
 {
-  "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE2MzQ1Njc4OTAsImV4cCI6MTYzNDY1NDI5MH0...",
+  "token": "eyJhbGciOiJIUzUxMiJ9...",
   "email": "user@example.com",
-  "role": "ROLE_USER"
+  "userId": 1,
+  "role": "ROLE_USER",
+  "message": "User registered successfully"
 }
 ```
 
-### 2. 로그인 (Login)
+### 2. 통합 로그인 (모든 사용자 타입)
 
 ```bash
-# 사용자 로그인
+# 사용자/작가/관리자 로그인 (통합 API)
 http POST localhost:8085/auth/login \
   email=user@example.com \
   password=password123
@@ -39,13 +41,14 @@ http POST localhost:8085/auth/login \
 **예상 응답:**
 ```json
 {
-  "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE2MzQ1Njc4OTAsImV4cCI6MTYzNDY1NDI5MH0...",
+  "token": "eyJhbGciOiJIUzUxMiJ9...",
   "email": "user@example.com",
+  "userId": 1,
   "role": "ROLE_USER"
 }
 ```
 
-### 3. 토큰 검증 (Validate Token)
+### 3. 토큰 검증
 
 ```bash
 # 토큰 유효성 검증
@@ -57,26 +60,18 @@ http POST localhost:8085/auth/validate \
 ```json
 {
   "valid": true,
+  "userId": "1",
   "email": "user@example.com",
   "role": "ROLE_USER"
 }
 ```
 
-### 4. 보호된 리소스 접근
+### 4. 작가 회원가입
 
 ```bash
-# 사용자 계정 정보 조회 (인증 필요)
-http GET localhost:8085/userAccounts/1 \
-  Authorization:"Bearer YOUR_JWT_TOKEN_HERE"
-```
-
-### 5. 작가 등록 요청
-
-```bash
-# 작가 등록 요청 (USER 권한 필요)
+# 작가 회원가입 (권한 불필요)
 # 이 API는 작가회원가입 + 등록요청 이벤트 publish를 수행합니다
-http POST localhost:8085/authorAccounts/requestauthorregistration \
-  Authorization:"Bearer YOUR_JWT_TOKEN_HERE" \
+http POST localhost:8085/authorAccounts/signup \
   email=author@example.com \
   password=password123 \
   selfIntroduction="저는 소설 작가입니다." \
@@ -86,13 +81,13 @@ http POST localhost:8085/authorAccounts/requestauthorregistration \
 **예상 응답:**
 ```json
 {
-  "id": 1,
+  "id": 2,
   "email": "author@example.com",
   "roles": "AUTHOR",
   "selfIntroduction": "저는 소설 작가입니다.",
   "portfolio": "https://example.com/portfolio",
-  "createdAt": "2024-01-01T00:00:00.000+00:00",
-  "updatedAt": "2024-01-01T00:00:00.000+00:00"
+  "createdAt": "2024-01-01T00:00:00",
+  "updatedAt": "2024-01-01T00:00:00"
 }
 ```
 
@@ -102,15 +97,15 @@ http POST localhost:8085/authorAccounts/requestauthorregistration \
 - AuthorRegistrationRequested 이벤트 publish
 - 자동으로 AUTHOR 역할 부여
 
-### 6. 관리자 계정 생성
+### 5. 관리자 계정 생성 (H2 콘솔에서 직접)
 
-```bash
-# 관리자 계정 생성 (ADMIN 권한 필요)
-http PUT localhost:8085/adminAccounts/1/signup \
-  Authorization:"Bearer ADMIN_JWT_TOKEN_HERE" \
-  email=admin@example.com \
-  password=admin123
+```sql
+-- H2 콘솔에서 실행
+INSERT INTO AdminAccount_table (id, email, password, roles, created_at, updated_at) 
+VALUES (1, 'admin@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ADMIN', NOW(), NOW());
 ```
+
+**참고**: 관리자 계정은 H2 콘솔에서 직접 생성하거나, 기존 관리자가 `/adminAccounts/signup` API를 사용하여 생성할 수 있습니다.
 
 ## 전체 테스트 시나리오
 
@@ -128,26 +123,28 @@ http POST localhost:8085/auth/validate Authorization:"Bearer $TOKEN"
 http GET localhost:8085/userAccounts Authorization:"Bearer $TOKEN"
 ```
 
-### 시나리오 2: 작가 등록 플로우
+### 시나리오 2: 작가 플로우
 
 ```bash
-# 1. 사용자 로그인
-TOKEN=$(http POST localhost:8085/auth/login email=testuser@example.com password=password123 | jq -r '.token')
-
-# 2. 작가 등록 요청 (작가회원가입 + 등록요청 이벤트 publish)
-http POST localhost:8085/authorAccounts/requestauthorregistration \
-  Authorization:"Bearer $TOKEN" \
+# 1. 작가 회원가입
+http POST localhost:8085/authorAccounts/signup \
   email=author@example.com \
   password=password123 \
   selfIntroduction="소설 작가입니다." \
   portfolio=https://example.com/portfolio
+
+# 2. 작가 로그인 (통합 API 사용)
+AUTHOR_TOKEN=$(http POST localhost:8085/auth/login email=author@example.com password=password123 | jq -r '.token')
+
+# 3. 작가 권한 확인
+http POST localhost:8085/auth/validate Authorization:"Bearer $AUTHOR_TOKEN"
 ```
 
 ### 시나리오 3: 관리자 플로우
 
 ```bash
-# 1. 관리자 로그인 (관리자 계정이 이미 존재한다고 가정)
-ADMIN_TOKEN=$(http POST localhost:8085/auth/login email=admin@example.com password=admin123 | jq -r '.token')
+# 1. 관리자 로그인 (H2에서 생성한 계정)
+ADMIN_TOKEN=$(http POST localhost:8085/auth/login email=admin@example.com password=password | jq -r '.token')
 
 # 2. 관리자 권한으로 사용자 계정 조회
 http GET localhost:8085/userAccounts Authorization:"Bearer $ADMIN_TOKEN"
@@ -204,7 +201,7 @@ http GET localhost:8085/userAccounts/1 \
 
 ```bash
 # USER 권한으로 ADMIN 전용 API 접근
-http PUT localhost:8085/adminAccounts/1/signup \
+http POST localhost:8085/adminAccounts/signup \
   Authorization:"Bearer USER_TOKEN_HERE" \
   email=admin@example.com \
   password=admin123
@@ -215,6 +212,19 @@ http PUT localhost:8085/adminAccounts/1/signup \
 {
   "error": "Access denied"
 }
+```
+
+### 5. 이메일 중복 회원가입
+
+```bash
+http POST localhost:8085/auth/signup \
+  email=existing@example.com \
+  password=password123
+```
+
+**예상 응답:**
+```json
+"Email already exists"
 ```
 
 ## 편의 기능
@@ -250,9 +260,8 @@ http -v GET localhost:8085/userAccounts Authorization:"Bearer $JWT_TOKEN"
 # 사용자 계정 조회
 http GET localhost:8085/userAccounts/1 Authorization:"Bearer $USER_TOKEN"
 
-# 작가 등록 요청 (작가회원가입 + 등록요청 이벤트 publish)
-http POST localhost:8085/authorAccounts/requestauthorregistration \
-  Authorization:"Bearer $USER_TOKEN" \
+# 작가 회원가입 (작가회원가입 + 등록요청 이벤트 publish)
+http POST localhost:8085/authorAccounts/signup \
   email=author@example.com \
   password=password123 \
   selfIntroduction="작가 소개" \
@@ -264,9 +273,8 @@ http POST localhost:8085/authorAccounts/requestauthorregistration \
 # 작가 계정 조회
 http GET localhost:8085/authorAccounts/1 Authorization:"Bearer $AUTHOR_TOKEN"
 
-# 작가 등록 요청 (이미 작가인 경우에도 가능 - 작가회원가입 + 등록요청 이벤트 publish)
-http POST localhost:8085/authorAccounts/requestauthorregistration \
-  Authorization:"Bearer $AUTHOR_TOKEN" \
+# 작가 회원가입 (이미 작가인 경우에도 가능)
+http POST localhost:8085/authorAccounts/signup \
   email=author2@example.com \
   password=password123 \
   selfIntroduction="작가 소개" \
@@ -280,8 +288,8 @@ http GET localhost:8085/userAccounts Authorization:"Bearer $ADMIN_TOKEN"
 http GET localhost:8085/authorAccounts Authorization:"Bearer $ADMIN_TOKEN"
 http GET localhost:8085/adminAccounts Authorization:"Bearer $ADMIN_TOKEN"
 
-# 관리자 계정 생성
-http PUT localhost:8085/adminAccounts/1/signup \
+# 관리자 계정 생성 (기존 관리자만 가능)
+http POST localhost:8085/adminAccounts/signup \
   Authorization:"Bearer $ADMIN_TOKEN" \
   email=newadmin@example.com \
   password=admin123
@@ -337,6 +345,7 @@ http -h GET localhost:8085/userAccounts Authorization:"Bearer $JWT_TOKEN"
 2. **비밀번호**: 테스트용 비밀번호는 실제 환경에서 사용하지 않기
 3. **환경변수**: 프로덕션 환경에서는 환경변수로 토큰 관리
 4. **HTTPS**: 프로덕션 환경에서는 반드시 HTTPS 사용
+5. **포트**: 서버는 8085 포트에서 실행됨
 
 ## 문제 해결
 
@@ -356,4 +365,18 @@ TOKEN=$(http POST localhost:8085/auth/login email=user@example.com password=pass
 ```bash
 # 현재 사용자 정보 확인
 http POST localhost:8085/auth/validate Authorization:"Bearer $JWT_TOKEN"
-``` 
+```
+
+## API 엔드포인트 요약
+
+### 공개 엔드포인트 (인증 불필요)
+- `POST /auth/login` - 통합 로그인 (모든 사용자 타입)
+- `POST /auth/signup` - 일반 사용자 회원가입
+- `POST /auth/validate` - 토큰 검증
+- `POST /authorAccounts/signup` - 작가 회원가입
+
+### 보호된 엔드포인트 (인증 필요)
+- `GET /userAccounts` - 사용자 계정 조회
+- `GET /authorAccounts` - 작가 계정 조회
+- `GET /adminAccounts` - 관리자 계정 조회
+- `POST /adminAccounts/signup` - 관리자 계정 생성 (ADMIN 권한 필요)
