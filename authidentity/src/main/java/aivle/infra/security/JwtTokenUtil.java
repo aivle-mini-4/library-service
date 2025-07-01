@@ -2,8 +2,6 @@ package aivle.infra.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,9 +31,8 @@ public class JwtTokenUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public LocalDateTime extractExpiration(String token) {
-        Date expirationDate = extractClaim(token, Claims::getExpiration);
-        return LocalDateTime.ofInstant(expirationDate.toInstant(), ZoneId.systemDefault());
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -49,7 +46,7 @@ public class JwtTokenUtil {
     }
 
     private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).isBefore(LocalDateTime.now());
+        return extractExpiration(token).before(new Date());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
@@ -57,8 +54,8 @@ public class JwtTokenUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-                .setExpiration(Date.from(LocalDateTime.now().plusSeconds(expiration).atZone(ZoneId.systemDefault()).toInstant()))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
                 .signWith(key)
                 .compact();
     }
