@@ -36,7 +36,7 @@ public class AiService {
     private static ProcessingResult processBook(String title, String content) {
         // 1. 책 표지 이미지 생성
         ImageRequest imgReq = new ImageRequest();
-        imgReq.setPrompt("다음 책 제목과 내용을 바탕으로 표지 아트워크만 배경 없이(책 프레임이나 책등, 책상, 펜 등 주변 소품 일체 없이) 포스터 형태로 표지만 출력해 주세요.\n\n책 제목: '" + title + "'\n" + "책 내용: " + content);
+        imgReq.setPrompt("다음 책 제목과 내용을 바탕으로 표지 아트워크를 만들어주세요. 배경 없이(책 프레임이나 책등, 책상, 펜 등 주변 소품 일체 없이) 포스터 형태로 표지만 출력해 주세요. 책 제목은 반드시 포함해주세요.\n\n책 제목: '" + title + "'\n" + "책 내용: " + content);
         ImageResponse imgRes = openAIClient.generateImage(apiKey, imgReq);
         String coverUrl = imgRes.getData()[0].getUrl();
 
