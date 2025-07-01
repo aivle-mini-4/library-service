@@ -36,6 +36,14 @@ http POST localhost:8085/auth/signup \
 http POST localhost:8085/auth/login \
   email=user@example.com \
   password=password123
+
+http POST localhost:8085/auth/login \
+  email=author@example.com \
+  password=password123
+
+http POST localhost:8085/auth/login \
+  email=admin@example.com \
+  password=admin123
 ```
 
 **예상 응답:**
