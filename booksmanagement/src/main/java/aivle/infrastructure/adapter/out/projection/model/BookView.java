@@ -1,6 +1,7 @@
-package aivle.infrastructure.projection;
+package aivle.infrastructure.adapter.out.projection.model;
 
 import aivle.common.entity.BaseEntity;
+import aivle.domain.event.BookUpdated;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,5 +42,17 @@ public class BookView extends BaseEntity {
         this.coverImageUrl = coverImageUrl;
         this.price = price;
         this.views = views;
+    }
+
+    public void updateFromEvent(BookUpdated evt) {
+        this.bookId = evt.getBookId();
+        this.authorId = evt.getAuthorId();
+        this.title = evt.getTitle();
+        this.content = evt.getContent();
+        this.category = evt.getCategory();
+        this.summary = evt.getSummary();
+        this.coverImageUrl = evt.getCoverImageUrl();
+        this.price = evt.getPrice();
+        this.views = evt.getViews();
     }
 }

@@ -1,9 +1,9 @@
-package aivle.infrastructure.adapter.out;
+package aivle.infrastructure.adapter.out.projection.adapter;
 
-import aivle.application.port.out.BookViewQueryPort;
+import aivle.application.port.out.BookQueryPort;
 import aivle.common.exception.CustomException;
-import aivle.infrastructure.persistence.BookViewRepository;
-import aivle.infrastructure.projection.BookView;
+import aivle.infrastructure.adapter.out.projection.repository.BookViewRepository;
+import aivle.infrastructure.adapter.out.projection.model.BookView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +13,7 @@ import static aivle.common.response.ErrorCode.NOT_FOUND;
 
 @Repository
 @RequiredArgsConstructor
-public class BookViewQueryAdapter implements BookViewQueryPort {
+public class BookQueryAdapter implements BookQueryPort {
 
     private final BookViewRepository repo;
 

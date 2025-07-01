@@ -1,4 +1,4 @@
-package aivle.presentation;//package aivle.presentation;
+package aivle.infrastructure.adapter.in.rest;//package aivle.presentation;
 
 import aivle.application.dto.BookViewDto;
 import aivle.application.port.in.BookQueryUseCase;
@@ -8,6 +8,7 @@ import aivle.common.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,13 @@ public class BookViewController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<BookViewDto>>> getAllBooks() {
-        List<BookViewDto> books = bookViewUseCase.findAllBooks();
-        return responseFactory.success(SuccessCode.OK, books);
+        List<BookViewDto> bookViewDtos = bookViewUseCase.findAllBooks();
+        return responseFactory.success(SuccessCode.OK, bookViewDtos);
+    }
+
+    @GetMapping("/{bookId}")
+    public ResponseEntity<ApiResponse<BookViewDto>> getBook(@PathVariable Long bookId) {
+        BookViewDto bookViewDto = bookViewUseCase.findBookById(bookId);
+        return responseFactory.success(SuccessCode.OK, bookViewDto);
     }
 }

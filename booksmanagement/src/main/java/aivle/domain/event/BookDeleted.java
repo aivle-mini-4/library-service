@@ -1,22 +1,11 @@
-//package aivle.domain.event;
-//
-//import aivle.infrastructure.messaging.AbstractEvent;
-//import aivle.domain.model.Book;
-//import lombok.*;
-//
-////<<< DDD / Domain Event
-//@Data
-//@ToString
-//public class BookDeleted extends AbstractEvent {
-//
-//    private Long id;
-//
-//    public BookDeleted(Book aggregate) {
-//        super(aggregate);
-//    }
-//
-//    public BookDeleted() {
-//        super();
-//    }
-//}
-////>>> DDD / Domain Event
+package aivle.domain.event;
+
+import aivle.infrastructure.messaging.AbstractEvent;
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class BookDeleted extends AbstractEvent {
+    private Long bookId;
+}

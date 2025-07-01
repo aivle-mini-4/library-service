@@ -1,6 +1,13 @@
+server:
+  port: 8080
+
 spring:
   application:
-    name: books-management
+    name: booksmanagement
+---
+
+spring:
+  profiles: default
 
   jackson:
     time-zone: Asia/Seoul
@@ -10,6 +17,11 @@ spring:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
     username: sa
     password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
 
   jpa:
     hibernate:
@@ -22,18 +34,31 @@ spring:
         default_batch_fetch_size: 1000
         implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
     open-in-view: false
+
   cloud:
     stream:
       kafka:
         binder:
           brokers: localhost:9092
+        streams:
+          binder:
+            configuration:
+              default:
+                key:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
       bindings:
-        event-out:
-          destination: book-events
-          contentType: application/json
         event-in:
-          destination: book-events
           group: booksmanagement
+          #<<< EDA / Topic Name
+          destination: aivle
+          #>>> EDA / Topic Name
+          contentType: application/json
+        event-out:
+          #<<< EDA / Topic Name
+          destination: aivle
+          #>>> EDA / Topic Name
           contentType: application/json
 
 logging:
@@ -41,5 +66,61 @@ logging:
     org.hibernate.type: trace
     org.springframework.cloud: debug
 
+
 server:
-  port: 8080
+  port: 8090
+
+---
+
+spring:
+  profiles: docker
+
+  jackson:
+    time-zone: Asia/Seoul
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        default_batch_fetch_size: 1000
+        implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
+    open-in-view: false
+
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: my-kafka:9092
+        streams:
+          binder:
+            configuration:
+              default:
+                key:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+      bindings:
+        event-in:
+          group: booksmanagement
+          destination: aivle
+          contentType: application/json
+        event-out:
+          destination: aivle
+          contentType: application/json

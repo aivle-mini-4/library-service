@@ -5,15 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Book extends BaseEntity {
@@ -25,7 +21,10 @@ public class Book extends BaseEntity {
     private Long authorId;
 
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
+
     private String category;
     private String summary;
     private String coverImageUrl;
@@ -43,5 +42,10 @@ public class Book extends BaseEntity {
         this.coverImageUrl = coverImageUrl;
         this.price = price;
         this.views = 0L;
+    }
+
+    public long increaseViews() {
+        this.views++;
+        return this.views;
     }
 }

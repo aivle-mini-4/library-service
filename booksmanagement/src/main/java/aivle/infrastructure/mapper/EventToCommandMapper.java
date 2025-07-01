@@ -1,7 +1,7 @@
 package aivle.infrastructure.mapper;
 
 import aivle.application.dto.BookRegisterCommand;
-import aivle.integration.event.ReadyToPublish;
+import aivle.infrastructure.adapter.out.event.ReadyToPublish;
 import org.springframework.stereotype.Component;
 
 @Component
