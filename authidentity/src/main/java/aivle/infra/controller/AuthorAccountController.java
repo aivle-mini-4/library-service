@@ -48,7 +48,6 @@ public class AuthorAccountController {
         authorAccount.requestAuthorRegistration(
             requestAuthorRegistrationCommand
         );
-        authorAccountRepository.save(authorAccount);
         return authorAccount;
     }
 

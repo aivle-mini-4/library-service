@@ -250,7 +250,13 @@ public AdminAccount signup(...) { ... }
 
 @RequestMapping(value = "/authorAccounts/requestauthorregistration", method = RequestMethod.POST)
 @PreAuthorize("hasRole('USER') or hasRole('AUTHOR')")
-public AuthorAccount requestAuthorRegistration(...) { ... }
+public AuthorAccount requestAuthorRegistration(...) { 
+    // 작가회원가입 + 등록요청 이벤트 publish
+    // - 이메일 중복 체크
+    // - 비밀번호 암호화
+    // - 작가 계정 생성 (AUTHOR 역할)
+    // - AuthorRegistrationRequested 이벤트 publish
+}
 ```
 
 **설명**: 각 API 엔드포인트에 적절한 역할 권한을 설정했습니다.

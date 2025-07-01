@@ -1,5 +1,12 @@
 # JWT 인증 API 테스트 가이드 (httpie)
 
+## h2 db접속
+http://localhost:8085/h2-console
+Driver Class:	org.h2.Driver
+JDBC URL: jdbc:h2:mem:testdb
+Username: sa  
+Password: (비어있음)
+
 ## 기본 API 테스트
 
 ### 1. 회원가입 (Signup)
@@ -67,6 +74,7 @@ http GET localhost:8085/userAccounts/1 \
 
 ```bash
 # 작가 등록 요청 (USER 권한 필요)
+# 이 API는 작가회원가입 + 등록요청 이벤트 publish를 수행합니다
 http POST localhost:8085/authorAccounts/requestauthorregistration \
   Authorization:"Bearer YOUR_JWT_TOKEN_HERE" \
   email=author@example.com \
@@ -74,6 +82,25 @@ http POST localhost:8085/authorAccounts/requestauthorregistration \
   selfIntroduction="저는 소설 작가입니다." \
   portfolio=https://example.com/portfolio
 ```
+
+**예상 응답:**
+```json
+{
+  "id": 1,
+  "email": "author@example.com",
+  "roles": "AUTHOR",
+  "selfIntroduction": "저는 소설 작가입니다.",
+  "portfolio": "https://example.com/portfolio",
+  "createdAt": "2024-01-01T00:00:00.000+00:00",
+  "updatedAt": "2024-01-01T00:00:00.000+00:00"
+}
+```
+
+**기능:**
+- 작가 계정 생성 (비밀번호 암호화 포함)
+- 이메일 중복 체크
+- AuthorRegistrationRequested 이벤트 publish
+- 자동으로 AUTHOR 역할 부여
 
 ### 6. 관리자 계정 생성
 
@@ -107,7 +134,7 @@ http GET localhost:8085/userAccounts Authorization:"Bearer $TOKEN"
 # 1. 사용자 로그인
 TOKEN=$(http POST localhost:8085/auth/login email=testuser@example.com password=password123 | jq -r '.token')
 
-# 2. 작가 등록 요청
+# 2. 작가 등록 요청 (작가회원가입 + 등록요청 이벤트 publish)
 http POST localhost:8085/authorAccounts/requestauthorregistration \
   Authorization:"Bearer $TOKEN" \
   email=author@example.com \
@@ -223,7 +250,7 @@ http -v GET localhost:8085/userAccounts Authorization:"Bearer $JWT_TOKEN"
 # 사용자 계정 조회
 http GET localhost:8085/userAccounts/1 Authorization:"Bearer $USER_TOKEN"
 
-# 작가 등록 요청
+# 작가 등록 요청 (작가회원가입 + 등록요청 이벤트 publish)
 http POST localhost:8085/authorAccounts/requestauthorregistration \
   Authorization:"Bearer $USER_TOKEN" \
   email=author@example.com \
@@ -237,7 +264,7 @@ http POST localhost:8085/authorAccounts/requestauthorregistration \
 # 작가 계정 조회
 http GET localhost:8085/authorAccounts/1 Authorization:"Bearer $AUTHOR_TOKEN"
 
-# 작가 등록 요청 (이미 작가인 경우)
+# 작가 등록 요청 (이미 작가인 경우에도 가능 - 작가회원가입 + 등록요청 이벤트 publish)
 http POST localhost:8085/authorAccounts/requestauthorregistration \
   Authorization:"Bearer $AUTHOR_TOKEN" \
   email=author2@example.com \

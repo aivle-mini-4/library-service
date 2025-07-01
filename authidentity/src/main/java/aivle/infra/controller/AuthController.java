@@ -24,6 +24,7 @@ import aivle.domain.entity.UserAccount;
 import aivle.domain.repository.AdminAccountRepository;
 import aivle.domain.repository.AuthorAccountRepository;
 import aivle.domain.repository.UserAccountRepository;
+import aivle.infra.security.CustomUserDetails;
 import aivle.infra.security.JwtTokenUtil;
 import aivle.infra.security.JwtUserDetailsService;
 
@@ -59,11 +60,12 @@ public class AuthController {
         authenticate(loginRequest.getEmail(), loginRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getEmail());
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        final String token = jwtTokenUtil.generateTokenWithUserIdOnly(userDetails);
 
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
         response.put("email", loginRequest.getEmail());
+        response.put("userId", ((CustomUserDetails) userDetails).getUserId());
         response.put("role", userDetails.getAuthorities().iterator().next().getAuthority());
 
         return ResponseEntity.ok(response);
@@ -92,12 +94,13 @@ public class AuthController {
             // 저장 후 flush하여 즉시 데이터베이스에 반영
             userAccountRepository.save(userAccount);
 
-            // 토큰 생성 (username과 role을 직접 전달)
-            final String token = jwtTokenUtil.generateToken(signupRequest.getEmail(), "USER");
+            // 토큰 생성 (사용자 ID만 담기)
+            final String token = jwtTokenUtil.generateTokenWithUserIdOnly(userAccount.getId().toString());
 
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("email", signupRequest.getEmail());
+            response.put("userId", userAccount.getId());
             response.put("role", "ROLE_USER");
             response.put("message", "User registered successfully");
 
@@ -112,13 +115,16 @@ public class AuthController {
     public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
         try {
             String jwtToken = token.substring(7);
-            String username = jwtTokenUtil.extractUsername(jwtToken);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            String userId = jwtTokenUtil.extractUserId(jwtToken);
+            
+            // 사용자 ID로 사용자 정보 조회
+            UserDetails userDetails = userDetailsService.loadUserByUserId(userId);
             
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("valid", true);
-                response.put("email", username);
+                response.put("userId", userId);
+                response.put("email", userDetails.getUsername());
                 response.put("role", userDetails.getAuthorities().iterator().next().getAuthority());
                 return ResponseEntity.ok(response);
             } else {

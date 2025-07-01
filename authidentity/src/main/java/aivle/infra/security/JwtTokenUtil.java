@@ -1,9 +1,13 @@
 package aivle.infra.security;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +26,8 @@ public class JwtTokenUtil {
     @Value("${jwt.expiration:86400}")
     private Long expiration;
 
-    public String extractUsername(String token) {
+    // 사용자 ID 추출 (subject)
+    public String extractUserId(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -36,41 +41,49 @@ public class JwtTokenUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        Key key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
-    }
-
-    public String generateToken(String username, String role) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", role);
-        return createToken(claims, username);
-    }
-
     private String createToken(Map<String, Object> claims, String subject) {
+        Key key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(key)
                 .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String userId = extractUserId(token);
+        String userDetailsId = extractUserIdFromUserDetails(userDetails);
+        return (userId.equals(userDetailsId) && !isTokenExpired(token));
     }
 
-    public String getRoleFromToken(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("role", String.class);
+    // UserDetails에서 사용자 ID 추출 (CustomUserDetails 사용)
+    private String extractUserIdFromUserDetails(UserDetails userDetails) {
+        if (userDetails instanceof CustomUserDetails) {
+            return ((CustomUserDetails) userDetails).getUserId();
+        }
+        // 기존 User 클래스 사용 시 이메일을 ID로 사용 (임시)
+        return userDetails.getUsername();
+    }
+
+    // 사용자 ID만 담는 토큰 생성
+    public String generateTokenWithUserIdOnly(String userId) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, userId);
+    }
+
+    // UserDetails로부터 사용자 ID만 담는 토큰 생성
+    public String generateTokenWithUserIdOnly(UserDetails userDetails) {
+        String userId = extractUserIdFromUserDetails(userDetails);
+        return generateTokenWithUserIdOnly(userId);
     }
 } 
