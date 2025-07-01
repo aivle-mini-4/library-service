@@ -14,7 +14,7 @@ import aivle.AuthidentityApplication;
 import aivle.domain.command.AuthorSignupCommand;
 import aivle.domain.command.LoginCommand;
 import aivle.domain.command.LogoutCommand;
-import aivle.domain.event.AuthorRegistrationRequested;
+import aivle.domain.event.AuthorSignup;
 import aivle.domain.event.Logged;
 import aivle.domain.event.Loggedout;
 import aivle.domain.repository.AuthorAccountRepository;
@@ -132,8 +132,8 @@ public class AuthorAccount  {
         repository().save(this);
 
         // 이벤트 publish
-        AuthorRegistrationRequested authorRegistrationRequested = new AuthorRegistrationRequested(this);
-        authorRegistrationRequested.publishAfterCommit();
+        AuthorSignup authorSignup = new AuthorSignup(this);
+        authorSignup.publishAfterCommit();
     }
 
     public void logout(LogoutCommand logoutCommand){
