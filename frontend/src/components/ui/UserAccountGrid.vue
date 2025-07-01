@@ -18,27 +18,27 @@
                 <v-btn :disabled="!selectedRow" style="margin-left: 5px;" @click="openEditDialog()" class="contrast-primary-text" small color="primary">
                     <v-icon small>mdi-pencil</v-icon>수정
                 </v-btn>
-                <v-btn :disabled="!selectedRow" style="margin-left: 5px;" @click="signupDialog = true" class="contrast-primary-text" small color="primary" :disabled="!hasRole('User')">
-                    <v-icon small>mdi-minus-circle-outline</v-icon>회원가입
-                </v-btn>
+<v-btn :disabled="!selectedRow || !hasRole('User')" style="margin-left: 5px;" @click="signupDialog = true" class="contrast-primary-text" small color="primary">
+    <v-icon small>mdi-minus-circle-outline</v-icon>회원가입
+</v-btn>
                 <v-dialog v-model="signupDialog" width="500">
                     <Signup
                         @closeDialog="signupDialog = false"
                         @signup="signup"
                     ></Signup>
                 </v-dialog>
-                <v-btn :disabled="!selectedRow" style="margin-left: 5px;" @click="logoutDialog = true" class="contrast-primary-text" small color="primary" :disabled="!hasRole('User')">
-                    <v-icon small>mdi-minus-circle-outline</v-icon>로그아웃
-                </v-btn>
+<v-btn :disabled="!selectedRow || !hasRole('User')" style="margin-left: 5px;" @click="logoutDialog = true" class="contrast-primary-text" small color="primary">
+    <v-icon small>mdi-minus-circle-outline</v-icon>로그아웃
+</v-btn>
                 <v-dialog v-model="logoutDialog" width="500">
                     <Logout
                         @closeDialog="logoutDialog = false"
                         @logout="logout"
                     ></Logout>
                 </v-dialog>
-                <v-btn :disabled="!selectedRow" style="margin-left: 5px;" @click="loginDialog = true" class="contrast-primary-text" small color="primary" :disabled="!hasRole('User')">
-                    <v-icon small>mdi-minus-circle-outline</v-icon>로그인
-                </v-btn>
+<v-btn :disabled="!selectedRow || !hasRole('User')" style="margin-left: 5px;" @click="loginDialog = true" class="contrast-primary-text" small color="primary">
+    <v-icon small>mdi-minus-circle-outline</v-icon>로그인
+</v-btn>
                 <v-dialog v-model="loginDialog" width="500">
                     <Login
                         @closeDialog="loginDialog = false"

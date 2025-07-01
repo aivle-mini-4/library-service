@@ -18,9 +18,9 @@
                 <v-btn :disabled="!selectedRow" style="margin-left: 5px;" @click="openEditDialog()" class="contrast-primary-text" small color="primary">
                     <v-icon small>mdi-pencil</v-icon>수정
                 </v-btn>
-                <v-btn :disabled="!selectedRow" style="margin-left: 5px;" @click="signupDialog = true" class="contrast-primary-text" small color="primary" :disabled="!hasRole('Admin')">
-                    <v-icon small>mdi-minus-circle-outline</v-icon>회원가입
-                </v-btn>
+<v-btn :disabled="!selectedRow || !hasRole('Admin')" style="margin-left: 5px;" @click="signupDialog = true" class="contrast-primary-text" small color="primary">
+    <v-icon small>mdi-minus-circle-outline</v-icon>회원가입
+</v-btn>
                 <v-dialog v-model="signupDialog" width="500">
                     <Signup
                         @closeDialog="signupDialog = false"
@@ -36,9 +36,9 @@
                         @login="login"
                     ></Login>
                 </v-dialog>
-                <v-btn :disabled="!selectedRow" style="margin-left: 5px;" @click="logoutDialog = true" class="contrast-primary-text" small color="primary" :disabled="!hasRole('Admin')">
-                    <v-icon small>mdi-minus-circle-outline</v-icon>로그아웃
-                </v-btn>
+<v-btn :disabled="!selectedRow || !hasRole('Admin')" style="margin-left: 5px;" @click="logoutDialog = true" class="contrast-primary-text" small color="primary">
+    <v-icon small>mdi-minus-circle-outline</v-icon>로그아웃
+</v-btn>
                 <v-dialog v-model="logoutDialog" width="500">
                     <Logout
                         @closeDialog="logoutDialog = false"
