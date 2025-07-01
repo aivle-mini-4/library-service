@@ -15,6 +15,6 @@ public class QueryFavoriteList {
     @Id
     //@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-    private Long userId;
     private Long bookId;
+    private Long userId;
 }
