@@ -1,6 +1,6 @@
 package aivle.domain.event;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import aivle.domain.entity.AdminAccount;
 import aivle.domain.entity.UserAccount;
@@ -17,8 +17,8 @@ public class SignedUp extends AbstractEvent {
     private String email;
     private String password;
     private String roles;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public SignedUp(UserAccount aggregate) {
         super(aggregate);

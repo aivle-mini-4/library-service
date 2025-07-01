@@ -1,6 +1,6 @@
 package aivle.domain.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -35,8 +35,8 @@ public class AuthorAccount  {
     private String password;    
     @Enumerated(EnumType.STRING)
     private UserRole roles = UserRole.AUTHOR;    
-    private Date createdAt;    
-    private Date updatedAt;
+    private LocalDateTime createdAt;    
+    private LocalDateTime updatedAt;
     private String selfIntroduction;
     private String portfolio;
 
@@ -72,19 +72,19 @@ public class AuthorAccount  {
         this.roles = roles;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -119,8 +119,8 @@ public class AuthorAccount  {
         this.setEmail(requestAuthorRegistrationCommand.getEmail());
         this.setSelfIntroduction(requestAuthorRegistrationCommand.getSelfIntroduction());
         this.setPortfolio(requestAuthorRegistrationCommand.getPortfolio());
-        this.setCreatedAt(new Date());
-        this.setUpdatedAt(new Date());
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
 
         // 비밀번호 암호화
         org.springframework.security.crypto.password.PasswordEncoder passwordEncoder = 

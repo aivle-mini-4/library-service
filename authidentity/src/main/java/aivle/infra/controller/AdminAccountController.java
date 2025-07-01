@@ -61,7 +61,6 @@ public class AdminAccountController {
         method = RequestMethod.POST,
         produces = "application/json;charset=UTF-8"
     )
-    @PreAuthorize("hasRole('ADMIN')")
     public AdminAccount login(
         HttpServletRequest request,
         HttpServletResponse response,

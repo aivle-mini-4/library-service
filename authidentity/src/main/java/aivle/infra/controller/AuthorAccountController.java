@@ -78,27 +78,18 @@ public class AuthorAccountController {
     }
 
     @RequestMapping(
-        value = "/authorAccounts/{id}/login",
-        method = RequestMethod.PUT,
+        value = "/authorAccounts/login",
+        method = RequestMethod.POST,
         produces = "application/json;charset=UTF-8"
     )
-    @PreAuthorize("hasRole('AUTHOR')")
     public AuthorAccount login(
-        @PathVariable(value = "id") Long id,
-        @RequestBody LoginCommand loginCommand,
         HttpServletRequest request,
-        HttpServletResponse response
+        HttpServletResponse response,
+        @RequestBody LoginCommand loginCommand
     ) throws Exception {
         System.out.println("##### /authorAccount/login  called #####");
-        Optional<AuthorAccount> optionalAuthorAccount = authorAccountRepository.findById(
-            id
-        );
-
-        optionalAuthorAccount.orElseThrow(() -> new Exception("No Entity Found")
-        );
-        AuthorAccount authorAccount = optionalAuthorAccount.get();
+        AuthorAccount authorAccount = new AuthorAccount();
         authorAccount.login(loginCommand);
-
         authorAccountRepository.save(authorAccount);
         return authorAccount;
     }

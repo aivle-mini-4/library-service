@@ -88,8 +88,8 @@ public class AuthController {
             UserAccount userAccount = new UserAccount();
             userAccount.setEmail(signupRequest.getEmail());
             userAccount.setPassword(encodedPassword);
-            userAccount.setCreatedAt(new java.util.Date());
-            userAccount.setUpdatedAt(new java.util.Date());
+            userAccount.setCreatedAt(java.time.LocalDateTime.now());
+            userAccount.setUpdatedAt(java.time.LocalDateTime.now());
 
             // 저장 후 flush하여 즉시 데이터베이스에 반영
             userAccountRepository.save(userAccount);
