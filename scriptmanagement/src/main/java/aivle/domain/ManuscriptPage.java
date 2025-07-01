@@ -8,7 +8,6 @@ import lombok.ToString;
 @Entity
 @Table(name = "ManuscriptPage_table")
 @Data
-@ToString
 public class ManuscriptPage {
 
     @Id
