@@ -49,7 +49,7 @@ public class AiService {
         // 4. 구독료 산정
         String price = callChat("다음 책 내용과 분량을 바탕으로 구독료를 제안하세요. 이 책에 적절한 구독료를 숫자(예: 250)로만 한 줄로 응답하세요. 그 외 다른 설명은 하지 마십시오. 구독료의 범위는 200포인트에서 500포인트 사이로, 10단위로 제안하세요.\n\n책 내용: " + content);
 
-        return new ProcessingResult(coverUrl, summary, categories, price);
+        return new ProcessingResult(coverUrl, summary, categories, Integer.parseInt(price));
     }
 
     private static String callChat(String prompt) {
@@ -69,7 +69,7 @@ public class AiService {
         private final String coverImageUrl;
         private final String summary;
         private final String categories;
-        private final String estimatedPrice;
+        private final Integer estimatedPrice;
     }
 
 }
