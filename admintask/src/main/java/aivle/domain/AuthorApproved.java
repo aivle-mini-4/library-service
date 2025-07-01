@@ -12,6 +12,7 @@ import lombok.*;
 public class AuthorApproved extends AbstractEvent {
 
     private Long id;
+    private Long adminId;
     private Long authorId;
     private LocalDateTime resultAt;
     private ApprovalState state;

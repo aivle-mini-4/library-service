@@ -59,9 +59,9 @@ public class Authorapproval {
 
 
 
-    public void approve(Long authorId) {
+    public void approve(Long adminId) {
     this.state = ApprovalState.APPROVED;
-    this.authorId = authorId;
+    this.adminId= adminId;
     this.resultAt = LocalDateTime.now();
     AuthorApproved event = new AuthorApproved(this);
     event.publishAfterCommit();
