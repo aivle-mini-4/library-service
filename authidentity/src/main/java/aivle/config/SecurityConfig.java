@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/**", "/h2-console/**", "/userAccounts/signup", 
-                           "/authorAccounts/signup").permitAll()
+                           "/authorAccounts/signup", "/adminAccounts/signup").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)

@@ -97,15 +97,27 @@ http POST localhost:8085/authorAccounts/signup \
 - AuthorRegistrationRequested 이벤트 publish
 - 자동으로 AUTHOR 역할 부여
 
-### 5. 관리자 계정 생성 (H2 콘솔에서 직접)
+### 5. 관리자 계정 생성
 
-```sql
--- H2 콘솔에서 실행
-INSERT INTO AdminAccount_table (id, email, password, roles, created_at, updated_at) 
-VALUES (1, 'admin@example.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ADMIN', NOW(), NOW());
+```bash
+# 관리자 계정 생성 (권한 불필요 - 테스트용)
+http POST localhost:8085/adminAccounts/signup \
+  email=admin@example.com \
+  password=admin123
 ```
 
-**참고**: 관리자 계정은 H2 콘솔에서 직접 생성하거나, 기존 관리자가 `/adminAccounts/signup` API를 사용하여 생성할 수 있습니다.
+**예상 응답:**
+```json
+{
+  "id": 3,
+  "email": "admin@example.com",
+  "roles": "ADMIN",
+  "createdAt": "2024-01-01T00:00:00",
+  "updatedAt": "2024-01-01T00:00:00"
+}
+```
+
+**참고**: 테스트 환경에서는 권한 없이도 관리자 계정을 생성할 수 있습니다. 프로덕션 환경에서는 보안을 위해 권한 제한을 추가해야 합니다.
 
 ## 전체 테스트 시나리오
 
@@ -143,13 +155,18 @@ http POST localhost:8085/auth/validate Authorization:"Bearer $AUTHOR_TOKEN"
 ### 시나리오 3: 관리자 플로우
 
 ```bash
-# 1. 관리자 로그인 (H2에서 생성한 계정)
-ADMIN_TOKEN=$(http POST localhost:8085/auth/login email=admin@example.com password=password | jq -r '.token')
+# 1. 관리자 계정 생성
+http POST localhost:8085/adminAccounts/signup \
+  email=admin@example.com \
+  password=admin123
 
-# 2. 관리자 권한으로 사용자 계정 조회
+# 2. 관리자 로그인
+ADMIN_TOKEN=$(http POST localhost:8085/auth/login email=admin@example.com password=admin123 | jq -r '.token')
+
+# 3. 관리자 권한으로 사용자 계정 조회
 http GET localhost:8085/userAccounts Authorization:"Bearer $ADMIN_TOKEN"
 
-# 3. 관리자 권한으로 작가 계정 조회
+# 4. 관리자 권한으로 작가 계정 조회
 http GET localhost:8085/authorAccounts Authorization:"Bearer $ADMIN_TOKEN"
 ```
 
@@ -288,9 +305,8 @@ http GET localhost:8085/userAccounts Authorization:"Bearer $ADMIN_TOKEN"
 http GET localhost:8085/authorAccounts Authorization:"Bearer $ADMIN_TOKEN"
 http GET localhost:8085/adminAccounts Authorization:"Bearer $ADMIN_TOKEN"
 
-# 관리자 계정 생성 (기존 관리자만 가능)
+# 관리자 계정 생성 (테스트 환경에서는 권한 불필요)
 http POST localhost:8085/adminAccounts/signup \
-  Authorization:"Bearer $ADMIN_TOKEN" \
   email=newadmin@example.com \
   password=admin123
 ```
@@ -374,9 +390,9 @@ http POST localhost:8085/auth/validate Authorization:"Bearer $JWT_TOKEN"
 - `POST /auth/signup` - 일반 사용자 회원가입
 - `POST /auth/validate` - 토큰 검증
 - `POST /authorAccounts/signup` - 작가 회원가입
+- `POST /adminAccounts/signup` - 관리자 계정 생성 (테스트용)
 
 ### 보호된 엔드포인트 (인증 필요)
 - `GET /userAccounts` - 사용자 계정 조회
 - `GET /authorAccounts` - 작가 계정 조회
 - `GET /adminAccounts` - 관리자 계정 조회
-- `POST /adminAccounts/signup` - 관리자 계정 생성 (ADMIN 권한 필요)
