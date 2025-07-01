@@ -37,6 +37,8 @@ public class AuthorAccount  {
     private UserRole roles = UserRole.AUTHOR;    
     private Date createdAt;    
     private Date updatedAt;
+    private String selfIntroduction;
+    private String portfolio;
 
     public Long getId() {
         return id;
@@ -86,36 +88,57 @@ public class AuthorAccount  {
         this.updatedAt = updatedAt;
     }
 
+    public String getSelfIntroduction() {
+        return selfIntroduction;
+    }
+
+    public void setSelfIntroduction(String selfIntroduction) {
+        this.selfIntroduction = selfIntroduction;
+    }
+
+    public String getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(String portfolio) {
+        this.portfolio = portfolio;
+    }
+
     public static AuthorAccountRepository repository(){
         AuthorAccountRepository authorAccountRepository = AuthidentityApplication.applicationContext.getBean(AuthorAccountRepository.class);
         return authorAccountRepository;
     }
 
-
-
     public void requestAuthorRegistration(RequestAuthorRegistrationCommand requestAuthorRegistrationCommand){
+        // 이메일 중복 체크
+        if (repository().findByEmail(requestAuthorRegistrationCommand.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists: " + requestAuthorRegistrationCommand.getEmail());
+        }
 
-        AuthorAccount authorAccount = new AuthorAccount();
+        // 현재 객체에 정보 설정
+        this.setEmail(requestAuthorRegistrationCommand.getEmail());
+        this.setSelfIntroduction(requestAuthorRegistrationCommand.getSelfIntroduction());
+        this.setPortfolio(requestAuthorRegistrationCommand.getPortfolio());
+        this.setCreatedAt(new Date());
+        this.setUpdatedAt(new Date());
 
-        authorAccount.setEmail(requestAuthorRegistrationCommand.getEmail());
-        authorAccount.setPassword(requestAuthorRegistrationCommand.getPassword());
-        authorAccount.setCreatedAt(new Date());
-        authorAccount.setUpdatedAt(new Date());
+        // 비밀번호 암호화
+        org.springframework.security.crypto.password.PasswordEncoder passwordEncoder = 
+            AuthidentityApplication.applicationContext.getBean(org.springframework.security.crypto.password.PasswordEncoder.class);
+        this.setPassword(passwordEncoder.encode(requestAuthorRegistrationCommand.getPassword()));
 
-        repository().save(authorAccount);
-        
+        // 저장
+        repository().save(this);
 
-
+        // 이벤트 publish
         AuthorRegistrationRequested authorRegistrationRequested = new AuthorRegistrationRequested(this);
         authorRegistrationRequested.publishAfterCommit();
     }
-
 
     public void logout(LogoutCommand logoutCommand){
         
         //implement business logic here:
         
-
 
         Loggedout loggedout = new Loggedout(this);
         loggedout.publishAfterCommit();
@@ -126,12 +149,9 @@ public class AuthorAccount  {
         //implement business logic here:
         
 
-
         Logged logged = new Logged(this);
         logged.publishAfterCommit();
     }
-
-
 
 }
 //>>> DDD / Aggregate Root
