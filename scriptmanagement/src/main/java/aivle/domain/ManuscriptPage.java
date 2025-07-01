@@ -3,7 +3,6 @@ package aivle.domain;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 import lombok.Data;
-import lombok.ToString;
 
 @Entity
 @Table(name = "ManuscriptPage_table")
@@ -14,6 +13,9 @@ public class ManuscriptPage {
     private Long id;
     private Long authorId;
     private String title;
+    
+    @Column(columnDefinition = "TEXT")
     private String content;
+    
     private LocalDateTime updatedAt;
 }

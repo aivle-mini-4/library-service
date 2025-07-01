@@ -27,7 +27,7 @@
                         @subscribeRequest="subscribeRequest"
                     ></SubscribeRequest>
                 </v-dialog>
-                <v-btn :disabled="!selectedRow" style="margin-left: 5px;" @click="unsubscribeRequestDialog = true" class="contrast-primary-text" small color="primary" :disabled="!hasRole('User')">
+                <v-btn style="margin-left: 5px;" @click="unsubscribeRequestDialog = true" class="contrast-primary-text" small color="primary" :disabled="!selectedRow || !hasRole('User')">
                     <v-icon small>mdi-minus-circle-outline</v-icon>구독취소
                 </v-btn>
                 <v-dialog v-model="unsubscribeRequestDialog" width="500">

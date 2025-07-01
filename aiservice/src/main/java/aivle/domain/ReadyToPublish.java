@@ -12,7 +12,7 @@ public class ReadyToPublish extends AbstractEvent {
     private String title;
     private String summary;
     private String category;
-    private String price;
+    private Integer price;
     private String content;
 
     public ReadyToPublish(Long authorId, String title, String content, ProcessingResult result) {

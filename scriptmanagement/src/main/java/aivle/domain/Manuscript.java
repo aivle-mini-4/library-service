@@ -19,6 +19,7 @@ public class Manuscript {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @UpdateTimestamp
