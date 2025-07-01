@@ -19,9 +19,9 @@ public class AuthorAccountHateoasProcessor
             Link
                 .of(
                     model.getRequiredLink("self").getHref() +
-                    "/requestauthorregistration"
+                    "/signup"
                 )
-                .withRel("requestauthorregistration")
+                .withRel("signup")
         );
         model.add(
             Link

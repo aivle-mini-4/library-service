@@ -31,18 +31,17 @@ public class AuthorAccountController {
     AuthorAccountRepository authorAccountRepository;
 
     @RequestMapping(
-        value = "/authorAccounts/requestauthorregistration",
+        value = "/authorAccounts/signup",
         method = RequestMethod.POST,
         produces = "application/json;charset=UTF-8"
     )
-    @PreAuthorize("hasRole('USER') or hasRole('AUTHOR')")
-    public AuthorAccount requestAuthorRegistration(
+    public AuthorAccount signup(
         HttpServletRequest request,
         HttpServletResponse response,
         @RequestBody RequestAuthorRegistrationCommand requestAuthorRegistrationCommand
     ) throws Exception {
         System.out.println(
-            "##### /authorAccount/requestAuthorRegistration  called #####"
+            "##### /authorAccount/signup  called #####"
         );
         AuthorAccount authorAccount = new AuthorAccount();
         authorAccount.requestAuthorRegistration(
