@@ -51,8 +51,14 @@ spring:
 
 logging:
   level:
-    org.hibernate.type: trace
-    org.springframework.cloud: debug
+#     org.hibernate.type: trace
+#     org.springframework.cloud: debug
+    root: ERROR
+    aivle: INFO
+    org.springframework.cloud: ERROR
+    org.hibernate: ERROR
+    org.springframework.boot: ERROR
+    org.springframework.web: ERROR
 
 api:
   url: 
