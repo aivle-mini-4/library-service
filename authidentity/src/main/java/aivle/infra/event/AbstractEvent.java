@@ -39,6 +39,13 @@ public class AbstractEvent {
         );
         MessageChannel outputChannel = processor.outboundTopic();
 
+        // 이벤트 로그 출력
+        System.out.println("=== EVENT PUBLISHED ===");
+        System.out.println("Event Type: " + getEventType());
+        System.out.println("Timestamp: " + getTimestamp());
+        System.out.println("Event Data: " + toJson());
+        System.out.println("=======================");
+
         outputChannel.send(
             MessageBuilder
                 .withPayload(this)
