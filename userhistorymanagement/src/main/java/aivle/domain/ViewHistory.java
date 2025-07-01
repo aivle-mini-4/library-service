@@ -49,12 +49,14 @@ public class ViewHistory {
             ViewHistory viewHistory = new ViewHistory();
             
             // set
+            viewHistory.setUserId(monthlyBookSubscribed.getUserId());
             viewHistory.setBookId(monthlyBookSubscribed.getBookId());
 
             repository().save(viewHistory);
 
             ViewHistoryRegistered event = new ViewHistoryRegistered(viewHistory);
             event.publishAfterCommit();
+
         } catch (Exception e) {
             throw new RuntimeException("MonthlyBookSubscribed 이벤트 적용 실패", e);
         }
