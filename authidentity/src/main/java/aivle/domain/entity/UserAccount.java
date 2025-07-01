@@ -110,9 +110,11 @@ public class UserAccount {
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
         
-        repository().save(this);
+        // 저장하고 flush하여 id 즉시 생성
+        UserAccount savedAccount = repository().saveAndFlush(this);
 
-        SignedUp signedUp = new SignedUp(this);
+        // 저장된 엔티티로 이벤트 publish (id가 설정된 객체)
+        SignedUp signedUp = new SignedUp(savedAccount);
         signedUp.publishAfterCommit();
     }
 

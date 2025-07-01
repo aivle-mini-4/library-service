@@ -132,11 +132,11 @@ public class AuthorAccount  {
             AuthidentityApplication.applicationContext.getBean(org.springframework.security.crypto.password.PasswordEncoder.class);
         this.setPassword(passwordEncoder.encode(authorSignupCommand.getPassword()));
 
-        // 저장
-        repository().save(this);
+        // 저장하고 flush하여 id 즉시 생성
+        AuthorAccount savedAccount = repository().saveAndFlush(this);
 
-        // 이벤트 publish
-        AuthorSignup authorSignup = new AuthorSignup(this);
+        // 저장된 엔티티로 이벤트 publish (id가 설정된 객체)
+        AuthorSignup authorSignup = new AuthorSignup(savedAccount);
         authorSignup.publishAfterCommit();
     }
 
