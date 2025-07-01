@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class DeleteFavoriteCommand {
 
-    private String userId;
-    private String bookId;
+    private Long userId;
+    private Long bookId;
 }

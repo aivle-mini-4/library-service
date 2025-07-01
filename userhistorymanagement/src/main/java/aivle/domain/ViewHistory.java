@@ -20,14 +20,17 @@ public class ViewHistory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    // null 허용X
-    @Column(nullable = false)
-    private Integer bookId;
+    private Long bookId;
 
-    // null 허용X
-    @Column(nullable = false)
-    private String userId;
+    private Long userId;
 
+    @PostPersist
+    public void onPostPersist() {
+        ViewHistoryRegistered viewHistoryRegistered = new ViewHistoryRegistered(
+            this
+        );
+        viewHistoryRegistered.publishAfterCommit();
+    }
 
     public static ViewHistoryRepository repository() {
         ViewHistoryRepository viewHistoryRepository = UserhistorymanagementApplication.applicationContext.getBean(
@@ -35,29 +38,6 @@ public class ViewHistory {
         );
         return viewHistoryRepository;
     }
-
-    //<<< Clean Arch / Port Method
-    public void registerViewHistory(
-        RegisterViewHistoryCommand registerViewHistoryCommand
-    ) {
-        //implement business logic here:
-        try {
-            this.bookId = registerViewHistoryCommand.getBookId();
-            this.userId = registerViewHistoryCommand.getUserId();
-
-            repository().save(this);
-
-            ViewHistoryRegistered viewHistoryRegistered = new ViewHistoryRegistered(
-                this
-            );
-
-            viewHistoryRegistered.publishAfterCommit();
-        } catch (Exception e) {
-            throw new RuntimeException("ViewHistory command 실패", e);
-        }
-    }
-
-    //>>> Clean Arch / Port Method
 
     //<<< Clean Arch / Port Method
     public static void registerViewHistory(
@@ -79,8 +59,8 @@ public class ViewHistory {
             throw new RuntimeException("MonthlyBookSubscribed 이벤트 적용 실패", e);
         }
     }
-
     //>>> Clean Arch / Port Method
+
     //<<< Clean Arch / Port Method
     public static void registerViewHistory(PointUsed pointUsed) {
         // implement business logic here:

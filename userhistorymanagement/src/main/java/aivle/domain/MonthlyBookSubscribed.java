@@ -2,6 +2,8 @@ package aivle.domain;
 
 import aivle.domain.*;
 import aivle.infra.AbstractEvent;
+
+import java.time.LocalDateTime;
 import java.util.*;
 import lombok.*;
 
@@ -13,5 +15,5 @@ public class MonthlyBookSubscribed extends AbstractEvent {
     private Long bookId;
     private String name;
     private Boolean isBookSubscribed;
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 }

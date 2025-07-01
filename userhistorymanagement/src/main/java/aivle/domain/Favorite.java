@@ -23,64 +23,23 @@ public class Favorite  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;    
-        
-    // null 허용X
-    @Column(nullable = false)
-    private Integer bookId;    
-        
-    // null 허용X
-    @Column(nullable = false)
-    private Integer userId;
+       
+    private Long bookId;      
 
+    private Long userId;
+
+    @PostPersist
+    public void onPostPersist() {
+        FavoriteRegistrerd favoriteRegistrerd = new FavoriteRegistrerd(this);
+        favoriteRegistrerd.publishAfterCommit();
+
+        FavoriteDeleted favoriteDeleted = new FavoriteDeleted(this);
+        favoriteDeleted.publishAfterCommit();
+    }
 
     public static FavoriteRepository repository(){
         FavoriteRepository favoriteRepository = UserhistorymanagementApplication.applicationContext.getBean(FavoriteRepository.class);
         return favoriteRepository;
     }
-
-
-//<<< Clean Arch / Port Method
-    public void registerFavorite(RegisterFavoriteCommand registerFavoriteCommand){
-        
-        //implement business logic here:
-        try {
-            this.bookId = registerFavoriteCommand.getBookId();
-            this.userId = registerFavoriteCommand.getUserId();
-
-            aivle.external.FavoriteQuery favoriteQuery = new aivle.external.FavoriteQuery();
-            favoriteQuery.setBookId(this.bookId);
-            favoriteQuery.setUserId(this.userId);
-            
-            aivle.external.Service externalService =
-                UserhistorymanagementApplication.applicationContext
-                    .getBean(aivle.external.Service.class);
-
-            
-            externalService.favorite(favoriteQuery);
-
-            repository().save(this);
-
-            FavoriteRegistrerd favoriteRegistrerd = new FavoriteRegistrerd(this);
-            favoriteRegistrerd.publishAfterCommit();
-        } catch (Execption e) {
-            throw new RuntimeException("RegisterFavorite command 실패", e);
-        }
-    }
-//>>> Clean Arch / Port Method
-//<<< Clean Arch / Port Method
-    public void deleteFavorite(DeleteFavoriteCommand deleteFavoriteCommand){
-        
-        //implement business logic here:
-        try {
-            repository().deleteById(deleteFavoriteCommand.getId());
-
-
-            FavoriteDeleted favoriteDeleted = new FavoriteDeleted(this);
-            favoriteDeleted.publishAfterCommit();
-        } catch (Exception e) {
-            throw new RuntimeException("DeleteFavorite command 실패", e);
-        }
-    }
-//>>> Clean Arch / Port Method
 }
 //>>> DDD / Aggregate Root

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import lombok.*;
 
 @Data
-@ToString
 public class ManuscriptUpdated extends AbstractEvent {
 
     private Long id;

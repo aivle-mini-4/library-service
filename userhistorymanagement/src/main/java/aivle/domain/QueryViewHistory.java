@@ -15,7 +15,6 @@ public class QueryViewHistory {
     @Id
     //@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
-    private Integer bookId;
-    private String userId;
+    private Long bookId;
+    private Long userId;
 }
