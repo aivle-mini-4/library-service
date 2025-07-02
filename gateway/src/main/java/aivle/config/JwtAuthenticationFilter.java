@@ -1,6 +1,7 @@
 package aivle.config;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,12 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
                 log.info("인증된 사용자: userId={}, role={}", userId, role);
 
+                // Role 기반 접근 제한 확인
+                if (!hasAccessToPath(role, path)) {
+                    log.warn("접근 권한 없음: role={}, path={}", role, path);
+                    return onError(exchange, "해당 경로에 접근할 권한이 없습니다", HttpStatus.FORBIDDEN);
+                }
+
                 // 헤더에 사용자 정보 추가
                 ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
                         .header("X-User-Id", userId)
@@ -80,6 +87,35 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
     private boolean isProtectedPath(String path) {
         List<String> protectedPaths = securityProperties.getProtectedPaths();
         return protectedPaths != null && protectedPaths.stream().anyMatch(path::startsWith);
+    }
+
+    private boolean hasAccessToPath(String role, String path) {
+        Map<String, List<String>> rolePaths = securityProperties.getRolePaths();
+        if (rolePaths == null || role == null) {
+            return true; // 설정이 없으면 모든 접근 허용
+        }
+        
+        // 내 role에 해당 path가 설정되어 있는지 확인
+        List<String> myAllowedPaths = rolePaths.get(role);
+        boolean hasMyAccess = myAllowedPaths != null && myAllowedPaths.stream().anyMatch(path::startsWith);
+        
+        // 다른 role에 해당 path가 설정되어 있는지 확인
+        boolean hasOtherAccess = rolePaths.entrySet().stream()
+            .filter(entry -> !entry.getKey().equals(role)) // 내 role 제외
+            .anyMatch(entry -> entry.getValue() != null && entry.getValue().stream().anyMatch(path::startsWith));
+        
+        // 내 role에 설정되어 있으면 무조건 접근 허용
+        if (hasMyAccess) {
+            return true;
+        }
+        
+        // 내 role에 없고 다른 role에도 없으면 접근 허용
+        if (!hasOtherAccess) {
+            return true;
+        }
+        
+        // 내 role에 없고 다른 role에만 있으면 접근 거부
+        return false;
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {

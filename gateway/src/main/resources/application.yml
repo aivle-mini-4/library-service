@@ -32,6 +32,33 @@ security:
     - "/registeredBestsellerViews"
     - "/registeredBookViews"
     - "/bookSubscriptions"
+  role-paths:
+    ADMIN:
+      - "/authorapprovals"
+      - "/pointpolicies"
+      - "/pointPolicyViews"
+      - "/adminProfiles"
+      - "/adminPages"
+      # - "/books"
+      # - "/registeredBestsellerViews"
+    AUTHOR:
+      - "/writerProfiles"
+      - "/writerPages"
+      - "/manuscripts"
+      - "/manuscriptPages"
+      - "/aiServices"
+    USER:
+      # - "/subscribes"
+      # - "/subscribeViews"
+      # - "/points"
+      # - "/pointViews"
+      # - "/memberProfiles"
+      # - "/userPages"
+      # - "/viewHistories"
+      # - "/favorites"
+      # - "/queryViewHistories"
+      # - "/queryFavoriteLists"
+      # - "/bookSubscriptions"
 logging:
   level:
 #     org.hibernate.type: trace
