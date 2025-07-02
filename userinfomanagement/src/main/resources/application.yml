@@ -4,8 +4,12 @@ server:
 spring:
   application:
     name: userinfomanagement
+  data:
+    rest:
+      defaultMediaType: application/json
+      returnBodyOnCreate: true
+      exposeIdsFor: WriterProfile
 ---
-
 spring:
   profiles: default
   jpa:
@@ -30,27 +34,24 @@ spring:
       bindings:
         event-in:
           group: userinfomanagement
-#<<< EDA / Topic Name
+          #<<< EDA / Topic Name
           destination: aivle
-#>>> EDA / Topic Name
+          #>>> EDA / Topic Name
           contentType: application/json
         event-out:
-#<<< EDA / Topic Name
+          #<<< EDA / Topic Name
           destination: aivle
-#>>> EDA / Topic Name
+          #>>> EDA / Topic Name
           contentType: application/json
 
 logging:
   level:
     org.hibernate.type: trace
     org.springframework.cloud: debug
-
-
-server:
-  port: 8084
+    aivle: debug
+    org.springframework.cloud.stream: debug
 
 ---
-
 spring:
   profiles: docker
   jpa:
@@ -80,5 +81,3 @@ spring:
         event-out:
           destination: aivle
           contentType: application/json
-
-

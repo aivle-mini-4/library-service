@@ -116,6 +116,9 @@ public class UserAccount {
         // 저장된 엔티티로 이벤트 publish (id가 설정된 객체)
         SignedUp signedUp = new SignedUp(savedAccount);
         signedUp.publishAfterCommit();
+        
+        // 헤더에 aggregateType 추가
+        // (이 부분은 AbstractEvent에서 처리하거나 별도 설정 필요)
     }
 
 

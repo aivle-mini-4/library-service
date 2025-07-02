@@ -44,6 +44,13 @@ openai:
   api-key: 
   url: https://api.openai.com/v1
 
+aws:
+  s3:
+    bucket: 
+  credentials:
+    accessKey: 
+    secretKey: 
+
 logging:
   level:
     org.hibernate.type: trace

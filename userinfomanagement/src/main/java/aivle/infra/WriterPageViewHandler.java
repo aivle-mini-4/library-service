@@ -2,8 +2,6 @@ package aivle.infra;
 
 import aivle.config.kafka.KafkaProcessor;
 import aivle.domain.*;
-import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -27,13 +25,13 @@ public class WriterPageViewHandler {
             // view 객체 생성
             WriterPage writerPage = new WriterPage();
             // view 객체에 이벤트의 Value 를 set 함
-            writerPage.setUserId(writerProfileCreated.getUserId());
+            writerPage.setId(writerProfileCreated.getUserId());
             writerPage.setName(writerProfileCreated.getName());
             writerPage.setEmail(writerProfileCreated.getEmail());
             writerPage.setBasicInformation(
                 writerProfileCreated.getBasicInformation()
             );
-            writerPage.setSelfInformation(
+            writerPage.setSelfIntroduction(
                 writerProfileCreated.getSelfIntroduction()
             );
             writerPage.setPortfolio(writerProfileCreated.getPortfolio());
@@ -51,7 +49,7 @@ public class WriterPageViewHandler {
         try {
             if (!writerProfileUpdated.validate()) return;
             // view 객체 조회
-            Optional<WriterPage> writerPageOptional = writerPageRepository.findByUserId(
+            Optional<WriterPage> writerPageOptional = writerPageRepository.findById(
                 writerProfileUpdated.getUserId()
             );
 
@@ -63,7 +61,7 @@ public class WriterPageViewHandler {
                 writerPage.setBasicInformation(
                     writerProfileUpdated.getBasicInformation()
                 );
-                writerPage.setSelfInformation(
+                writerPage.setSelfIntroduction(
                     writerProfileUpdated.getSelfIntroduction()
                 );
                 writerPage.setPortfolio(writerProfileUpdated.getPortfolio());

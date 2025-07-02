@@ -88,11 +88,11 @@ spring:
         - id: userinfomanagement
           uri: http://localhost:8084
           predicates:
-            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, /writerPages/**, /adminPages/**, /userPages/**
+            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, /writerPages/**, /adminPages/**, /userPages/**, /memberPages/**
         - id: authidentity
           uri: http://localhost:8085
           predicates:
-            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, /auth/**
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
         - id: pointmanagement
           uri: http://localhost:8086
           predicates:
@@ -122,9 +122,6 @@ spring:
           predicates:
             - Path=/**
 #>>> API Gateway / Routes
-      default-filters:
-        - LoggingFilter  # 모든 요청 로깅
-        - JwtAuthenticationFilter  # 모든 라우트에 기본 적용
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -162,7 +159,7 @@ spring:
         - id: authidentity
           uri: http://authidentity:8080
           predicates:
-            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, /auth/**
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
         - id: pointmanagement
           uri: http://pointmanagement:8080
           predicates:
