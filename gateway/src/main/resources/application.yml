@@ -1,6 +1,10 @@
 server:
   port: 8088
 
+# JWT 설정
+jwt:
+  secret: aivleSecretKeyForJWTTokenGeneration2024WithMoreThan256BitsToMeetSecurityRequirements
+
 ---
 
 spring:
@@ -54,6 +58,8 @@ spring:
           predicates:
             - Path=/**
 #>>> API Gateway / Routes
+      default-filters:
+        - JwtAuthenticationFilter  # 모든 라우트에 기본 적용
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -72,6 +78,8 @@ spring:
   profiles: docker
   cloud:
     gateway:
+      default-filters:
+        - JwtAuthenticationFilter  # 모든 라우트에 기본 적용
       routes:
         - id: admintask
           uri: http://admintask:8080
