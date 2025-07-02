@@ -2,9 +2,11 @@ package aivle.domain;
 
 import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //<<< DDD / Domain Event
 @Data
@@ -12,9 +14,10 @@ import lombok.*;
 public class AuthorApproved extends AbstractEvent {
 
     private Long id;
+    private Long adminId;
     private Long authorId;
-    private Date resultAt;
-    private String state;
+    private LocalDateTime resultAt;
+    private ApprovalState state;
 
     public AuthorApproved(Authorapproval aggregate) {
         super(aggregate);

@@ -1,6 +1,6 @@
 package aivle.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
 import lombok.Data;

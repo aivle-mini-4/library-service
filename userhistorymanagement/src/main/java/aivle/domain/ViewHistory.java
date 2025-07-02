@@ -20,9 +20,17 @@ public class ViewHistory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Integer bookId;
+    private Long bookId;
 
-    private String userId;
+    private Long userId;
+
+    @PostPersist
+    public void onPostPersist() {
+        ViewHistoryRegistered viewHistoryRegistered = new ViewHistoryRegistered(
+            this
+        );
+        viewHistoryRegistered.publishAfterCommit();
+    }
 
     public static ViewHistoryRepository repository() {
         ViewHistoryRepository viewHistoryRepository = UserhistorymanagementApplication.applicationContext.getBean(
@@ -32,70 +40,46 @@ public class ViewHistory {
     }
 
     //<<< Clean Arch / Port Method
-    public void registerViewHistory(
-        RegisterViewHistoryCommand registerViewHistoryCommand
-    ) {
-        //implement business logic here:
-
-        ViewHistoryRegistered viewHistoryRegistered = new ViewHistoryRegistered(
-            this
-        );
-        viewHistoryRegistered.publishAfterCommit();
-    }
-
-    //>>> Clean Arch / Port Method
-
-    //<<< Clean Arch / Port Method
     public static void registerViewHistory(
-        월구독자도서열람됨 월구독자도서열람됨
+        MonthlyBookSubscribed monthlyBookSubscribed
     ) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        ViewHistory viewHistory = new ViewHistory();
-        repository().save(viewHistory);
-
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(월구독자도서열람됨.get???()).ifPresent(viewHistory->{
+        // implement business logic here:
+        try{
+            // new item 
+            ViewHistory viewHistory = new ViewHistory();
             
-            viewHistory // do something
+            // set
+            viewHistory.setUserId(monthlyBookSubscribed.getUserId());
+            viewHistory.setBookId(monthlyBookSubscribed.getBookId());
+
             repository().save(viewHistory);
 
+            ViewHistoryRegistered event = new ViewHistoryRegistered(viewHistory);
+            event.publishAfterCommit();
 
-         });
-        */
-
+        } catch (Exception e) {
+            throw new RuntimeException("MonthlyBookSubscribed 이벤트 적용 실패", e);
+        }
     }
-
     //>>> Clean Arch / Port Method
+
     //<<< Clean Arch / Port Method
     public static void registerViewHistory(PointUsed pointUsed) {
-        //implement business logic here:
+        // implement business logic here:
+        try {
+            // new item 
+            ViewHistory viewHistory = new ViewHistory();
 
-        /** Example 1:  new item 
-        ViewHistory viewHistory = new ViewHistory();
-        repository().save(viewHistory);
+            viewHistory.setUserId(pointUsed.getUserId());
 
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(pointUsed.get???()).ifPresent(viewHistory->{
-            
-            viewHistory // do something
             repository().save(viewHistory);
 
-
-         });
-        */
-
+            ViewHistoryRegistered event = new ViewHistoryRegistered(viewHistory);
+            event.publishAfterCommit();
+        } catch (Exception e) {
+            throw new RuntimeException("PointUsed 이벤트 적용 실패", e);
+        }
     }
     //>>> Clean Arch / Port Method
-
 }
 //>>> DDD / Aggregate Root

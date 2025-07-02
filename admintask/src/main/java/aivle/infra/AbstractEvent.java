@@ -1,5 +1,6 @@
 package aivle.infra;
 
+import java.sql.Timestamp;
 import aivle.AdmintaskApplication;
 import aivle.config.kafka.KafkaProcessor;
 import com.fasterxml.jackson.core.JsonProcessingException;

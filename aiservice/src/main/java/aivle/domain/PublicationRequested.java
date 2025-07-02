@@ -1,12 +1,9 @@
 package aivle.domain;
 
-import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.util.*;
-import lombok.*;
+import lombok.Data;
 
 @Data
-@ToString
 public class PublicationRequested extends AbstractEvent {
 
     private Long id;

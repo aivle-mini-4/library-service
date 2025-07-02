@@ -9,15 +9,16 @@ import lombok.*;
 //<<< DDD / Domain Event
 @Data
 @ToString
-public class 월구독자도서열람됨 extends AbstractEvent {
+public class SubscriptionRequested extends AbstractEvent {
 
     private Long id;
+    private Long userId;
 
-    public 월구독자도서열람됨(BookSubscription aggregate) {
+    public SubscriptionRequested(BookSubscription aggregate) {
         super(aggregate);
     }
 
-    public 월구독자도서열람됨() {
+    public SubscriptionRequested() {
         super();
     }
 }

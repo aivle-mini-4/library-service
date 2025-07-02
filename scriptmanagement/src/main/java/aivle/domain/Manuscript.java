@@ -1,23 +1,14 @@
 package aivle.domain;
 
 import aivle.ScriptmanagementApplication;
-import aivle.domain.ManuscriptCreated;
-import aivle.domain.ManuscriptDeleted;
-import aivle.domain.ManuscriptUpdated;
-import aivle.domain.PublicationRequested;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
 import javax.persistence.*;
+import org.hibernate.annotations.UpdateTimestamp;
 import lombok.Data;
 
 @Entity
 @Table(name = "Manuscript_table")
 @Data
-//<<< DDD / Aggregate Root
 public class Manuscript {
 
     @Id
@@ -28,19 +19,16 @@ public class Manuscript {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    private Date updatedAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @PostPersist
     public void onPostPersist() {
         ManuscriptCreated manuscriptCreated = new ManuscriptCreated(this);
         manuscriptCreated.publishAfterCommit();
-
-        PublicationRequested publicationRequested = new PublicationRequested(
-            this
-        );
-        publicationRequested.publishAfterCommit();
     }
 
     @PostUpdate
@@ -62,4 +50,3 @@ public class Manuscript {
         return manuscriptRepository;
     }
 }
-//>>> DDD / Aggregate Root

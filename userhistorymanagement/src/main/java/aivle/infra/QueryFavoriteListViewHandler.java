@@ -26,25 +26,14 @@ public class QueryFavoriteListViewHandler {
 
             // view 객체 생성
             QueryFavoriteList queryFavoriteList = new QueryFavoriteList();
+
             // view 객체에 이벤트의 Value 를 set 함
             queryFavoriteList.setId(favoriteRegistrerd.getId());
             queryFavoriteList.setUserId(favoriteRegistrerd.getUserId());
             queryFavoriteList.setBookId(favoriteRegistrerd.getBookId());
+
             // view 레파지 토리에 save
             queryFavoriteListRepository.save(queryFavoriteList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @StreamListener(KafkaProcessor.INPUT)
-    public void whenFavoriteRegistrerd_then_UPDATE_1(
-        @Payload FavoriteRegistrerd favoriteRegistrerd
-    ) {
-        try {
-            if (!favoriteRegistrerd.validate()) return;
-            // view 객체 조회
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,6 +45,7 @@ public class QueryFavoriteListViewHandler {
     ) {
         try {
             if (!favoriteDeleted.validate()) return;
+            
             // view 레파지 토리에 삭제 쿼리
             queryFavoriteListRepository.deleteById(favoriteDeleted.getId());
         } catch (Exception e) {

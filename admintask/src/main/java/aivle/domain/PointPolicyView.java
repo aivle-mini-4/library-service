@@ -1,7 +1,6 @@
 package aivle.domain;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
@@ -22,6 +21,6 @@ public class PointPolicyView {
     private String pointType;
     private Integer amount;
     private Boolean isActive;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
