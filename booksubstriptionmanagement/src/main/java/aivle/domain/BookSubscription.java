@@ -6,6 +6,7 @@ import aivle.domain.MonthlyBookSubscribed;
 import aivle.domain.SubscriptionRequested;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +36,8 @@ public class BookSubscription {
 
     private LocalDateTime updatedAt;
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
     public static BookSubscriptionRepository repository() {
         BookSubscriptionRepository bookSubscriptionRepository = BooksubstriptionmanagementApplication.applicationContext.getBean(
@@ -52,6 +55,7 @@ public class BookSubscription {
         
         this.userId = subscribeBookCommand.getUserId();
         this.isBookSubscribed = true;
+        this.updatedAt = LocalDateTime.now().format(formatter);
 
         BookSubscribed bookSubscribed = new BookSubscribed(this);
         bookSubscribed.publishAfterCommit();
@@ -68,6 +72,7 @@ public class BookSubscription {
 
         this.userId = viewBookCommand.getUserId();
         this.isBookSubscribed = true;
+        this.updatedAt = LocalDateTime.now().format(formatter);
 
         MonthlyBookSubscribed monthlyBookSubscribed = new MonthlyBookSubscribed(this);
         monthlyBookSubscribed.publishAfterCommit();
