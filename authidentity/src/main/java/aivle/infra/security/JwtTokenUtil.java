@@ -75,15 +75,30 @@ public class JwtTokenUtil {
         return userDetails.getUsername();
     }
 
-    // 사용자 ID만 담는 토큰 생성
-    public String generateTokenWithUserIdOnly(String userId) {
+    // 사용자 ID와 역할을 담는 토큰 생성
+    public String generateTokenWithUserIdOnly(String userId, String role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
         return createToken(claims, userId);
     }
 
-    // UserDetails로부터 사용자 ID만 담는 토큰 생성
+    // UserDetails로부터 사용자 ID와 역할을 담는 토큰 생성
     public String generateTokenWithUserIdOnly(UserDetails userDetails) {
         String userId = extractUserIdFromUserDetails(userDetails);
-        return generateTokenWithUserIdOnly(userId);
+        String role = extractRoleFromUserDetails(userDetails);
+        return generateTokenWithUserIdOnly(userId, role);
+    }
+
+    // UserDetails에서 역할 추출
+    private String extractRoleFromUserDetails(UserDetails userDetails) {
+        if (userDetails.getAuthorities() != null && !userDetails.getAuthorities().isEmpty()) {
+            return userDetails.getAuthorities().iterator().next().getAuthority();
+        }
+        return "ROLE_USER"; // 기본값
+    }
+
+    // 토큰에서 역할 추출
+    public String extractRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
     }
 } 
