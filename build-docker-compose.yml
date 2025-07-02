@@ -163,3 +163,27 @@ services:
       - ./booksubstriptionmanagement:/usr/src
       - ./maven-repo:/root/.m2
       
+  gateway:
+    depends_on: 
+      - kafka
+      - admintask
+      - monthlysubscriptionmanagement
+      - userinfomanagement
+      - authidentity
+      - pointmanagement
+      - scriptmanagement
+      - userhistorymanagement
+      - aiservice
+      - booksmanagement
+      - booksubstriptionmanagement
+    image: adoptopenjdk/maven-openjdk11:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    command: mvn spring-boot:run
+    ports:
+      - 8092:8092
+    working_dir: /usr/src
+    volumes:
+      - ./gateway:/usr/src
+      - ./maven-repo:/root/.m2
+      
