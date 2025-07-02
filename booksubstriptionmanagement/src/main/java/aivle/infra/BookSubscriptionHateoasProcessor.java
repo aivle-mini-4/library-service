@@ -14,6 +14,17 @@ public class BookSubscriptionHateoasProcessor
     public EntityModel<BookSubscription> process(
         EntityModel<BookSubscription> model
     ) {
+        model.add(
+            Link
+                .of(model.getRequiredLink("self").getHref() + "/subscribebook")
+                .withRel("subscribebook")
+        );
+        model.add(
+            Link
+                .of(model.getRequiredLink("self").getHref() + "/viewbook")
+                .withRel("viewbook")
+        );
+
         return model;
     }
 }

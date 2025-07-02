@@ -6,6 +6,7 @@ import aivle.domain.MonthlyBookSubscribed;
 import aivle.domain.SubscriptionRequested;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -35,14 +36,8 @@ public class BookSubscription {
 
     private LocalDateTime updatedAt;
 
-    @PostPersist
-    public void onPostPersist() {
-        BookSubscribed bookSubscribed = new BookSubscribed(this);
-        bookSubscribed.publishAfterCommit();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        MonthlyBookSubscribed monthlyBookSubscribed = new MonthlyBookSubscribed(this);
-        monthlyBookSubscribed.publishAfterCommit();
-    }
 
     public static BookSubscriptionRepository repository() {
         BookSubscriptionRepository bookSubscriptionRepository = BooksubstriptionmanagementApplication.applicationContext.getBean(
@@ -52,15 +47,49 @@ public class BookSubscription {
     }
 
     //<<< Clean Arch / Port Method
+    // 비구독자
+    public void subscribeBook(SubscribeBookCommand subscribeBookCommand) {
+        if (Boolean.TRUE.equals(this.isBookSubscribed)) {
+            throw new IllegalStateException("이미 구독된 도서");
+        }
+        
+        this.userId = subscribeBookCommand.getUserId();
+        this.isBookSubscribed = true;
+        this.updatedAt = LocalDateTime.now().format(formatter);
+
+        BookSubscribed bookSubscribed = new BookSubscribed(this);
+        bookSubscribed.publishAfterCommit();
+    }
+    //>>> Clean Arch / Port Method
+    
+    //<<< Clean Arch / Port Method
+    // 구독자
+    public void viewBook(ViewBookCommand viewBookCommand) {
+        //implement business logic here:
+        if (Boolean.TRUE.equals(this.isBookSubscribed)){
+            throw new IllegalStateException("이미 조회된 도서");
+        }
+
+        this.userId = viewBookCommand.getUserId();
+        this.isBookSubscribed = true;
+        this.updatedAt = LocalDateTime.now().format(formatter);
+
+        MonthlyBookSubscribed monthlyBookSubscribed = new MonthlyBookSubscribed(this);
+        monthlyBookSubscribed.publishAfterCommit();
+    }
+    //>>> Clean Arch / Port Method
+
+    //<<< Clean Arch / Port Method
     public static void subscriptionRequest(PointExpired pointExpired) {
         //implement business logic here:
         //finding and process
         repository().findById(pointExpired.getUserId()).ifPresent(bookSubscription->{
             if (pointExpired.getPoints() == 0){
-            
+                
+
                 SubscriptionRequested subscriptionRequested = new SubscriptionRequested(bookSubscription);
                 subscriptionRequested.setUserId(pointExpired.getUserId());
-                ubscriptionRequested.publishAfterCommit();
+                subscriptionRequested.publishAfterCommit();
                 
                 repository().save(bookSubscription);
             }
