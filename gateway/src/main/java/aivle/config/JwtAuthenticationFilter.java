@@ -62,16 +62,17 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
                 log.info("인증된 사용자: userId={}, role={}", userId, role);
 
-                // Role 기반 접근 제한 확인
-                if (!hasAccessToPath(role, path)) {
-                    log.warn("접근 권한 없음: role={}, path={}", role, path);
+                // Role 기반 접근 제한 확인 (ROLE_ 접두사 제거)
+                String roleWithoutPrefix = role.startsWith("ROLE_") ? role.substring(5) : role;
+                if (!hasAccessToPath(roleWithoutPrefix, path)) {
+                    log.warn("접근 권한 없음: role={}, path={}", roleWithoutPrefix, path);
                     return onError(exchange, "해당 경로에 접근할 권한이 없습니다", HttpStatus.FORBIDDEN);
                 }
 
-                // 헤더에 사용자 정보 추가
+                // 헤더에 사용자 정보 추가 (ROLE_ 접두사 제거)
                 ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
                         .header("X-User-Id", userId)
-                        .header("X-User-Role", role)
+                        .header("X-User-Role", roleWithoutPrefix)
                         .build();
 
                 exchange = exchange.mutate().request(modifiedRequest).build();
