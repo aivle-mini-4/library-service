@@ -28,15 +28,15 @@ public class PolicyHandler {
 
     @StreamListener(
         value = KafkaProcessor.INPUT,
-        condition = "headers['type']=='월구독자도서열람됨'"
+        condition = "headers['type']=='MonthlyBookSubscribed'"
     )
-    public void whenever월구독자도서열람됨_RegisterViewHistory(
-        @Payload 월구독자도서열람됨 월구독자도서열람됨
+    public void wheneverMonthlyBookSubscribed_RegisterViewHistory(
+        @Payload MonthlyBookSubscribed MonthlyBookSubscribed
     ) {
-        월구독자도서열람됨 event = 월구독자도서열람됨;
+        MonthlyBookSubscribed event = MonthlyBookSubscribed;
         System.out.println(
             "\n\n##### listener RegisterViewHistory : " +
-            월구독자도서열람됨 +
+            MonthlyBookSubscribed +
             "\n\n"
         );
 

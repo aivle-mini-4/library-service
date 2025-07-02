@@ -2,7 +2,7 @@ package aivle.domain;
 
 import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import lombok.*;
 
@@ -13,9 +13,11 @@ public class BookSubscribed extends AbstractEvent {
 
     private Long id;
     private Long bookId;
-    private String name;
+    private Long userId;
+    private Integer price;
+    private String bookName;
     private Boolean isBookSubscribed;
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     public BookSubscribed(BookSubscription aggregate) {
         super(aggregate);

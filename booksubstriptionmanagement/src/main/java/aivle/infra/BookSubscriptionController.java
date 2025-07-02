@@ -19,5 +19,41 @@ public class BookSubscriptionController {
 
     @Autowired
     BookSubscriptionRepository bookSubscriptionRepository;
+
+    @RequestMapping(
+        value = "/bookSubscriptions/subscribebook",
+        method = RequestMethod.POST,
+        produces = "application/json;charset=UTF-8"
+    )
+    public BookSubscription subscribeBook(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        @RequestBody SubscribeBookCommand subscribeBookCommand
+    ) throws Exception {
+        System.out.println(
+            "##### /bookSubscription/subscribeBook  called #####"
+        );
+        BookSubscription bookSubscription = new BookSubscription();
+        bookSubscription.subscribeBook(subscribeBookCommand);
+        bookSubscriptionRepository.save(bookSubscription);
+        return bookSubscription;
+    }
+
+    @RequestMapping(
+        value = "/bookSubscriptions/viewbook",
+        method = RequestMethod.POST,
+        produces = "application/json;charset=UTF-8"
+    )
+    public BookSubscription viewBook(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        @RequestBody ViewBookCommand viewBookCommand
+    ) throws Exception {
+        System.out.println("##### /bookSubscription/viewBook  called #####");
+        BookSubscription bookSubscription = new BookSubscription();
+        bookSubscription.viewBook(viewBookCommand);
+        bookSubscriptionRepository.save(bookSubscription);
+        return bookSubscription;
+    }
 }
 //>>> Clean Arch / Inbound Adaptor

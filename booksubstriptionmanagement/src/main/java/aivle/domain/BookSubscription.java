@@ -2,9 +2,10 @@ package aivle.domain;
 
 import aivle.BooksubstriptionmanagementApplication;
 import aivle.domain.BookSubscribed;
-import aivle.domain.월구독자도서열람됨;
+import aivle.domain.MonthlyBookSubscribed;
+import aivle.domain.SubscriptionRequested;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -22,22 +23,18 @@ public class BookSubscription {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
-
     private Long bookId;
+    
+    private Long userId;
+    
+    private Integer price;
+
+    private String bookName;;
 
     private Boolean isBookSubscribed;
 
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
-    @PostPersist
-    public void onPostPersist() {
-        BookSubscribed bookSubscribed = new BookSubscribed(this);
-        bookSubscribed.publishAfterCommit();
-
-        월구독자도서열람됨 월구독자도서열람됨 = new 월구독자도서열람됨(this);
-        월구독자도서열람됨.publishAfterCommit();
-    }
 
     public static BookSubscriptionRepository repository() {
         BookSubscriptionRepository bookSubscriptionRepository = BooksubstriptionmanagementApplication.applicationContext.getBean(
@@ -47,29 +44,52 @@ public class BookSubscription {
     }
 
     //<<< Clean Arch / Port Method
-    public static void subscriptionRequest(PointExpired pointExpired) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        BookSubscription bookSubscription = new BookSubscription();
-        repository().save(bookSubscription);
-
-        */
-
-        /** Example 2:  finding and process
+    // 비구독자
+    public void subscribeBook(SubscribeBookCommand subscribeBookCommand) {
+        if (Boolean.TRUE.equals(this.isBookSubscribed)) {
+            throw new IllegalStateException("이미 구독된 도서");
+        }
         
+        this.userId = subscribeBookCommand.getUserId();
+        this.isBookSubscribed = true;
 
-        repository().findById(pointExpired.get???()).ifPresent(bookSubscription->{
-            
-            bookSubscription // do something
-            repository().save(bookSubscription);
+        BookSubscribed bookSubscribed = new BookSubscribed(this);
+        bookSubscribed.publishAfterCommit();
+    }
+    //>>> Clean Arch / Port Method
+    
+    //<<< Clean Arch / Port Method
+    // 구독자
+    public void viewBook(ViewBookCommand viewBookCommand) {
+        //implement business logic here:
+        if (Boolean.TRUE.equals(this.isBookSubscribed)){
+            throw new IllegalStateException("이미 조회된 도서");
+        }
 
+        this.userId = viewBookCommand.getUserId();
+        this.isBookSubscribed = true;
 
-         });
-        */
-
+        MonthlyBookSubscribed monthlyBookSubscribed = new MonthlyBookSubscribed(this);
+        monthlyBookSubscribed.publishAfterCommit();
     }
     //>>> Clean Arch / Port Method
 
+    //<<< Clean Arch / Port Method
+    public static void subscriptionRequest(PointExpired pointExpired) {
+        //implement business logic here:
+        //finding and process
+        repository().findById(pointExpired.getUserId()).ifPresent(bookSubscription->{
+            if (pointExpired.getPoints() == 0){
+                
+
+                SubscriptionRequested subscriptionRequested = new SubscriptionRequested(bookSubscription);
+                subscriptionRequested.setUserId(pointExpired.getUserId());
+                subscriptionRequested.publishAfterCommit();
+                
+                repository().save(bookSubscription);
+            }
+         });
+    }
+    //>>> Clean Arch / Port Method
 }
 //>>> DDD / Aggregate Root

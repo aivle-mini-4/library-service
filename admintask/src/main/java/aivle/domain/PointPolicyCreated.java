@@ -1,8 +1,9 @@
+//PointPolicyCreated.java
 package aivle.domain;
 
 import aivle.domain.*;
 import aivle.infra.AbstractEvent;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 @ToString
 public class PointPolicyCreated extends AbstractEvent {
 
-    private String id;
+    private Long id;
     private String name;
     private String description;
     private PointType pointType;

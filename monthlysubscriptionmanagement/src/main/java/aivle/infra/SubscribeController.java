@@ -7,58 +7,30 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 //<<< Clean Arch / Inbound Adaptor
 
 @RestController
-// @RequestMapping(value="/subscribes")
+@RequestMapping(value="/subscribes")
 @Transactional
 public class SubscribeController {
 
     @Autowired
-    SubscribeRepository subscribeRepository;
+    private SubscribeCommandHandler subscribeCommandHandler;
 
-    @RequestMapping(
-        value = "/subscribes/subscriberequest",
-        method = RequestMethod.POST,
-        produces = "application/json;charset=UTF-8"
-    )
-    public Subscribe subscribeRequest(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        @RequestBody SubscribeRequestCommand subscribeRequestCommand
-    ) throws Exception {
-        System.out.println("##### /subscribe/subscribeRequest  called #####");
-        Subscribe subscribe = new Subscribe();
-        subscribe.subscribeRequest(subscribeRequestCommand);
-        subscribeRepository.save(subscribe);
-        return subscribe;
+    @Autowired
+    private UnsubscribeCommandHandler unsubscribeCommandHandler;
+
+    @PostMapping("/subscriberequest")
+    public Subscribe subscribe(@RequestBody SubscribeRequestCommand command) {
+        return subscribeCommandHandler.handle(command);
     }
 
-    @RequestMapping(
-        value = "/subscribes/{id}/unsubscriberequest",
-        method = RequestMethod.DELETE,
-        produces = "application/json;charset=UTF-8"
-    )
-    public Subscribe unsubscribeRequest(
-        @PathVariable(value = "id") Long id,
-        @RequestBody UnsubscribeRequestCommand unsubscribeRequestCommand,
-        HttpServletRequest request,
-        HttpServletResponse response
-    ) throws Exception {
-        System.out.println("##### /subscribe/unsubscribeRequest  called #####");
-        Optional<Subscribe> optionalSubscribe = subscribeRepository.findById(
-            id
-        );
-
-        optionalSubscribe.orElseThrow(() -> new Exception("No Entity Found"));
-        Subscribe subscribe = optionalSubscribe.get();
-        subscribe.unsubscribeRequest(unsubscribeRequestCommand);
-
-        subscribeRepository.delete(subscribe);
-        return subscribe;
+    @DeleteMapping("/{id}/unsubscriberequest")
+    public Subscribe unsubscribe(@PathVariable Long id,
+                                 @RequestBody UnsubscribeRequestCommand command) {
+        command.setId(id);
+        return unsubscribeCommandHandler.handle(command);
     }
 }
 //>>> Clean Arch / Inbound Adaptor

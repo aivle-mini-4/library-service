@@ -41,8 +41,11 @@ mvn spring-boot:run
 ## Test by API
 - admintask
 ```
- http :8088/authorapprovals id="id"authorid="authorid"state="state"appliedAt="appliedAt"resultAt="resultAt"rejectedAt="rejectedAt"adminId="adminId"reason="reason"
- http :8088/pointpolicies id="id"name="name"description="description"pointType="pointType"amount="amount"isActive="isActive"createdAt="createdAt"updatedAt="updatedAt"
+http PUT http://localhost:8082/pointpolicies/1 name="신규" description="신규가입 1000포인트 적립" pointType="ACCUMULATION" amount="2000" isActive="true" 
+http POST http://localhost:8082/authorapprovals authorId="1001"
+http PUT "http://localhost:8082/authorapprovals/2/reject?adminId=2001&reason=이유없음"
+http PUT "http://localhost:8082/authorapprovals/1/reject?adminId=2001&reason=포트폴리오 미흡"
+
 ```
 - monthlysubscriptionmanagement
 ```

@@ -30,14 +30,10 @@ spring:
       bindings:
         event-in:
           group: scriptmanagement
-#<<< EDA / Topic Name
           destination: aivle
-#>>> EDA / Topic Name
           contentType: application/json
         event-out:
-#<<< EDA / Topic Name
           destination: aivle
-#>>> EDA / Topic Name
           contentType: application/json
 
 logging:

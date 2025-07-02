@@ -2,8 +2,6 @@ package aivle.infra;
 
 import aivle.config.kafka.KafkaProcessor;
 import aivle.domain.*;
-import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -13,12 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ManuscriptPageViewHandler {
 
-    //<<< DDD / CQRS
     @Autowired
     private ManuscriptPageRepository manuscriptPageRepository;
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenManuscriptCreated_then_CREATE_1(
+    public void whenManuscriptCreated_then_CREATE(
         @Payload ManuscriptCreated manuscriptCreated
     ) {
         try {
@@ -26,14 +23,14 @@ public class ManuscriptPageViewHandler {
 
             // view 객체 생성
             ManuscriptPage manuscriptPage = new ManuscriptPage();
+
             // view 객체에 이벤트의 Value 를 set 함
             manuscriptPage.setContent(manuscriptCreated.getContent());
-            manuscriptPage.setUpdatedAt(
-                Date.valueOf(manuscriptCreated.getUpdatedAt())
-            );
+            manuscriptPage.setUpdatedAt(manuscriptCreated.getUpdatedAt());
             manuscriptPage.setTitle(manuscriptCreated.getTitle());
             manuscriptPage.setAuthorId(manuscriptCreated.getAuthorId());
             manuscriptPage.setId(manuscriptCreated.getId());
+
             // view 레파지 토리에 save
             manuscriptPageRepository.save(manuscriptPage);
         } catch (Exception e) {
@@ -42,11 +39,12 @@ public class ManuscriptPageViewHandler {
     }
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenManuscriptUpdated_then_UPDATE_1(
+    public void whenManuscriptUpdated_then_UPDATE(
         @Payload ManuscriptUpdated manuscriptUpdated
     ) {
         try {
             if (!manuscriptUpdated.validate()) return;
+
             // view 객체 조회
             Optional<ManuscriptPage> manuscriptPageOptional = manuscriptPageRepository.findById(
                 manuscriptUpdated.getId()
@@ -55,11 +53,11 @@ public class ManuscriptPageViewHandler {
             if (manuscriptPageOptional.isPresent()) {
                 ManuscriptPage manuscriptPage = manuscriptPageOptional.get();
                 // view 객체에 이벤트의 eventDirectValue 를 set 함
+                 manuscriptPage.setContent(manuscriptUpdated.getContent());
+                manuscriptPage.setUpdatedAt(manuscriptUpdated.getUpdatedAt());
                 manuscriptPage.setTitle(manuscriptUpdated.getTitle());
-                manuscriptPage.setContent(manuscriptUpdated.getContent());
-                manuscriptPage.setUpdatedAt(
-                    Date.valueOf(manuscriptUpdated.getUpdatedAt())
-                );
+                manuscriptPage.setAuthorId(manuscriptUpdated.getAuthorId());
+
                 // view 레파지 토리에 save
                 manuscriptPageRepository.save(manuscriptPage);
             }
@@ -69,7 +67,7 @@ public class ManuscriptPageViewHandler {
     }
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenManuscriptDeleted_then_DELETE_1(
+    public void whenManuscriptDeleted_then_DELETE(
         @Payload ManuscriptDeleted manuscriptDeleted
     ) {
         try {
@@ -80,5 +78,4 @@ public class ManuscriptPageViewHandler {
             e.printStackTrace();
         }
     }
-    //>>> DDD / CQRS
 }

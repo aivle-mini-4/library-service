@@ -23,6 +23,35 @@ public class PolicyHandler {
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString) {}
 
+    // 테스트
+    // @StreamListener(KafkaProcessor.INPUT)
+    // public void onEvent(@Payload String eventString) {
+    //     try {
+    //         ObjectMapper mapper = new ObjectMapper();
+    //         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    //         Map<String, Object> eventMap = mapper.readValue(eventString, Map.class);
+
+    //         String eventType = (String) eventMap.get("eventType");
+    //         System.out.println("🔔 수신된 이벤트 타입: " + eventType);
+
+    //         if ("SignedUp".equals(eventType)) {
+    //             SignedUp signedUp = mapper.convertValue(eventMap, SignedUp.class);
+    //             System.out.println("✅ SignedUp 처리 시작: " + signedUp);
+    //             Point.grantPoints(signedUp);
+    //         }
+
+    //         // 향후 다른 이벤트 타입도 여기에 if 추가하면 됨
+    //         if ("PointPolicyCreated".equals(eventType)) {
+    //             PointPolicyCreated policyCreated = mapper.convertValue(eventMap, PointPolicyCreated.class);
+    //             System.out.println("📌 정책 생성 이벤트 처리됨: " + policyCreated);
+    //             Point.pointManagement(policyCreated);
+    //         }
+
+    //     } catch (Exception e) {
+    //         System.out.println("❌ 이벤트 처리 중 오류 발생: " + e.getMessage());
+    //     }
+    // }
+
     @StreamListener(
         value = KafkaProcessor.INPUT,
         condition = "headers['type']=='SignedUp'"
@@ -35,27 +64,6 @@ public class PolicyHandler {
 
         // Sample Logic //
         Point.grantPoints(event);
-    }
-
-    @StreamListener(
-        value = KafkaProcessor.INPUT,
-        condition = "headers['type']=='ViewHistoryRegistered'"
-    )
-    public void wheneverViewHistoryRegistered_PointDeduction(
-        @Payload ViewHistoryRegistered viewHistoryRegistered
-    ) {
-        ViewHistoryRegistered event = viewHistoryRegistered;
-        System.out.println(
-            "\n\n##### listener PointDeduction : " +
-            viewHistoryRegistered +
-            "\n\n"
-        );
-
-        // Comments //
-        //Whenever 도서열람됨 Then 포인트사용
-
-        // Sample Logic //
-        Point.pointDeduction(event);
     }
 
     @StreamListener(
