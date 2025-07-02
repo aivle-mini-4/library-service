@@ -19,10 +19,12 @@ public class AbstractEvent {
 
     String eventType;
     Long timestamp;
+    String aggregateType;
 
     public AbstractEvent(Object aggregate) {
         this();
         BeanUtils.copyProperties(aggregate, this);
+        this.aggregateType = aggregate.getClass().getSimpleName();
     }
 
     public AbstractEvent() {
@@ -42,6 +44,7 @@ public class AbstractEvent {
         // 이벤트 로그 출력
         System.out.println("=== EVENT PUBLISHED ===");
         System.out.println("Event Type: " + getEventType());
+        System.out.println("Aggregate Type: " + getAggregateType());
         System.out.println("Timestamp: " + getTimestamp());
         System.out.println("Event Data: " + toJson());
         System.out.println("=======================");
@@ -54,6 +57,7 @@ public class AbstractEvent {
                     MimeTypeUtils.APPLICATION_JSON
                 )
                 .setHeader("type", getEventType())
+                .setHeader("aggregateType", getAggregateType())
                 .build()
         );
     }
@@ -75,6 +79,14 @@ public class AbstractEvent {
 
     public void setEventType(String eventType) {
         this.eventType = eventType;
+    }
+
+    public String getAggregateType() {
+        return aggregateType;
+    }
+
+    public void setAggregateType(String aggregateType) {
+        this.aggregateType = aggregateType;
     }
 
     public Long getTimestamp() {

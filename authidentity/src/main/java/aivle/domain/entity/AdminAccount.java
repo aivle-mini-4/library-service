@@ -117,6 +117,8 @@ public class AdminAccount {
         // 저장된 엔티티로 이벤트 publish (id가 설정된 객체)
         SignedUp signedUp = new SignedUp(savedAccount);
         signedUp.publishAfterCommit();
+        
+        // 헤더에 aggregateType 추가
     }
 
     public void login(LoginCommand loginCommand) {

@@ -1,13 +1,11 @@
 server:
   port: 8088
-
 ---
-
 spring:
   profiles: default
   cloud:
     gateway:
-#<<< API Gateway / Routes
+      #<<< API Gateway / Routes
       routes:
         - id: admintask
           uri: http://localhost:8082
@@ -20,11 +18,11 @@ spring:
         - id: userinfomanagement
           uri: http://localhost:8084
           predicates:
-            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, /writerPages/**, /adminPages/**, /userPages/**
+            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, /writerPages/**, /adminPages/**, /memberPages/**
         - id: authidentity
           uri: http://localhost:8085
           predicates:
-            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**,
         - id: pointmanagement
           uri: http://localhost:8086
           predicates:
@@ -40,7 +38,7 @@ spring:
         - id: aiservice
           uri: http://localhost:8089
           predicates:
-            - Path=/aiServices/**, 
+            - Path=/aiServices/**,
         - id: booksmanagement
           uri: http://localhost:8090
           predicates:
@@ -48,15 +46,15 @@ spring:
         - id: booksubstriptionmanagement
           uri: http://localhost:8091
           predicates:
-            - Path=/bookSubscriptions/**, 
+            - Path=/bookSubscriptions/**,
         - id: frontend
           uri: http://localhost:8080
           predicates:
             - Path=/**
-#>>> API Gateway / Routes
+      #>>> API Gateway / Routes
       globalcors:
         corsConfigurations:
-          '[/**]':
+          "[/**]":
             allowedOrigins:
               - "*"
             allowedMethods:
@@ -64,10 +62,7 @@ spring:
             allowedHeaders:
               - "*"
             allowCredentials: true
-
-
 ---
-
 spring:
   profiles: docker
   cloud:
@@ -76,50 +71,50 @@ spring:
         - id: admintask
           uri: http://admintask:8080
           predicates:
-            - Path=/authorapprovals/**, /pointpolicies/**, 
+            - Path=/authorapprovals/**, /pointpolicies/**,
         - id: monthlysubscriptionmanagement
           uri: http://monthlysubscriptionmanagement:8080
           predicates:
-            - Path=/subscribes/**, 
+            - Path=/subscribes/**,
         - id: userinfomanagement
           uri: http://userinfomanagement:8080
           predicates:
-            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, 
+            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**,
         - id: authidentity
           uri: http://authidentity:8080
           predicates:
-            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**,
         - id: pointmanagement
           uri: http://pointmanagement:8080
           predicates:
-            - Path=/points/**, 
+            - Path=/points/**,
         - id: scriptmanagement
           uri: http://scriptmanagement:8080
           predicates:
-            - Path=/manuscripts/**, 
+            - Path=/manuscripts/**,
         - id: userhistorymanagement
           uri: http://userhistorymanagement:8080
           predicates:
-            - Path=/viewHistories/**, /favorites/**, 
+            - Path=/viewHistories/**, /favorites/**,
         - id: aiservice
           uri: http://aiservice:8080
           predicates:
-            - Path=/aiServices/**, 
+            - Path=/aiServices/**,
         - id: booksmanagement
           uri: http://booksmanagement:8080
           predicates:
-            - Path=/books/**, 
+            - Path=/books/**,
         - id: booksubstriptionmanagement
           uri: http://booksubstriptionmanagement:8080
           predicates:
-            - Path=/bookSubscriptions/**, 
+            - Path=/bookSubscriptions/**,
         - id: frontend
           uri: http://frontend:8080
           predicates:
             - Path=/**
       globalcors:
         corsConfigurations:
-          '[/**]':
+          "[/**]":
             allowedOrigins:
               - "*"
             allowedMethods:
