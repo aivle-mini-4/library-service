@@ -13,7 +13,9 @@ public class MonthlyBookSubscribed extends AbstractEvent {
 
     private Long id;
     private Long bookId;
-    private String name;
+    private Long userId;
+    private Integer price;
+    private String bookName;
     private Boolean isBookSubscribed;
     private LocalDateTime updatedAt;
 }

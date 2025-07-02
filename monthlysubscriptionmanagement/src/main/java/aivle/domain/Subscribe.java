@@ -3,6 +3,7 @@ package aivle.domain;
 import aivle.MonthlysubscriptionmanagementApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -20,11 +21,13 @@ public class Subscribe {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private Long userId;
+
     private String name;
 
     private Boolean isSubscribed;
 
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     public static SubscribeRepository repository() {
         return MonthlysubscriptionmanagementApplication.applicationContext.getBean(SubscribeRepository.class);
@@ -36,7 +39,7 @@ public class Subscribe {
     ) {
         //implement business logic here:
         this.isSubscribed = true;
-        this.updatedAt = new Date();
+        this.updatedAt = LocalDateTime.now();
 
         Subscribed subscribed = new Subscribed(this);
         subscribed.publishAfterCommit();
@@ -49,7 +52,7 @@ public class Subscribe {
     ) {
         //implement business logic here:
         this.isSubscribed = false;
-        this.updatedAt = new Date();
+        this.updatedAt = LocalDateTime.now();
 
         UnSubscribed unSubscribed = new UnSubscribed(this);
         unSubscribed.publishAfterCommit();
