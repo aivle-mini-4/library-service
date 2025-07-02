@@ -2,9 +2,6 @@ package aivle.domain;
 
 
 import aivle.AdmintaskApplication;
-import aivle.domain.AuthorApproved;
-import aivle.domain.AuthorRejected;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;

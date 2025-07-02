@@ -1,4 +1,6 @@
-# userinfomanagement
+# User Info Management Service
+
+사용자 정보 관리 서비스로, 회원 프로필, 작가 프로필, 관리자 프로필을 관리합니다.
 
 ## Running in local development environment
 
@@ -17,13 +19,14 @@ docker run username/userinfomanagement:v1
 ## Push images and running in Kubernetes
 
 ```
-docker login 
+docker login
 # in case of docker hub, enter your username and password
 
 docker push username/userinfomanagement:v1
 ```
 
 Edit the deployment.yaml under the /kubernetes directory:
+
 ```
     spec:
       containers:
@@ -35,16 +38,19 @@ Edit the deployment.yaml under the /kubernetes directory:
 ```
 
 Apply the yaml to the Kubernetes:
+
 ```
 kubectl apply -f kubernetes/deployment.yaml
 ```
 
 See the pod status:
+
 ```
 kubectl get pods -l app=userinfomanagement
 ```
 
 If you have no problem, you can connect to the service by opening a proxy between your local and the kubernetes by using this command:
+
 ```
 # new terminal
 kubectl port-forward deploy/userinfomanagement 8080:8080
@@ -54,14 +60,14 @@ http localhost:8080
 ```
 
 If you have any problem on running the pod, you can find the reason by hitting this:
+
 ```
 kubectl logs -l app=userinfomanagement
 ```
 
 Following problems may be occurred:
 
-1. ImgPullBackOff:  Kubernetes failed to pull the image with the image name you've specified at the deployment.yaml. Please check your image name and ensure you have pushed the image properly.
+1. ImgPullBackOff: Kubernetes failed to pull the image with the image name you've specified at the deployment.yaml. Please check your image name and ensure you have pushed the image properly.
 1. CrashLoopBackOff: The spring application is not running properly. If you didn't provide the kafka installation on the kubernetes, the application may crash. Please install kafka firstly:
 
 https://labs.msaez.io/#/courses/cna-full/full-course-cna/ops-utility
-

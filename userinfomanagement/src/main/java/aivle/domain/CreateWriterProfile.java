@@ -1,72 +1,58 @@
 package aivle.domain;
 
 import aivle.infra.AbstractEvent;
-import java.util.*;
+import java.util.Date;
 
-//<<< DDD / Domain Event
-public class WriterProfileCreated extends AbstractEvent {
+public class CreateWriterProfile extends AbstractEvent {
 
     private Long id;
+    private Long authorId;
+    private Date resultAt;
+    private String state;
     private String name;
     private String email;
     private String roles;
     private String basicInformation;
     private String selfIntroduction;
     private String portfolio;
-    private Date updatedAt;
-    private Long userId;
-
-    public WriterProfileCreated(WriterProfile aggregate) {
-        super(aggregate);
-        this.userId = aggregate.getId();
-        this.name = aggregate.getName();
-        this.email = aggregate.getEmail();
-        this.roles = aggregate.getRoles();
-        this.basicInformation = aggregate.getBasicInformation();
-        this.selfIntroduction = aggregate.getSelfIntroduction();
-        this.portfolio = aggregate.getPortfolio();
-        this.updatedAt = aggregate.getUpdatedAt();
-    }
-
-    public WriterProfileCreated() {
-        super();
-    }
 
     // Getters
     public Long getId() { return id; }
+    public Long getAuthorId() { return authorId; }
+    public Date getResultAt() { return resultAt; }
+    public String getState() { return state; }
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getRoles() { return roles; }
     public String getBasicInformation() { return basicInformation; }
     public String getSelfIntroduction() { return selfIntroduction; }
     public String getPortfolio() { return portfolio; }
-    public Date getUpdatedAt() { return updatedAt; }
-    public Long getUserId() { return userId; }
 
     // Setters
     public void setId(Long id) { this.id = id; }
+    public void setAuthorId(Long authorId) { this.authorId = authorId; }
+    public void setResultAt(Date resultAt) { this.resultAt = resultAt; }
+    public void setState(String state) { this.state = state; }
     public void setName(String name) { this.name = name; }
     public void setEmail(String email) { this.email = email; }
     public void setRoles(String roles) { this.roles = roles; }
     public void setBasicInformation(String basicInformation) { this.basicInformation = basicInformation; }
     public void setSelfIntroduction(String selfIntroduction) { this.selfIntroduction = selfIntroduction; }
     public void setPortfolio(String portfolio) { this.portfolio = portfolio; }
-    public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
-    public void setUserId(Long userId) { this.userId = userId; }
 
     @Override
     public String toString() {
-        return "WriterProfileCreated{" +
+        return "CreateWriterProfile{" +
                 "id=" + id +
+                ", authorId=" + authorId +
+                ", resultAt=" + resultAt +
+                ", state='" + state + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", roles='" + roles + '\'' +
                 ", basicInformation='" + basicInformation + '\'' +
                 ", selfIntroduction='" + selfIntroduction + '\'' +
                 ", portfolio='" + portfolio + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", userId=" + userId +
                 '}';
     }
-}
-//>>> DDD / Domain Event
+} 

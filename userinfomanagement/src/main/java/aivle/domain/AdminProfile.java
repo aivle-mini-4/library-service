@@ -1,13 +1,7 @@
 package aivle.domain;
 
 import aivle.UserinfomanagementApplication;
-import aivle.domain.AdminProfileCreated;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -20,12 +14,10 @@ public class AdminProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String name;
-
     private String email;
-
     private String roles;
+    private Date updatedAt;
 
     public static AdminProfileRepository repository() {
         AdminProfileRepository adminProfileRepository = UserinfomanagementApplication.applicationContext.getBean(
@@ -36,32 +28,15 @@ public class AdminProfile {
 
     //<<< Clean Arch / Port Method
     public static void createAdminProfile(SignedUp signedUp) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
         AdminProfile adminProfile = new AdminProfile();
+        adminProfile.setName(signedUp.getName());
+        adminProfile.setEmail(signedUp.getEmail());
+        adminProfile.setRoles(signedUp.getRoles());
+        adminProfile.setUpdatedAt(new Date());
         repository().save(adminProfile);
-
         AdminProfileCreated adminProfileCreated = new AdminProfileCreated(adminProfile);
         adminProfileCreated.publishAfterCommit();
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(signedUp.get???()).ifPresent(adminProfile->{
-            
-            adminProfile // do something
-            repository().save(adminProfile);
-
-            AdminProfileCreated adminProfileCreated = new AdminProfileCreated(adminProfile);
-            adminProfileCreated.publishAfterCommit();
-
-         });
-        */
-
     }
     //>>> Clean Arch / Port Method
-
 }
 //>>> DDD / Aggregate Root

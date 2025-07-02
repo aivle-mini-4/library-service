@@ -1,8 +1,6 @@
 package aivle.domain;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -19,6 +17,6 @@ public class WriterPage {
     private String name;
     private String email;
     private String basicInformation;
-    private String selfInformation;
+    private String selfIntroduction;
     private String portfolio;
 }
