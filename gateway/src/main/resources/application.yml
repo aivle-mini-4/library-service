@@ -5,6 +5,34 @@ server:
 jwt:
   secret: aivleSecretKeyForJWTTokenGeneration2024WithMoreThan256BitsToMeetSecurityRequirements
 
+# 보안 경로 설정 (선택사항 - 기본값 사용 시 생략 가능)
+security:
+  protected-paths:
+    - "/authorapprovals/"
+    - "/pointpolicies/"
+    - "/pointPolicyViews/"
+    - "/subscribes/"
+    - "/subscribeViews/"
+    - "/writerProfiles/"
+    - "/memberProfiles/"
+    - "/adminProfiles/"
+    - "/writerPages/"
+    - "/adminPages/"
+    - "/userPages/"
+    - "/points/"
+    - "/pointViews/"
+    - "/manuscripts/"
+    - "/manuscriptPages/"
+    - "/viewHistories/"
+    - "/favorites/"
+    - "/queryViewHistories/"
+    - "/queryFavoriteLists/"
+    - "/aiServices/"
+    - "/books/"
+    - "/registeredBestsellerViews/"
+    - "/registeredBookViews/"
+    - "/bookSubscriptions/"
+
 ---
 
 spring:

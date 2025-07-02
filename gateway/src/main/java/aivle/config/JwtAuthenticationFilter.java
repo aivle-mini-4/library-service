@@ -1,7 +1,10 @@
 package aivle.config;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +20,9 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtTokenProvider jwtProvider;
+    
+    @Value("${security.protected-paths}")
+    private List<String> protectedPaths;
 
     public JwtAuthenticationFilter(JwtTokenProvider jwtProvider) {
         super(Config.class);
@@ -28,8 +34,8 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
         return (exchange, chain) -> {
             String path = exchange.getRequest().getPath().value();
             
-            // 인증이 필요없는 경로들
-            if (isPublicPath(path)) {
+            // 인증이 필요없는 경로들은 바로 통과
+            if (!isProtectedPath(path)) {
                 return chain.filter(exchange);
             }
             
@@ -73,18 +79,8 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
         };
     }
 
-    private boolean isPublicPath(String path) {
-        // 인증이 필요없는 공개 경로들
-        return path.startsWith("/auth/") || 
-               path.startsWith("/userAccounts/signup") ||
-               path.startsWith("/authorAccounts/signup") ||
-               path.startsWith("/adminAccounts/signup") ||
-               path.startsWith("/h2-console/") ||
-               path.equals("/") ||
-               path.startsWith("/static/") ||
-               path.startsWith("/css/") ||
-               path.startsWith("/js/") ||
-               path.startsWith("/images/");
+    private boolean isProtectedPath(String path) {
+        return protectedPaths != null && protectedPaths.stream().anyMatch(path::startsWith);
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
