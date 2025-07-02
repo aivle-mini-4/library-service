@@ -18,6 +18,9 @@ public class PointUsed extends AbstractEvent {
 
     public PointUsed(Point aggregate) {
         super(aggregate);
+        this.id = aggregate.getId();
+        this.userId = aggregate.getUserId();
+        this.points = aggregate.getPoints();
     }
 
     public PointUsed() {

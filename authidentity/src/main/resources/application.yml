@@ -1,6 +1,11 @@
 server:
   port: 8080
 
+# JWT 설정
+jwt:
+  secret: aivleSecretKeyForJWTTokenGeneration2024WithMoreThan256BitsToMeetSecurityRequirements
+  expiration: 86400
+
 spring:
   application:
     name: authidentity
@@ -8,6 +13,10 @@ spring:
 
 spring:
   profiles: default
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   jpa:
     properties:
       hibernate:
@@ -42,8 +51,14 @@ spring:
 
 logging:
   level:
-    org.hibernate.type: trace
-    org.springframework.cloud: debug
+#     org.hibernate.type: trace
+#     org.springframework.cloud: debug
+    root: ERROR
+    aivle: INFO
+    org.springframework.cloud: ERROR
+    org.hibernate: ERROR
+    org.springframework.boot: ERROR
+    org.springframework.web: ERROR
 
 api:
   url: 

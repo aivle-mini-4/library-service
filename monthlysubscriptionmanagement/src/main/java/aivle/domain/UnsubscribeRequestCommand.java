@@ -8,6 +8,7 @@ import lombok.Data;
 public class UnsubscribeRequestCommand {
 
     private Long id;
+    private Long userId;
     private String name;
     private Boolean isSubscribed;
 }

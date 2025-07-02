@@ -10,8 +10,10 @@ import lombok.*;
 public class BookSubscribed extends AbstractEvent {
 
     private Long id;
+    private Long userId;
     private Long bookId;
     private String name;
     private Boolean isBookSubscribed;
     private Date updatedAt;
+    private Integer price;
 }

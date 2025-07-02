@@ -3,6 +3,7 @@ package aivle.domain;
 import aivle.domain.*;
 import aivle.infra.AbstractEvent;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import lombok.*;
 
@@ -12,13 +13,15 @@ import lombok.*;
 public class Subscribed extends AbstractEvent {
 
     private Long id;
+    private Long userId;
     private String name;
     private Boolean isSubscribed;
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     public Subscribed(Subscribe aggregate) {
         super(aggregate);
         this.id = aggregate.getId();
+        this.userId = aggregate.getUserId();
         this.name = aggregate.getName();
         this.isSubscribed = aggregate.getIsSubscribed();
         this.updatedAt = aggregate.getUpdatedAt();

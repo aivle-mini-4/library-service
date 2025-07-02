@@ -6,6 +6,7 @@ import aivle.domain.PointUsed;
 import aivle.domain.PointsGranted;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -23,23 +24,12 @@ public class Point {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long userId;
+    private Long userId; // 유저식별 userId로 해야할 것 같아서
+    private String name;
 
     private Integer points;
 
-    private Date history;
-
-    @PostPersist
-    public void onPostPersist() {
-        PointUsed pointUsed = new PointUsed(this);
-        pointUsed.publishAfterCommit();
-
-        PointExpired pointExpired = new PointExpired(this);
-        pointExpired.publishAfterCommit();
-
-        PointsGranted pointsGranted = new PointsGranted(this);
-        pointsGranted.publishAfterCommit();
-    }
+    private LocalDateTime history;
 
     public static PointRepository repository() {
         PointRepository pointRepository = PointmanagementApplication.applicationContext.getBean(
@@ -48,158 +38,118 @@ public class Point {
         return pointRepository;
     }
 
+    public static StoredPointPolicyRepository storedPointPolicyRepository() {
+        return PointmanagementApplication.applicationContext.getBean(StoredPointPolicyRepository.class);
+    }
+
+
     //<<< Clean Arch / Port Method
     public static void grantPoints(SignedUp signedUp) {
-        //implement business logic here:
 
-        /** Example 1:  new item 
+        if (repository().findByUserId(signedUp.getId()).isPresent()) {
+            System.out.println("⚠ 이미 포인트가 지급된 유저입니다: " + signedUp.getId());
+            return;
+        }
+
         Point point = new Point();
+        point.setUserId(signedUp.getId());
+
+        int totalPoints = 0;
+
+        List<StoredPointPolicy> policies = storedPointPolicyRepository().findByPointType(PointType.ACCUMULATION); 
+
+        for (StoredPointPolicy policy : policies) {
+            if (!Boolean.TRUE.equals(policy.getIsActive())) continue;
+
+            String policyName = policy.getName();
+
+            if ("기본포인트".equals(policyName)) {
+                totalPoints += policy.getAmount();
+            } else if ("kt유저보너스포인트".equals(policyName)) {
+                if (isKt(signedUp.getEmail())) {
+                    totalPoints += policy.getAmount();
+                }
+            }    
+        }
+
+        point.setPoints(totalPoints);
+        point.setHistory(LocalDateTime.now());
         repository().save(point);
 
         PointsGranted pointsGranted = new PointsGranted(point);
         pointsGranted.publishAfterCommit();
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(signedUp.get???()).ifPresent(point->{
-            
-            point // do something
-            repository().save(point);
-
-            PointsGranted pointsGranted = new PointsGranted(point);
-            pointsGranted.publishAfterCommit();
-
-         });
-        */
-
     }
-
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
-    public static void pointDeduction(
-        ViewHistoryRegistered viewHistoryRegistered
-    ) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Point point = new Point();
-        repository().save(point);
-
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(viewHistoryRegistered.get???()).ifPresent(point->{
-            
-            point // do something
-            repository().save(point);
-
-
-         });
-        */
-
+    // kt 회원인지 확인하는 함수 (수정필요)
+    private static boolean isKt(String email) {
+        return email.endsWith("@kt.com");
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public static void pointDeduction(BookSubscribed bookSubscribed) {
-        //implement business logic here:
 
-        /** Example 1:  new item 
-        Point point = new Point();
-        repository().save(point);
-
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(bookSubscribed.get???()).ifPresent(point->{
+        repository().findByUserId(bookSubscribed.getUserId()).ifPresent(point->{
             
-            point // do something
+            int price = bookSubscribed.getPrice(); // booksubscribe에서 price를 받아와야할 것 같음
+            
+            if (point.getPoints() < price) {
+                // 포인트 부족
+                PointExpired expired = new PointExpired(point);
+                expired.publishAfterCommit();
+                return;
+            }
+
+            // 포인트 사용
+            point.setPoints(point.getPoints() - price);
+            point.setHistory(LocalDateTime.now());
             repository().save(point);
 
+            PointUsed used = new PointUsed(point);
+            used.publishAfterCommit();
 
          });
-        */
+
 
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public static void pointManagement(PointPolicyCreated pointPolicyCreated) {
-        //implement business logic here:
 
-        /** Example 1:  new item 
-        Point point = new Point();
-        repository().save(point);
+        StoredPointPolicy policy = new StoredPointPolicy();
+        policy.setPolicyId(pointPolicyCreated.getId());
+        policy.setName(pointPolicyCreated.getName());
+        policy.setDescription(pointPolicyCreated.getDescription());
+        policy.setPointType(pointPolicyCreated.getPointType());
+        policy.setAmount(pointPolicyCreated.getAmount());
+        policy.setIsActive(pointPolicyCreated.getIsActive());
+        policy.setCreatedAt(pointPolicyCreated.getCreatedAt());
 
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(pointPolicyCreated.get???()).ifPresent(point->{
-            
-            point // do something
-            repository().save(point);
-
-
-         });
-        */
-
+        System.out.println("👉 저장할 정책: " + policy);
+        storedPointPolicyRepository().save(policy);
+        System.out.println("✅ 정책 저장 완료");
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public static void pointManagement(PointPolicyUpdated pointPolicyUpdated) {
-        //implement business logic here:
 
-        /** Example 1:  new item 
-        Point point = new Point();
-        repository().save(point);
-
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(pointPolicyUpdated.get???()).ifPresent(point->{
-            
-            point // do something
-            repository().save(point);
-
-
-         });
-        */
-
+        storedPointPolicyRepository().findById(pointPolicyUpdated.getId()).ifPresent(policy -> {
+            policy.setName(pointPolicyUpdated.getName());
+            policy.setDescription(pointPolicyUpdated.getDescription());
+            policy.setPointType(pointPolicyUpdated.getPointType());
+            policy.setAmount(pointPolicyUpdated.getAmount());
+            policy.setIsActive(pointPolicyUpdated.getIsActive());
+            policy.setUpdatedAt(pointPolicyUpdated.getUpdatedAt());
+            storedPointPolicyRepository().save(policy);
+        });
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public static void pointManagement(PointPolicyDeleted pointPolicyDeleted) {
-        //implement business logic here:
 
-        /** Example 1:  new item 
-        Point point = new Point();
-        repository().save(point);
-
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(pointPolicyDeleted.get???()).ifPresent(point->{
-            
-            point // do something
-            repository().save(point);
-
-
-         });
-        */
+        storedPointPolicyRepository().deleteById(pointPolicyDeleted.getId());
 
     }
     //>>> Clean Arch / Port Method
