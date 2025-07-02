@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/books-view")
+@RequestMapping("/book-views")
 @RequiredArgsConstructor
 public class BookViewController {
 
