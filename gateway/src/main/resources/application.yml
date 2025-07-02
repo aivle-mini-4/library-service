@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8092
 
 # JWT 설정
 jwt:
@@ -8,31 +8,40 @@ jwt:
 # 보안 경로 설정 (선택사항 - 기본값 사용 시 생략 가능)
 security:
   protected-paths:
-    - "/authorapprovals/"
-    - "/pointpolicies/"
-    - "/pointPolicyViews/"
-    - "/subscribes/"
-    - "/subscribeViews/"
-    - "/writerProfiles/"
-    - "/memberProfiles/"
-    - "/adminProfiles/"
-    - "/writerPages/"
-    - "/adminPages/"
-    - "/userPages/"
-    - "/points/"
-    - "/pointViews/"
-    - "/manuscripts/"
-    - "/manuscriptPages/"
-    - "/viewHistories/"
-    - "/favorites/"
-    - "/queryViewHistories/"
-    - "/queryFavoriteLists/"
-    - "/aiServices/"
-    - "/books/"
-    - "/registeredBestsellerViews/"
-    - "/registeredBookViews/"
-    - "/bookSubscriptions/"
-
+    - "/authorapprovals"
+    - "/pointpolicies"
+    - "/pointPolicyViews"
+    - "/subscribes"
+    - "/subscribeViews"
+    - "/writerProfiles"
+    - "/memberProfiles"
+    - "/adminProfiles"
+    - "/writerPages"
+    - "/adminPages"
+    - "/userPages"
+    - "/points"
+    - "/pointViews"
+    - "/manuscripts"
+    - "/manuscriptPages"
+    - "/viewHistories"
+    - "/favorites"
+    - "/queryViewHistories"
+    - "/queryFavoriteLists"
+    - "/aiServices"
+    - "/books"
+    - "/registeredBestsellerViews"
+    - "/registeredBookViews"
+    - "/bookSubscriptions"
+logging:
+  level:
+#     org.hibernate.type: trace
+#     org.springframework.cloud: debug
+    root: ERROR
+    aivle: INFO
+    org.springframework.cloud: ERROR
+    org.hibernate: ERROR
+    org.springframework.boot: ERROR
+    org.springframework.web: ERROR
 ---
 
 spring:
@@ -56,7 +65,7 @@ spring:
         - id: authidentity
           uri: http://localhost:8085
           predicates:
-            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, /auth/**
         - id: pointmanagement
           uri: http://localhost:8086
           predicates:
@@ -87,6 +96,7 @@ spring:
             - Path=/**
 #>>> API Gateway / Routes
       default-filters:
+        - LoggingFilter  # 모든 요청 로깅
         - JwtAuthenticationFilter  # 모든 라우트에 기본 적용
       globalcors:
         corsConfigurations:
@@ -107,6 +117,7 @@ spring:
   cloud:
     gateway:
       default-filters:
+        - LoggingFilter  # 모든 요청 로깅
         - JwtAuthenticationFilter  # 모든 라우트에 기본 적용
       routes:
         - id: admintask
@@ -124,7 +135,7 @@ spring:
         - id: authidentity
           uri: http://authidentity:8080
           predicates:
-            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, /auth/**
         - id: pointmanagement
           uri: http://pointmanagement:8080
           predicates:

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
@@ -20,13 +19,12 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtTokenProvider jwtProvider;
-    
-    @Value("${security.protected-paths}")
-    private List<String> protectedPaths;
+    private final SecurityProperties securityProperties;
 
-    public JwtAuthenticationFilter(JwtTokenProvider jwtProvider) {
+    public JwtAuthenticationFilter(JwtTokenProvider jwtProvider, SecurityProperties securityProperties) {
         super(Config.class);
         this.jwtProvider = jwtProvider;
+        this.securityProperties = securityProperties;
     }
 
     @Override
@@ -80,6 +78,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
     }
 
     private boolean isProtectedPath(String path) {
+        List<String> protectedPaths = securityProperties.getProtectedPaths();
         return protectedPaths != null && protectedPaths.stream().anyMatch(path::startsWith);
     }
 
