@@ -28,5 +28,8 @@ export const subscriptionApi = {
           ...headers,
         },
       }),
+
+    // 구독 조회
+    getSubscription: () => api.get(`${MONTHLY_SUBSCRIPTION_URL}Views`),
   },
 }
