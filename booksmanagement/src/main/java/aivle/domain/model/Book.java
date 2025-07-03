@@ -27,6 +27,8 @@ public class Book extends BaseEntity {
 
     private String category;
     private String summary;
+
+    @Column(length = 1024)
     private String coverImageUrl;
 
     private Integer price;
