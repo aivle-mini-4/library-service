@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authApi } from '../api/auth'
-import Alert from '../components/ui/Alert'
-import Button from '../components/ui/Button'
-import Card from '../components/ui/Card'
-import Input from '../components/ui/Input'
-import Textarea from '../components/ui/Textarea'
+import Alert from '../components/Alert'
+import Button from '../components/Button'
+import Card from '../components/Card'
+import Input from '../components/Input'
+import Textarea from '../components/Textarea'
 import { useForm, validationRules } from '../hooks/useForm'
 
 function Register() {
