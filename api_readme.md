@@ -46,7 +46,17 @@
   "password": "string"
 }
 ```
-- **Response**: UserAccount 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "email": "string",
+  "password": "string",
+  "roles": "string",
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
 
 ### 1.4 작가 회원가입
 - **URL**: `POST /authorAccounts/signup`
@@ -60,7 +70,19 @@
   "portfolio": "string"
 }
 ```
-- **Response**: AuthorAccount 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "email": "string",
+  "password": "string",
+  "roles": "string",
+  "selfIntroduction": "string",
+  "portfolio": "string",
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
 
 ### 1.5 관리자 회원가입
 - **URL**: `POST /adminAccounts/signup`
@@ -72,7 +94,17 @@
   "password": "string"
 }
 ```
-- **Response**: AdminAccount 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "email": "string",
+  "password": "string",
+  "roles": "string",
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
 
 ## 2. Script Management Service (원고 관리 서비스)
 
@@ -87,7 +119,15 @@
   "content": "string"
 }
 ```
-- **Response**: Manuscript 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "authorId": "number",
+  "title": "string",
+  "content": "string"
+}
+```
 
 ### 2.2 원고 수정
 - **URL**: `PUT /manuscripts/{id}`
@@ -101,7 +141,15 @@
   "content": "string"
 }
 ```
-- **Response**: Manuscript 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "authorId": "number",
+  "title": "string",
+  "content": "string"
+}
+```
 
 ### 2.3 원고 삭제
 - **URL**: `DELETE /manuscripts/{id}`
@@ -118,13 +166,31 @@
 ### 2.5 전체 원고 목록 조회
 - **URL**: `GET /manuscripts`
 - **Description**: 전체 원고 페이지 목록 조회
-- **Response**: ManuscriptPage 배열
+- **Response**:
+```json
+[
+  {
+    "id": "number",
+    "authorId": "number",
+    "title": "string",
+    "content": "string"
+  }
+]
+```
 
 ### 2.6 특정 원고 조회
 - **URL**: `GET /manuscripts/{id}`
 - **Description**: 특정 원고 페이지 조회
 - **Path Parameters**: `id` (number)
-- **Response**: ManuscriptPage 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "authorId": "number",
+  "title": "string",
+  "content": "string"
+}
+```
 
 ## 3. Admin Task Service (관리자 작업 서비스)
 
@@ -137,25 +203,75 @@
   "authorId": "number"
 }
 ```
-- **Response**: Authorapproval 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "authorId": "number",
+  "state": "string",
+  "appliedAt": "string",
+  "approvedAt": "string",
+  "rejectedAt": "string",
+  "adminId": "number",
+  "reason": "string"
+}
+```
 
 ### 3.2 전체 승인 요청 목록 조회
 - **URL**: `GET /authorapprovals`
 - **Description**: 전체 작가 승인 요청 목록 조회
-- **Response**: Authorapproval 배열
+- **Response**:
+```json
+[
+  {
+    "id": "number",
+    "authorId": "number",
+    "state": "string",
+    "appliedAt": "string",
+    "approvedAt": "string",
+    "rejectedAt": "string",
+    "adminId": "number",
+    "reason": "string"
+  }
+]
+```
 
 ### 3.3 특정 승인 요청 조회
 - **URL**: `GET /authorapprovals/{id}`
 - **Description**: 특정 작가 승인 요청 조회
 - **Path Parameters**: `id` (number)
-- **Response**: Authorapproval 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "authorId": "number",
+  "state": "string",
+  "appliedAt": "string",
+  "approvedAt": "string",
+  "rejectedAt": "string",
+  "adminId": "number",
+  "reason": "string"
+}
+```
 
 ### 3.4 승인 처리
 - **URL**: `PUT /authorapprovals/{id}/approve`
 - **Description**: 작가 승인 처리
 - **Path Parameters**: `id` (number)
 - **Query Parameters**: `adminId` (number)
-- **Response**: Authorapproval 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "authorId": "number",
+  "state": "string",
+  "appliedAt": "string",
+  "approvedAt": "string",
+  "rejectedAt": "string",
+  "adminId": "number",
+  "reason": "string"
+}
+```
 
 ### 3.5 거부 처리
 - **URL**: `PUT /authorapprovals/{id}/reject`
@@ -164,7 +280,19 @@
 - **Query Parameters**: 
   - `adminId` (number)
   - `reason` (string)
-- **Response**: Authorapproval 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "authorId": "number",
+  "state": "string",
+  "appliedAt": "string",
+  "approvedAt": "string",
+  "rejectedAt": "string",
+  "adminId": "number",
+  "reason": "string"
+}
+```
 
 ### 3.6 포인트 정책 생성
 - **URL**: `POST /pointpolicies`
@@ -179,18 +307,56 @@
   "isActive": "boolean"
 }
 ```
-- **Response**: Pointpolicy 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "name": "string",
+  "description": "string",
+  "pointType": "string",
+  "amount": "number",
+  "isActive": "boolean",
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
 
 ### 3.7 전체 포인트 정책 목록 조회
 - **URL**: `GET /pointpolicies`
 - **Description**: 전체 포인트 정책 목록 조회
-- **Response**: Pointpolicy 배열
+- **Response**:
+```json
+[
+  {
+    "id": "number",
+    "name": "string",
+    "description": "string",
+    "pointType": "string",
+    "amount": "number",
+    "isActive": "boolean",
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
+]
+```
 
 ### 3.8 특정 포인트 정책 조회
 - **URL**: `GET /pointpolicies/{id}`
 - **Description**: 특정 포인트 정책 조회
 - **Path Parameters**: `id` (number)
-- **Response**: Pointpolicy 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "name": "string",
+  "description": "string",
+  "pointType": "string",
+  "amount": "number",
+  "isActive": "boolean",
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
 
 ### 3.9 포인트 정책 수정
 - **URL**: `PUT /pointpolicies/{id}`
@@ -206,7 +372,19 @@
   "isActive": "boolean"
 }
 ```
-- **Response**: Pointpolicy 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "name": "string",
+  "description": "string",
+  "pointType": "string",
+  "amount": "number",
+  "isActive": "boolean",
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
 
 ### 3.10 포인트 정책 삭제
 - **URL**: `DELETE /pointpolicies/{id}`
@@ -222,27 +400,63 @@
 - **Request Body**:
 ```json
 {
+  "id": "number",
   "userId": "number",
   "name": "string",
   "isSubscribed": "boolean",
-  "updatedAt": "date"
+  "updatedAt": "string"
 }
 ```
-- **Response**: Subscribe 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "userId": "number",
+  "name": "string",
+  "isSubscribed": "boolean",
+  "updatedAt": "string"
+}
+```
 
 ### 4.2 구독 해지 요청
 - **URL**: `DELETE /subscribes/{id}/unsubscriberequest`
 - **Description**: 월 구독 해지 요청
 - **Path Parameters**: `id` (number)
+- **Headers**: 
+  - `X-User-Id`: "string"
+  - `X-User-Role`: "string"
 - **Request Body**:
 ```json
 {
+  "id": "number",
   "userId": "number",
   "name": "string",
   "isSubscribed": "boolean"
 }
 ```
-- **Response**: Subscribe 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "userId": "number",
+  "name": "string",
+  "isSubscribed": "boolean",
+  "updatedAt": "string"
+}
+```
+
+### 4.3 구독 조회
+- **URL**: `GET /subscribesViews`
+- **Description**: 월 구독 해지 요청
+- **Response**:
+```json
+{
+  "id": "number",
+  "name": "string",
+  "isSubscribed": "boolean", 
+  "updatedAt": "string"
+}
+```
 
 ## 5. Book Subscription Management Service (도서 구독 관리 서비스)
 
@@ -256,7 +470,18 @@
   "isBookSubscribed": "boolean"
 }
 ```
-- **Response**: BookSubscription 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "bookId": "number",
+  "userId": "number",
+  "price": "number",
+  "bookName": "string",
+  "isBookSubscribed": "boolean",
+  "updatedAt": "string"
+}
+```
 
 ### 5.2 도서 조회
 - **URL**: `POST /bookSubscriptions/viewbook`
@@ -268,7 +493,18 @@
   "isBookSubscribed": "boolean"
 }
 ```
-- **Response**: BookSubscription 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "bookId": "number",
+  "userId": "number",
+  "price": "number",
+  "bookName": "string",
+  "isBookSubscribed": "boolean",
+  "updatedAt": "string"
+}
+```
 
 ## 6. Books Management Service (도서 관리 서비스)
 
@@ -276,29 +512,112 @@
 - **URL**: `DELETE /books/{id}`
 - **Description**: 도서 삭제
 - **Path Parameters**: `id` (number)
-- **Response**: ApiResponse<Void>
+- **Response**:
+```json
+{
+  "isSuccess": "boolean",
+  "message": "string",
+  "result": null
+}
+```
 
 ### 6.2 전체 도서 목록 조회
-- **URL**: `GET /book-views`
+- **URL**: `GET /books`
 - **Description**: 전체 도서 목록 조회
-- **Response**: ApiResponse<BookViewDto[]>
+- **Response**:
+```json
+{
+  "isSuccess": "boolean",
+  "message": "string",
+  "result": [
+    {
+      "bookId": "number",
+      "authorId": "number",
+      "title": "string",
+      "content": "string",
+      "category": "string",
+      "summary": "string",
+      "coverImageUrl": "string",
+      "price": "number",
+      "views": "number",
+      "createdAt": "string",
+      "updatedAt": "string"
+    }
+  ]
+}
+```
 
 ### 6.3 특정 도서 조회
-- **URL**: `GET /book-views/{bookId}`
+- **URL**: `GET /books/{bookId}`
 - **Description**: 특정 도서 조회
 - **Path Parameters**: `bookId` (number)
-- **Response**: ApiResponse<BookViewDto>
+- **Response**:
+```json
+{
+  "isSuccess": "boolean",
+  "message": "string",
+  "result": {
+    "bookId": "number",
+    "authorId": "number",
+    "title": "string",
+    "content": "string",
+    "category": "string",
+    "summary": "string",
+    "coverImageUrl": "string",
+    "price": "number",
+    "views": "number",
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
+}
+```
 
 ### 6.4 전체 베스트셀러 목록 조회
-- **URL**: `GET /bestseller-views`
+- **URL**: `GET /bestsellers`
 - **Description**: 전체 베스트셀러 목록 조회
-- **Response**: ApiResponse<BestSellerViewDto[]>
+- **Response**:
+```json
+{
+  "isSuccess": "boolean",
+  "message": "string",
+  "result": [
+    {
+      "bookId": "number",
+      "authorId": "number",
+      "title": "string",
+      "category": "string",
+      "coverImageUrl": "string",
+      "price": "number",
+      "views": "number",
+      "createdAt": "string",
+      "updatedAt": "string"
+    }
+  ]
+}
+```
 
 ### 6.5 특정 베스트셀러 조회
-- **URL**: `GET /bestseller-views/{bookId}`
+- **URL**: `GET /bestsellers/{bookId}`
 - **Description**: 특정 베스트셀러 조회
 - **Path Parameters**: `bookId` (number)
-- **Response**: ApiResponse<BestSellerViewDto>
+- **Response**:
+```json
+{
+  "isSuccess": "boolean",
+  "message": "string",
+  "result": {
+    "bookId": "number",
+    "authorId": "number",
+    "title": "string",
+    "category": "string",
+    "coverImageUrl": "string",
+    "price": "number",
+    "views": "number",
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
+}
+```
 
 ## 7. User Info Management Service (사용자 정보 관리 서비스)
 
@@ -316,7 +635,19 @@
   "selfIntroduction": "string"
 }
 ```
-- **Response**: MemberProfile 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "userId": "number",
+  "name": "string",
+  "email": "string",
+  "roles": "string",
+  "basicInformation": "string",
+  "selfIntroduction": "string",
+  "updatedAt": "string"
+}
+```
 
 ### 7.2 작가 프로필 수정
 - **URL**: `PUT /writerProfiles/{id}`
@@ -333,7 +664,20 @@
   "portfolio": "string"
 }
 ```
-- **Response**: WriterProfile 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "authorId": "number",
+  "name": "string",
+  "email": "string",
+  "roles": "string",
+  "basicInformation": "string",
+  "selfIntroduction": "string",
+  "portfolio": "string",
+  "updatedAt": "string"
+}
+```
 
 ## 8. AI Service (AI 서비스)
 
@@ -346,30 +690,164 @@ Point Management Service는 Spring Data REST를 통해 자동으로 REST API가 
 ### 9.1 포인트 정보 조회
 - **URL**: `GET /points`
 - **Description**: 전체 포인트 정보 목록 조회
-- **Response**: Point 객체 배열
+- **Response**:
+```json
+{
+  "_embedded": {
+    "points": [
+      {
+        "id": "number",
+        "userId": "number",
+        "points": "number",
+        "history": "string",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "point": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "profile": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": "number",
+    "totalElements": "number",
+    "totalPages": "number",
+    "number": "number"
+  }
+}
+```
 
 ### 9.2 특정 사용자 포인트 조회
 - **URL**: `GET /points/{id}`
 - **Description**: 특정 사용자의 포인트 정보 조회
 - **Path Parameters**: `id` (number)
-- **Response**: Point 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "userId": "number",
+  "points": "number",
+  "history": "string",
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "point": {
+      "href": "string"
+    }
+  }
+}
+```
 
 ### 9.3 포인트 뷰 정보 조회
 - **URL**: `GET /pointViews`
 - **Description**: 전체 포인트 뷰 정보 목록 조회
-- **Response**: PointView 객체 배열
+- **Response**:
+```json
+{
+  "_embedded": {
+    "pointViews": [
+      {
+        "id": "number",
+        "userId": "number",
+        "points": "number",
+        "history": "string",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "pointView": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "profile": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": "number",
+    "totalElements": "number",
+    "totalPages": "number",
+    "number": "number"
+  }
+}
+```
 
 ### 9.4 특정 사용자 포인트 뷰 조회
 - **URL**: `GET /pointViews/{id}`
 - **Description**: 특정 사용자의 포인트 뷰 정보 조회
 - **Path Parameters**: `id` (number)
-- **Response**: PointView 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "userId": "number",
+  "points": "number",
+  "history": "string",
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "pointView": {
+      "href": "string"
+    }
+  }
+}
+```
 
 ### 9.5 사용자별 포인트 뷰 조회
 - **URL**: `GET /pointViews/search/findByUserId?userId={userId}`
 - **Description**: 특정 사용자 ID로 포인트 뷰 정보 조회
 - **Query Parameters**: `userId` (number)
-- **Response**: PointView 객체 배열
+- **Response**:
+```json
+{
+  "_embedded": {
+    "pointViews": [
+      {
+        "id": "number",
+        "userId": "number",
+        "points": "number",
+        "history": "string",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "pointView": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "profile": {
+      "href": "string"
+    }
+  }
+}
+```
 
 ## 10. User History Management Service (사용자 히스토리 관리 서비스)
 
@@ -378,46 +856,246 @@ User History Management Service는 Spring Data REST를 통해 자동으로 REST 
 ### 10.1 즐겨찾기 목록 조회
 - **URL**: `GET /favorites`
 - **Description**: 전체 즐겨찾기 목록 조회
-- **Response**: Favorite 객체 배열
+- **Response**:
+```json
+{
+  "_embedded": {
+    "favorites": [
+      {
+        "id": "number",
+        "bookId": "number",
+        "userId": "number",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "favorite": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "profile": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": "number",
+    "totalElements": "number",
+    "totalPages": "number",
+    "number": "number"
+  }
+}
+```
 
 ### 10.2 특정 즐겨찾기 조회
 - **URL**: `GET /favorites/{id}`
 - **Description**: 특정 즐겨찾기 정보 조회
 - **Path Parameters**: `id` (number)
-- **Response**: Favorite 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "bookId": "number",
+  "userId": "number",
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "favorite": {
+      "href": "string"
+    }
+  }
+}
+```
 
 ### 10.3 조회 히스토리 목록 조회
 - **URL**: `GET /viewHistories`
 - **Description**: 전체 조회 히스토리 목록 조회
-- **Response**: ViewHistory 객체 배열
+- **Response**:
+```json
+{
+  "_embedded": {
+    "viewHistories": [
+      {
+        "id": "number",
+        "bookId": "number",
+        "userId": "number",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "viewHistory": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "profile": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": "number",
+    "totalElements": "number",
+    "totalPages": "number",
+    "number": "number"
+  }
+}
+```
 
 ### 10.4 특정 조회 히스토리 조회
 - **URL**: `GET /viewHistories/{id}`
 - **Description**: 특정 조회 히스토리 정보 조회
 - **Path Parameters**: `id` (number)
-- **Response**: ViewHistory 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "bookId": "number",
+  "userId": "number",
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "viewHistory": {
+      "href": "string"
+    }
+  }
+}
+```
 
 ### 10.5 쿼리 즐겨찾기 목록 조회
 - **URL**: `GET /queryFavoriteLists`
 - **Description**: 쿼리용 즐겨찾기 목록 조회
-- **Response**: QueryFavoriteList 객체 배열
+- **Response**:
+```json
+{
+  "_embedded": {
+    "queryFavoriteLists": [
+      {
+        "id": "number",
+        "bookId": "number",
+        "userId": "number",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "queryFavoriteList": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "profile": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": "number",
+    "totalElements": "number",
+    "totalPages": "number",
+    "number": "number"
+  }
+}
+```
 
 ### 10.6 특정 쿼리 즐겨찾기 조회
 - **URL**: `GET /queryFavoriteLists/{id}`
 - **Description**: 특정 쿼리 즐겨찾기 정보 조회
 - **Path Parameters**: `id` (number)
-- **Response**: QueryFavoriteList 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "bookId": "number",
+  "userId": "number",
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "queryFavoriteList": {
+      "href": "string"
+    }
+  }
+}
+```
 
 ### 10.7 쿼리 조회 히스토리 목록 조회
 - **URL**: `GET /queryViewHistories`
 - **Description**: 쿼리용 조회 히스토리 목록 조회
-- **Response**: QueryViewHistory 객체 배열
+- **Response**:
+```json
+{
+  "_embedded": {
+    "queryViewHistories": [
+      {
+        "id": "number",
+        "bookId": "number",
+        "userId": "number",
+        "_links": {
+          "self": {
+            "href": "string"
+          },
+          "queryViewHistory": {
+            "href": "string"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "profile": {
+      "href": "string"
+    }
+  },
+  "page": {
+    "size": "number",
+    "totalElements": "number",
+    "totalPages": "number",
+    "number": "number"
+  }
+}
+```
 
 ### 10.8 특정 쿼리 조회 히스토리 조회
 - **URL**: `GET /queryViewHistories/{id}`
 - **Description**: 특정 쿼리 조회 히스토리 정보 조회
 - **Path Parameters**: `id` (number)
-- **Response**: QueryViewHistory 객체
+- **Response**:
+```json
+{
+  "id": "number",
+  "bookId": "number",
+  "userId": "number",
+  "_links": {
+    "self": {
+      "href": "string"
+    },
+    "queryViewHistory": {
+      "href": "string"
+    }
+  }
+}
+```
 
 ## 공통 응답 형식
 

@@ -59,6 +59,9 @@ export const handlers = [
       id: 1,
       email: email,
       password: password,
+      roles: 'USER',
+      createdAt: '2025-01-01T00:00:00',
+      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -79,8 +82,11 @@ export const handlers = [
       id: 1,
       email: email,
       password: password,
+      roles: 'AUTHOR',
       selfIntroduction: selfIntroduction,
       portfolio: portfolio,
+      createdAt: '2025-01-01T00:00:00',
+      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -101,6 +107,9 @@ export const handlers = [
       id: 1,
       email: email,
       password: password,
+      roles: 'ADMIN',
+      createdAt: '2025-01-01T00:00:00',
+      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -124,7 +133,6 @@ export const handlers = [
       authorId: authorId,
       title: title,
       content: content,
-      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -146,7 +154,6 @@ export const handlers = [
       authorId: authorId,
       title: title,
       content: content,
-      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -165,14 +172,12 @@ export const handlers = [
     return HttpResponse.json([
       {
         id: 1,
-        bookId: 1,
         authorId: 1,
         title: '원고 제목 1',
         content: '원고 내용 1',
       },
       {
         id: 2,
-        bookId: 2,
         authorId: 1,
         title: '원고 제목 2',
         content: '원고 내용 2',
@@ -184,7 +189,6 @@ export const handlers = [
   http.get('/manuscripts/:id', ({ params }) => {
     return HttpResponse.json({
       id: params.id,
-      bookId: params.id,
       authorId: 1,
       title: '원고 제목',
       content: '원고 내용',
@@ -202,6 +206,10 @@ export const handlers = [
       authorId: authorId,
       state: 'PENDING',
       appliedAt: '2025-01-01T00:00:00',
+      approvedAt: null,
+      rejectedAt: null,
+      adminId: null,
+      reason: null,
     })
   }),
 
@@ -213,6 +221,10 @@ export const handlers = [
         authorId: 1,
         state: 'PENDING',
         appliedAt: '2025-01-01T00:00:00',
+        approvedAt: null,
+        rejectedAt: null,
+        adminId: null,
+        reason: null,
       },
     ])
   }),
@@ -224,6 +236,10 @@ export const handlers = [
       authorId: 1,
       state: 'PENDING',
       appliedAt: '2025-01-01T00:00:00',
+      approvedAt: null,
+      rejectedAt: null,
+      adminId: null,
+      reason: null,
     })
   }),
 
@@ -236,8 +252,11 @@ export const handlers = [
       id: params.id,
       authorId: 1,
       state: 'APPROVED',
+      appliedAt: '2025-01-01T00:00:00',
+      approvedAt: '2025-01-01T00:00:00',
+      rejectedAt: null,
       adminId: adminId,
-      resultAt: '2025-01-01T00:00:00',
+      reason: null,
     })
   }),
 
@@ -251,9 +270,11 @@ export const handlers = [
       id: params.id,
       authorId: 1,
       state: 'REJECTED',
+      appliedAt: '2025-01-01T00:00:00',
+      approvedAt: null,
+      rejectedAt: '2025-01-01T00:00:00',
       adminId: adminId,
       reason: reason,
-      rejectedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -269,6 +290,7 @@ export const handlers = [
       amount: data.amount,
       isActive: data.isActive,
       createdAt: '2025-01-01T00:00:00',
+      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -283,6 +305,7 @@ export const handlers = [
         amount: 1000,
         isActive: true,
         createdAt: '2025-01-01T00:00:00',
+        updatedAt: '2025-01-01T00:00:00',
       },
     ])
   }),
@@ -297,6 +320,7 @@ export const handlers = [
       amount: 1000,
       isActive: true,
       createdAt: '2025-01-01T00:00:00',
+      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -311,6 +335,7 @@ export const handlers = [
       pointType: data.pointType,
       amount: data.amount,
       isActive: data.isActive,
+      createdAt: '2025-01-01T00:00:00',
       updatedAt: '2025-01-01T00:00:00',
     })
   }),
@@ -348,6 +373,16 @@ export const handlers = [
     })
   }),
 
+  // 구독 조회
+  http.get('/subscribesViews', () => {
+    return HttpResponse.json({
+      id: 1,
+      name: '구독자',
+      isSubscribed: true,
+      updatedAt: '2025-01-01T00:00:00',
+    })
+  }),
+
   // ===== Book Subscription Management Service =====
 
   // 도서 구독
@@ -356,8 +391,12 @@ export const handlers = [
 
     return HttpResponse.json({
       id: 1,
+      bookId: 1,
       userId: data.userId,
+      price: 1000,
+      bookName: '도서 제목',
       isBookSubscribed: data.isBookSubscribed,
+      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -367,8 +406,12 @@ export const handlers = [
 
     return HttpResponse.json({
       id: 1,
+      bookId: 1,
       userId: data.userId,
+      price: 1000,
+      bookName: '도서 제목',
       isBookSubscribed: data.isBookSubscribed,
+      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -384,7 +427,7 @@ export const handlers = [
   }),
 
   // 전체 도서 목록 조회
-  http.get('/book-views', () => {
+  http.get('/books', () => {
     return HttpResponse.json({
       isSuccess: true,
       message: '성공입니다.',
@@ -399,13 +442,15 @@ export const handlers = [
           coverImageUrl: 'https://example.com/cover1.jpg',
           price: 1000,
           views: 100,
+          createdAt: '2025-01-01T00:00:00',
+          updatedAt: '2025-01-01T00:00:00',
         },
       ],
     })
   }),
 
   // 특정 도서 조회
-  http.get('/book-views/:bookId', ({ params }) => {
+  http.get('/books/:bookId', ({ params }) => {
     return HttpResponse.json({
       isSuccess: true,
       message: '성공입니다.',
@@ -419,12 +464,14 @@ export const handlers = [
         coverImageUrl: 'https://example.com/cover.jpg',
         price: 1000,
         views: 100,
+        createdAt: '2025-01-01T00:00:00',
+        updatedAt: '2025-01-01T00:00:00',
       },
     })
   }),
 
   // 전체 베스트셀러 목록 조회
-  http.get('/bestseller-views', () => {
+  http.get('/bestsellers', () => {
     return HttpResponse.json({
       isSuccess: true,
       message: '성공입니다.',
@@ -437,13 +484,15 @@ export const handlers = [
           coverImageUrl: 'https://example.com/cover1.jpg',
           price: 1000,
           views: 1000,
+          createdAt: '2025-01-01T00:00:00',
+          updatedAt: '2025-01-01T00:00:00',
         },
       ],
     })
   }),
 
   // 특정 베스트셀러 조회
-  http.get('/bestseller-views/:bookId', ({ params }) => {
+  http.get('/bestsellers/:bookId', ({ params }) => {
     return HttpResponse.json({
       isSuccess: true,
       message: '성공입니다.',
@@ -455,6 +504,8 @@ export const handlers = [
         coverImageUrl: 'https://example.com/cover.jpg',
         price: 1000,
         views: 1000,
+        createdAt: '2025-01-01T00:00:00',
+        updatedAt: '2025-01-01T00:00:00',
       },
     })
   }),
@@ -467,11 +518,13 @@ export const handlers = [
 
     return HttpResponse.json({
       id: params.id,
+      userId: 1,
       name: data.name,
       email: data.email,
       roles: data.roles,
       basicInformation: data.basicInformation,
       selfIntroduction: data.selfIntroduction,
+      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -481,12 +534,14 @@ export const handlers = [
 
     return HttpResponse.json({
       id: params.id,
+      authorId: 1,
       name: data.name,
       email: data.email,
       roles: data.roles,
       basicInformation: data.basicInformation,
       selfIntroduction: data.selfIntroduction,
       portfolio: data.portfolio,
+      updatedAt: '2025-01-01T00:00:00',
     })
   }),
 
@@ -500,11 +555,32 @@ export const handlers = [
           {
             id: 1,
             userId: 1,
-            name: '포인트',
             points: 1000,
             history: '2025-01-01T00:00:00',
+            _links: {
+              self: {
+                href: 'http://localhost:8080/points/1',
+              },
+              point: {
+                href: 'http://localhost:8080/points/1',
+              },
+            },
           },
         ],
+      },
+      _links: {
+        self: {
+          href: 'http://localhost:8080/points',
+        },
+        profile: {
+          href: 'http://localhost:8080/profile/points',
+        },
+      },
+      page: {
+        size: 20,
+        totalElements: 1,
+        totalPages: 1,
+        number: 0,
       },
     })
   }),
@@ -514,9 +590,16 @@ export const handlers = [
     return HttpResponse.json({
       id: params.id,
       userId: 1,
-      name: '포인트',
       points: 1000,
       history: '2025-01-01T00:00:00',
+      _links: {
+        self: {
+          href: `http://localhost:8080/points/${params.id}`,
+        },
+        point: {
+          href: `http://localhost:8080/points/${params.id}`,
+        },
+      },
     })
   }),
 
@@ -530,8 +613,30 @@ export const handlers = [
             userId: 1,
             points: 1000,
             history: '2025-01-01T00:00:00',
+            _links: {
+              self: {
+                href: 'http://localhost:8080/pointViews/1',
+              },
+              pointView: {
+                href: 'http://localhost:8080/pointViews/1',
+              },
+            },
           },
         ],
+      },
+      _links: {
+        self: {
+          href: 'http://localhost:8080/pointViews',
+        },
+        profile: {
+          href: 'http://localhost:8080/profile/pointViews',
+        },
+      },
+      page: {
+        size: 20,
+        totalElements: 1,
+        totalPages: 1,
+        number: 0,
       },
     })
   }),
@@ -543,6 +648,14 @@ export const handlers = [
       userId: 1,
       points: 1000,
       history: '2025-01-01T00:00:00',
+      _links: {
+        self: {
+          href: `http://localhost:8080/pointViews/${params.id}`,
+        },
+        pointView: {
+          href: `http://localhost:8080/pointViews/${params.id}`,
+        },
+      },
     })
   }),
 
@@ -559,8 +672,24 @@ export const handlers = [
             userId: userId,
             points: 1000,
             history: '2025-01-01T00:00:00',
+            _links: {
+              self: {
+                href: 'http://localhost:8080/pointViews/1',
+              },
+              pointView: {
+                href: 'http://localhost:8080/pointViews/1',
+              },
+            },
           },
         ],
+      },
+      _links: {
+        self: {
+          href: 'http://localhost:8080/pointViews/search/findByUserId?userId=1',
+        },
+        profile: {
+          href: 'http://localhost:8080/profile/pointViews',
+        },
       },
     })
   }),
@@ -576,8 +705,30 @@ export const handlers = [
             id: 1,
             bookId: 1,
             userId: 1,
+            _links: {
+              self: {
+                href: 'http://localhost:8080/favorites/1',
+              },
+              favorite: {
+                href: 'http://localhost:8080/favorites/1',
+              },
+            },
           },
         ],
+      },
+      _links: {
+        self: {
+          href: 'http://localhost:8080/favorites',
+        },
+        profile: {
+          href: 'http://localhost:8080/profile/favorites',
+        },
+      },
+      page: {
+        size: 20,
+        totalElements: 1,
+        totalPages: 1,
+        number: 0,
       },
     })
   }),
@@ -588,6 +739,14 @@ export const handlers = [
       id: params.id,
       bookId: 1,
       userId: 1,
+      _links: {
+        self: {
+          href: `http://localhost:8080/favorites/${params.id}`,
+        },
+        favorite: {
+          href: `http://localhost:8080/favorites/${params.id}`,
+        },
+      },
     })
   }),
 
@@ -600,8 +759,30 @@ export const handlers = [
             id: 1,
             bookId: 1,
             userId: 1,
+            _links: {
+              self: {
+                href: 'http://localhost:8080/viewHistories/1',
+              },
+              viewHistory: {
+                href: 'http://localhost:8080/viewHistories/1',
+              },
+            },
           },
         ],
+      },
+      _links: {
+        self: {
+          href: 'http://localhost:8080/viewHistories',
+        },
+        profile: {
+          href: 'http://localhost:8080/profile/viewHistories',
+        },
+      },
+      page: {
+        size: 20,
+        totalElements: 1,
+        totalPages: 1,
+        number: 0,
       },
     })
   }),
@@ -612,6 +793,14 @@ export const handlers = [
       id: params.id,
       bookId: 1,
       userId: 1,
+      _links: {
+        self: {
+          href: `http://localhost:8080/viewHistories/${params.id}`,
+        },
+        viewHistory: {
+          href: `http://localhost:8080/viewHistories/${params.id}`,
+        },
+      },
     })
   }),
 
@@ -624,8 +813,30 @@ export const handlers = [
             id: 1,
             bookId: 1,
             userId: 1,
+            _links: {
+              self: {
+                href: 'http://localhost:8080/queryFavoriteLists/1',
+              },
+              queryFavoriteList: {
+                href: 'http://localhost:8080/queryFavoriteLists/1',
+              },
+            },
           },
         ],
+      },
+      _links: {
+        self: {
+          href: 'http://localhost:8080/queryFavoriteLists',
+        },
+        profile: {
+          href: 'http://localhost:8080/profile/queryFavoriteLists',
+        },
+      },
+      page: {
+        size: 20,
+        totalElements: 1,
+        totalPages: 1,
+        number: 0,
       },
     })
   }),
@@ -636,6 +847,14 @@ export const handlers = [
       id: params.id,
       bookId: 1,
       userId: 1,
+      _links: {
+        self: {
+          href: `http://localhost:8080/queryFavoriteLists/${params.id}`,
+        },
+        queryFavoriteList: {
+          href: `http://localhost:8080/queryFavoriteLists/${params.id}`,
+        },
+      },
     })
   }),
 
@@ -648,8 +867,30 @@ export const handlers = [
             id: 1,
             bookId: 1,
             userId: 1,
+            _links: {
+              self: {
+                href: 'http://localhost:8080/queryViewHistories/1',
+              },
+              queryViewHistory: {
+                href: 'http://localhost:8080/queryViewHistories/1',
+              },
+            },
           },
         ],
+      },
+      _links: {
+        self: {
+          href: 'http://localhost:8080/queryViewHistories',
+        },
+        profile: {
+          href: 'http://localhost:8080/profile/queryViewHistories',
+        },
+      },
+      page: {
+        size: 20,
+        totalElements: 1,
+        totalPages: 1,
+        number: 0,
       },
     })
   }),
@@ -660,6 +901,14 @@ export const handlers = [
       id: params.id,
       bookId: 1,
       userId: 1,
+      _links: {
+        self: {
+          href: `http://localhost:8080/queryViewHistories/${params.id}`,
+        },
+        queryViewHistory: {
+          href: `http://localhost:8080/queryViewHistories/${params.id}`,
+        },
+      },
     })
   }),
 ]
