@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import {manuscriptsApi} from '../../api/manuscripts'
+import CardContainer from './common/CardContainer'
+import ActionButton from './common/ActionButton'
 
 
 function ManuscriptList() {
@@ -30,7 +32,14 @@ function ManuscriptList() {
 }, [])
 
   return (
-    <div style={{border: '4px solid #ccc', borderRadius: '20px', padding: '50px', maxWidth: '1000px', margin: '0 auto'}}>
+    <CardContainer style={{marginBottom: '52px'}}>
+      <ActionButton 
+          style={{position: 'absolute', right: '48px', fontSize: '28px', padding: '8px 16px', marginTop: '32px'}}
+          color={'#28a745'}
+          onClick={() => navigate(`/manuscript`)}
+      >
+          새 원고 쓰기
+      </ActionButton>
       <h1 style={{fontSize: '52px'}}>원고 목록</h1>
       <ul style={{listStyle: 'none', padding: 0}}>
         {manuscripts.map((m) => (
@@ -63,7 +72,7 @@ function ManuscriptList() {
           </li>
         ))}
       </ul>
-    </div>
+    </CardContainer>
   )
 }
 

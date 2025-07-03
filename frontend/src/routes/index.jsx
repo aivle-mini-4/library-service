@@ -24,7 +24,7 @@ function AppRoutes() {
       <Route path="/login" element={<Login/>}/>
       <Route path="/register" element={<Register/>}/>
       <Route path="/author" element={<AuthorPage/>}/>
-      <Route path="/manuscript/:id" element={<Manuscript/>}/>
+      <Route path="/manuscript/:id?" element={<Manuscript/>}/>
       <Route element={<ProtectedRoute/>}>
         <Route path="/" element={<Home/>}/>
         <Route path="/">

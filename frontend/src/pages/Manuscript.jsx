@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import { manuscriptsApi } from '../api/manuscripts'
 import CardContainer from '../components/author/common/CardContainer'
@@ -10,6 +10,9 @@ import ActionButton from '../components/author/common/ActionButton'
 import ReadOnlyField from '../components/author/common/ReadOnlyField'
 
 function Manuscript() {
+
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [isEditing, setIsEditing] = useState(false)
@@ -17,7 +20,8 @@ function Manuscript() {
     const { id } = useParams()
 
     useEffect(() => {
-        manuscriptsApi.getManuscript()
+        if (id) {
+            manuscriptsApi.getManuscript()
             .then(res => {
                 const data = res.data
                 setTitle(data.title)
@@ -26,6 +30,7 @@ function Manuscript() {
             .catch(err => {
                 alert('원고 정보를 불러오지 못했습니다.')
             })
+        }
     }, [])
 
     const handleEdit = () => {
@@ -37,9 +42,15 @@ function Manuscript() {
             'title': title,
             'content': content
         }
-        manuscriptsApi.updateManuscript(id, data)
-        alert('저장되었습니다!')
-        setIsEditing(false)
+        if (id) {
+            manuscriptsApi.updateManuscript(id, data)
+            alert('저장되었습니다!')
+            setIsEditing(false)
+        } else {
+            manuscriptsApi.createManuscript(data)
+            alert('원고가 생성되었습니다!')
+            navigate(-1);
+        }
     }
 
     const handleDelete = () => {
@@ -68,9 +79,12 @@ function Manuscript() {
             {isEditing && (
                 <h2 style={{fontSize: '48px'}}>원고 수정</h2>
             )}
+            {!id && (
+                <h2 style={{fontSize: '48px'}}>새 원고</h2>
+            )}
             <Label>제목</Label>
             <div style={{border: '1px solid #ccc', borderRadius: '20px', marginBottom: '32px', display: 'flex', flexDirection: 'column'}}>
-                {isEditing ? (
+                {!id || isEditing ? (
                 <TextInput
                     value={title}
                     onChange={e => setTitle(e.target.value)}
@@ -81,7 +95,7 @@ function Manuscript() {
             </div>
             <Label>내용</Label>
             <div style={{border: '1px solid #ccc', borderRadius: '20px', marginBottom: '32px', display: 'flex', flexDirection: 'column'}}>
-                {isEditing ? (
+                {!id || isEditing ? (
                 <TextArea
                     value={content}
                     onChange={e => setContent(e.target.value)}
@@ -97,7 +111,7 @@ function Manuscript() {
                 </div>
             )}
             <div style={{display: 'flex', justifyContent: 'flex-end', gap: '16px', marginTop: '40px'}}>
-                {isEditing ? (
+                {!id || isEditing ? (
                 <ActionButton color="#28a745" onClick={handleSave}>저장</ActionButton>
                 ) : (
                 <>
