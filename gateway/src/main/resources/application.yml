@@ -98,6 +98,10 @@ spring:
           uri: http://localhost:8086
           predicates:
             - Path=/points/**, /pointViews/**
+        - id: storedpointpolicy
+          uri: http://localhost:8086
+          predicates:
+            - Path=/storedPointPolicies/**
         - id: scriptmanagement
           uri: http://localhost:8087
           predicates:
@@ -165,6 +169,10 @@ spring:
           uri: http://pointmanagement:8080
           predicates:
             - Path=/points/**, 
+        - id: storedpointpolicy
+          uri: http://storedpointpolicy:8080
+          predicates:
+            - Path=/storedPointPolicies/**
         - id: scriptmanagement
           uri: http://scriptmanagement:8080
           predicates:
