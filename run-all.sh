@@ -4,7 +4,7 @@ docker run -d an990906/userinfomanagement:v1
 
 docker run -d an990906/userhistorymanagement:v1
 
-docker run -d an990906/scriptmanagement:v1
+docker run -d an990906/scriptmanagement:v2
 
 docker run -d an990906/pointmanagement:v1
 
