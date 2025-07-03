@@ -43,4 +43,27 @@ export const booksApi = {
 
   createCover: data => api.post(`${BOOKS_URL}/cover`, data),
   searchBooks: keyword => api.get(`${BOOKS_URL}/keyword`, { params: { keyword } }),
+
+  // 도서 상세 조회
+  getBookDetail: async id => {
+    const response = await api.get(`/books/${id}`)
+    return response
+  },
+
+  // 월 구독자 도서 열람
+  viewBook: async bookId => {
+    const response = await api.get('/bookSubscriptions/viewbook', {
+      params: { bookId },
+    })
+    return response
+  },
+
+  // 비 구독자 도서 알람 신청
+  subscribeBook: async bookId => {
+    const response = await api.put('/bookSubscriptions/subscribebook', {
+      userId: 'temp-user-123', // 임시 사용자 ID
+      bookId: bookId,
+    })
+    return response
+  },
 }
