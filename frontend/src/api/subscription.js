@@ -6,10 +6,10 @@ const MONTHLY_SUBSCRIPTION_URL = '/subscribes'
 export const subscriptionApi = {
   // 도서 구독 관련
   bookSubscription: {
-    // 도서 구독 기록 저장
+    // 도서 구독
     subscribeBook: data => api.post(`${BOOK_SUBSCRIPTION_URL}/subscribebook`, data),
 
-    // 도서 열람 기록 저장
+    // 도서 구독시 도서 조회
     viewBook: data => api.post(`${BOOK_SUBSCRIPTION_URL}/viewbook`, data),
   },
 

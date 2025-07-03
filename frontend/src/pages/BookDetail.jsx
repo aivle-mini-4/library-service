@@ -1,77 +1,17 @@
-import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { booksApi } from '../api/books'
 import Alert from '../components/Alert'
 import Badge from '../components/Badge'
 import Button from '../components/Button'
 import Card from '../components/Card'
 import Divider from '../components/Divider'
+import { useBookDetail } from '../hooks/useBookDetail'
 
 function BookDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [book, setBook] = useState(null)
-  const [isSubscriber, setIsSubscriber] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [actionLoading, setActionLoading] = useState(false)
-  const [actionMessage, setActionMessage] = useState(null)
 
-  const fetchBookDetail = async () => {
-    try {
-      setLoading(true)
-      const response = await booksApi.getBookDetail(id)
-      setBook(response.data)
-
-      // 구독자 여부 확인 (임시로 랜덤하게 설정)
-      setIsSubscriber(Math.random() > 0.5)
-    } catch (err) {
-      setError('책 정보를 불러오는데 실패했습니다.')
-      console.error('책 상세 조회 실패:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchBookDetail()
-  }, [id])
-
-  const handleViewBook = async () => {
-    try {
-      setActionLoading(true)
-      await booksApi.viewBook(id)
-      setActionMessage({ type: 'success', text: '책을 성공적으로 열람했습니다!' })
-
-      // 실제로는 책 내용 페이지로 이동하거나 모달을 띄우는 등의 처리
-      setTimeout(() => {
-        setActionMessage(null)
-      }, 3000)
-    } catch (err) {
-      setActionMessage({ type: 'error', text: '책 열람에 실패했습니다.' })
-      console.error('책 열람 실패:', err)
-    } finally {
-      setActionLoading(false)
-    }
-  }
-
-  const handleSubscribe = async () => {
-    try {
-      setActionLoading(true)
-      await booksApi.subscribeBook(id)
-      setActionMessage({ type: 'success', text: '알람 신청이 완료되었습니다!' })
-      setIsSubscriber(true)
-
-      setTimeout(() => {
-        setActionMessage(null)
-      }, 3000)
-    } catch (err) {
-      setActionMessage({ type: 'error', text: '알람 신청에 실패했습니다.' })
-      console.error('알람 신청 실패:', err)
-    } finally {
-      setActionLoading(false)
-    }
-  }
+  const { book, isSubscriber, loading, error, actionLoading, actionMessage, handleViewBook, handleSubscribe } =
+    useBookDetail(id)
 
   if (loading) {
     return (
