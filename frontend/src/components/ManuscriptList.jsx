@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {manuscriptsApi} from '../api/manuscripts'
 
 
 function ManuscriptList() {
   const [manuscripts, setManuscripts] = useState([])
+  const navigate = useNavigate()
+
   const handleClick = (id) => {
-    alert(`원고 ID: ${id} 클릭됨`) 
-    // 추후 상세 페이지 이동 
+    navigate(`/manuscript/${id}`)
   }
 
   useEffect(() => {

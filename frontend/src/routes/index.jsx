@@ -6,6 +6,7 @@ import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import AuthorPage from '../pages/AuthorPage'
+import Manuscript from '../pages/Manuscript'
 
 const ProtectedRoute = () => {
   const {isAuthenticated} = useSelector((state) => state.auth)
@@ -23,6 +24,7 @@ function AppRoutes() {
       <Route path="/login" element={<Login/>}/>
       <Route path="/register" element={<Register/>}/>
       <Route path="/author" element={<AuthorPage/>}/>
+      <Route path="/manuscript/:id" element={<Manuscript/>}/>
       <Route element={<ProtectedRoute/>}>
         <Route path="/" element={<Home/>}/>
         <Route path="/">
