@@ -32,6 +32,7 @@ security:
     - "/registeredBestsellerViews"
     - "/registeredBookViews"
     - "/bookSubscriptions"
+    - "/auth"
   role-paths:
     ADMIN:
       - "/authorapprovals"
@@ -92,7 +93,7 @@ spring:
         - id: authidentity
           uri: http://localhost:8085
           predicates:
-            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, /auth/**
         - id: pointmanagement
           uri: http://localhost:8086
           predicates:
@@ -159,7 +160,7 @@ spring:
         - id: authidentity
           uri: http://authidentity:8080
           predicates:
-            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, 
+            - Path=/userAccounts/**, /authorAccounts/**, /adminAccounts/**, /auth/**,
         - id: pointmanagement
           uri: http://pointmanagement:8080
           predicates:
