@@ -53,12 +53,35 @@ server:
 
 spring:
   profiles: docker
+
+  jackson:
+    time-zone: Asia/Seoul
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
   jpa:
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
         format_sql: true
+        use_sql_comments: true
+        default_batch_fetch_size: 1000
         implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
+    open-in-view: false
+
   cloud:
     stream:
       kafka:
@@ -80,5 +103,8 @@ spring:
         event-out:
           destination: aivle
           contentType: application/json
+
+server:
+  port: 8080
 
 
