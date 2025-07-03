@@ -14,9 +14,10 @@ function Register() {
 
   // 검증 규칙 정의
   const registerValidationRules = {
-    email: validationRules.email,
-    password: validationRules.minLength(6),
-    confirmPassword: validationRules.passwordConfirm('password'),
+    email: value => validationRules.required(value) || validationRules.email(value),
+    password: value => validationRules.required(value) || validationRules.minLength(6)(value),
+    confirmPassword: value =>
+      validationRules.required(value) || validationRules.passwordConfirm('password')(value, values),
     selfIntroduction: validationRules.requiredIf(() => userType === 'author'),
   }
 
@@ -29,7 +30,7 @@ function Register() {
     portfolio: '',
   }
 
-  const { values, errors, isLoading, submitError, handleChange, setValue, handleSubmit } = useForm(
+  const { values, errors, isLoading, submitError, handleChange, handleSubmit } = useForm(
     initialValues,
     registerValidationRules,
   )

@@ -9,21 +9,25 @@ export const useForm = (initialValues = {}, validationRules = {}) => {
   const handleChange = useCallback(
     e => {
       const { name, value } = e.target
-      setValues(prev => ({
-        ...prev,
-        [name]: value,
-      }))
-
-      // 실시간 검증 (필드별 에러만)
-      if (validationRules[name]) {
-        const fieldError = validationRules[name](value, values)
-        setErrors(prev => ({
+      setValues(prev => {
+        const newValues = {
           ...prev,
-          [name]: fieldError,
-        }))
-      }
+          [name]: value,
+        }
+
+        // 실시간 검증 (필드별 에러만)
+        if (validationRules[name]) {
+          const fieldError = validationRules[name](value, newValues)
+          setErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: fieldError,
+          }))
+        }
+
+        return newValues
+      })
     },
-    [validationRules, values],
+    [validationRules],
   )
 
   const setValue = useCallback((name, value) => {
