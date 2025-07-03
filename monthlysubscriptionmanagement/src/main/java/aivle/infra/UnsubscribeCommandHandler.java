@@ -16,6 +16,10 @@ public class UnsubscribeCommandHandler {
         Subscribe subscribe = repository.findById(command.getId())
                 .orElseThrow(() -> new RuntimeException("구독 정보 없음"));
 
+        if (!subscribe.getIsSubscribed()) {
+            throw new RuntimeException("이미 구독 해지된 상태입니다.");
+        }
+
         subscribe.unsubscribeRequest(command);
         return repository.save(subscribe);
     }

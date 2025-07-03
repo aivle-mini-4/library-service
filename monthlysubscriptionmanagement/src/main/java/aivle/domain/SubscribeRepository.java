@@ -10,4 +10,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 //<<< PoEAA / Repository
 public interface SubscribeRepository
-    extends PagingAndSortingRepository<Subscribe, Long> {}
+    extends PagingAndSortingRepository<Subscribe, Long> {
+
+    Subscribe findByUserId(Long userId);}
