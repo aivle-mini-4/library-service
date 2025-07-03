@@ -19,9 +19,14 @@ export const subscriptionApi = {
     subscribeRequest: data => api.post(`${MONTHLY_SUBSCRIPTION_URL}/subscriberequest`, data),
 
     // 월간 구독 취소 요청
-    unsubscribeRequest: (id, data) =>
+    unsubscribeRequest: (id, data, headers = {}) =>
       api.delete(`${MONTHLY_SUBSCRIPTION_URL}/${id}/unsubscriberequest`, {
         data,
+        headers: {
+          'X-User-Id': headers.userId || '',
+          'X-User-Role': headers.userRole || '',
+          ...headers,
+        },
       }),
   },
 }
