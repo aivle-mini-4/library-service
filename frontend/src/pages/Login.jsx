@@ -1,6 +1,10 @@
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { authApi } from '../api/auth'
+import Alert from '../components/ui/Alert'
+import Button from '../components/ui/Button'
+import Card from '../components/ui/Card'
+import Input from '../components/ui/Input'
 import { useForm, validationRules } from '../hooks/useForm'
 import { login } from '../store/authSlice'
 
@@ -52,87 +56,79 @@ function Login() {
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
-      <div className='max-w-md w-full space-y-8'>
-        <div>
-          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>로그인</h2>
-        </div>
-
-        <form
-          className='mt-8 space-y-6'
-          onSubmit={handleFormSubmit}
-        >
-          {/* 에러 메시지 */}
-          {submitError && (
-            <div className='bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm'>
-              {submitError}
-            </div>
-          )}
-
-          <div className='space-y-4'>
-            <div>
-              <label
-                htmlFor='loginId'
-                className='block text-sm font-medium text-gray-700'
+    <div className='min-h-screen flex items-center justify-center bg-blue-50 py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='max-w-md w-full'>
+        <Card className='p-8'>
+          <div className='text-center mb-8'>
+            <div className='w-16 h-16 bg-slate-600 rounded-full flex items-center justify-center mx-auto mb-6'>
+              <svg
+                className='w-8 h-8 text-white'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
               >
-                아이디
-              </label>
-              <input
-                id='loginId'
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
+                />
+              </svg>
+            </div>
+            <h2 className='text-3xl font-bold text-gray-800 mb-2'>로그인</h2>
+            <p className='text-gray-600'>계정에 로그인하여 서비스를 이용하세요</p>
+          </div>
+
+          <form
+            onSubmit={handleFormSubmit}
+            className='space-y-6'
+          >
+            {/* 에러 메시지 */}
+            {submitError && <Alert type='error'>{submitError}</Alert>}
+
+            <div className='space-y-4'>
+              <Input
+                label='아이디'
                 name='loginId'
                 type='text'
                 value={values.loginId}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.loginId ? 'border-red-300' : 'border-gray-300'
-                }`}
+                error={errors.loginId}
                 placeholder='아이디를 입력하세요'
               />
-              {errors.loginId && <p className='mt-1 text-sm text-red-600'>{errors.loginId}</p>}
-            </div>
-            <div>
-              <label
-                htmlFor='password'
-                className='block text-sm font-medium text-gray-700'
-              >
-                비밀번호
-              </label>
-              <input
-                id='password'
+
+              <Input
+                label='비밀번호'
                 name='password'
                 type='password'
                 value={values.password}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.password ? 'border-red-300' : 'border-gray-300'
-                }`}
+                error={errors.password}
                 placeholder='비밀번호를 입력하세요'
               />
-              {errors.password && <p className='mt-1 text-sm text-red-600'>{errors.password}</p>}
             </div>
-          </div>
 
-          <div>
-            <button
+            <Button
               type='submit'
-              disabled={isLoading}
-              className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed'
+              loading={isLoading}
+              fullWidth
+              variant='primary'
             >
               {isLoading ? '로그인 중...' : '로그인'}
-            </button>
-          </div>
+            </Button>
 
-          <div className='text-center'>
-            <span className='text-sm text-gray-600'>계정이 없으신가요? </span>
-            <button
-              type='button'
-              onClick={() => navigate('/register')}
-              className='text-sm text-blue-600 hover:text-blue-500 font-medium'
-            >
-              회원가입하기
-            </button>
-          </div>
-        </form>
+            <div className='text-center'>
+              <span className='text-gray-600'>계정이 없으신가요? </span>
+              <button
+                type='button'
+                onClick={() => navigate('/register')}
+                className='text-slate-600 hover:text-slate-500 font-medium ml-1 hover:underline'
+              >
+                회원가입하기
+              </button>
+            </div>
+          </form>
+        </Card>
       </div>
     </div>
   )

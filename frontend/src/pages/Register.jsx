@@ -1,10 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authApi } from '../api/auth'
+import Alert from '../components/ui/Alert'
+import Button from '../components/ui/Button'
+import Card from '../components/ui/Card'
+import Input from '../components/ui/Input'
+import Textarea from '../components/ui/Textarea'
 import { useForm, validationRules } from '../hooks/useForm'
 
 function Register() {
-  const [userType, setUserType] = useState('user') // user, author, admin
+  const [userType, setUserType] = useState('user')
   const navigate = useNavigate()
 
   // 검증 규칙 정의
@@ -71,199 +76,147 @@ function Register() {
     }
   }
 
-  return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
-      <div className='max-w-md w-full space-y-8'>
-        <div>
-          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>회원가입</h2>
-        </div>
+  const userTypeOptions = [
+    { value: 'user', label: '일반 사용자', icon: '👤', color: 'bg-blue-200 border-blue-300 text-blue-700' },
+    { value: 'author', label: '작가', icon: '✍️', color: 'bg-purple-200 border-purple-300 text-purple-700' },
+    { value: 'admin', label: '관리자', icon: '⚙️', color: 'bg-orange-200 border-orange-300 text-orange-700' },
+  ]
 
-        <form
-          className='mt-8 space-y-6'
-          onSubmit={handleFormSubmit}
-        >
-          {/* 사용자 타입 선택 */}
-          <div className='space-y-4'>
-            <label className='block text-sm font-medium text-gray-700'>계정 유형 선택</label>
-            <div className='grid grid-cols-3 gap-3'>
-              <button
-                type='button'
-                onClick={() => setUserType('user')}
-                className={`py-2 px-4 border rounded-md text-sm font-medium ${
-                  userType === 'user'
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                }`}
+  return (
+    <div className='min-h-screen flex items-center justify-center bg-blue-50 py-12 px-4 sm:px-6 lg:px-8'>
+      <div className='max-w-md w-full'>
+        <Card className='p-8'>
+          <div className='text-center mb-8'>
+            <div className='w-16 h-16 bg-slate-600 rounded-full flex items-center justify-center mx-auto mb-6'>
+              <svg
+                className='w-8 h-8 text-white'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
               >
-                일반 사용자
-              </button>
-              <button
-                type='button'
-                onClick={() => setUserType('author')}
-                className={`py-2 px-4 border rounded-md text-sm font-medium ${
-                  userType === 'author'
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                작가
-              </button>
-              <button
-                type='button'
-                onClick={() => setUserType('admin')}
-                className={`py-2 px-4 border rounded-md text-sm font-medium ${
-                  userType === 'admin'
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                관리자
-              </button>
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z'
+                />
+              </svg>
             </div>
+            <h2 className='text-3xl font-bold text-gray-800 mb-2'>회원가입</h2>
+            <p className='text-gray-600'>계정을 생성하고 서비스를 이용해보세요</p>
           </div>
 
-          {/* 에러 메시지 */}
-          {submitError && (
-            <div className='bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm'>
-              {submitError}
+          <form
+            onSubmit={handleFormSubmit}
+            className='space-y-6'
+          >
+            {/* 사용자 타입 선택 */}
+            <div className='space-y-4'>
+              <label className='block text-lg font-semibold text-gray-800 text-center'>계정 유형 선택</label>
+              <div className='grid grid-cols-3 gap-3'>
+                {userTypeOptions.map(option => (
+                  <button
+                    key={option.value}
+                    type='button'
+                    onClick={() => setUserType(option.value)}
+                    className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                      userType === option.value
+                        ? `${option.color}`
+                        : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className='text-2xl mb-1'>{option.icon}</div>
+                    <div className='text-sm font-medium'>{option.label}</div>
+                  </button>
+                ))}
+              </div>
             </div>
-          )}
 
-          {/* 기본 정보 */}
-          <div className='space-y-4'>
-            <div>
-              <label
-                htmlFor='email'
-                className='block text-sm font-medium text-gray-700'
-              >
-                이메일 *
-              </label>
-              <input
-                id='email'
+            {/* 에러 메시지 */}
+            {submitError && <Alert type='error'>{submitError}</Alert>}
+
+            {/* 기본 정보 */}
+            <div className='space-y-4'>
+              <Input
+                label='이메일 *'
                 name='email'
                 type='email'
-                required
                 value={values.email}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.email ? 'border-red-300' : 'border-gray-300'
-                }`}
+                error={errors.email}
                 placeholder='example@email.com'
               />
-              {errors.email && <p className='mt-1 text-sm text-red-600'>{errors.email}</p>}
-            </div>
 
-            <div>
-              <label
-                htmlFor='password'
-                className='block text-sm font-medium text-gray-700'
-              >
-                비밀번호 *
-              </label>
-              <input
-                id='password'
+              <Input
+                label='비밀번호 *'
                 name='password'
                 type='password'
-                required
                 value={values.password}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.password ? 'border-red-300' : 'border-gray-300'
-                }`}
+                error={errors.password}
                 placeholder='최소 6자 이상'
               />
-              {errors.password && <p className='mt-1 text-sm text-red-600'>{errors.password}</p>}
-            </div>
 
-            <div>
-              <label
-                htmlFor='confirmPassword'
-                className='block text-sm font-medium text-gray-700'
-              >
-                비밀번호 확인 *
-              </label>
-              <input
-                id='confirmPassword'
+              <Input
+                label='비밀번호 확인 *'
                 name='confirmPassword'
                 type='password'
-                required
                 value={values.confirmPassword}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                }`}
+                error={errors.confirmPassword}
                 placeholder='비밀번호를 다시 입력하세요'
               />
-              {errors.confirmPassword && <p className='mt-1 text-sm text-red-600'>{errors.confirmPassword}</p>}
-            </div>
 
-            {/* 작가 전용 필드 */}
-            {userType === 'author' && (
-              <>
-                <div>
-                  <label
-                    htmlFor='selfIntroduction'
-                    className='block text-sm font-medium text-gray-700'
-                  >
-                    작가 소개 *
-                  </label>
-                  <textarea
-                    id='selfIntroduction'
+              {/* 작가 전용 필드 */}
+              {userType === 'author' && (
+                <div className='space-y-4 p-4 bg-purple-50 rounded-lg border border-purple-200'>
+                  <div className='flex items-center space-x-2'>
+                    <span className='text-lg font-semibold text-purple-800'>작가 정보</span>
+                  </div>
+
+                  <Textarea
+                    label='작가 소개 *'
                     name='selfIntroduction'
-                    required
                     value={values.selfIntroduction}
                     onChange={handleChange}
-                    rows={3}
-                    className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
-                      errors.selfIntroduction ? 'border-red-300' : 'border-gray-300'
-                    }`}
+                    error={errors.selfIntroduction}
                     placeholder='자신을 소개해주세요'
+                    rows={4}
                   />
-                  {errors.selfIntroduction && <p className='mt-1 text-sm text-red-600'>{errors.selfIntroduction}</p>}
-                </div>
 
-                <div>
-                  <label
-                    htmlFor='portfolio'
-                    className='block text-sm font-medium text-gray-700'
-                  >
-                    포트폴리오
-                  </label>
-                  <textarea
-                    id='portfolio'
+                  <Textarea
+                    label='포트폴리오'
                     name='portfolio'
                     value={values.portfolio}
                     onChange={handleChange}
-                    rows={3}
-                    className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500'
                     placeholder='이전 작품이나 경력을 소개해주세요 (선택사항)'
+                    rows={4}
                   />
                 </div>
-              </>
-            )}
-          </div>
+              )}
+            </div>
 
-          <div>
-            <button
+            <Button
               type='submit'
-              disabled={isLoading}
-              className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed'
+              loading={isLoading}
+              fullWidth
+              variant='primary'
             >
               {isLoading ? '처리중...' : '회원가입'}
-            </button>
-          </div>
+            </Button>
 
-          <div className='text-center'>
-            <span className='text-sm text-gray-600'>이미 계정이 있으신가요? </span>
-            <button
-              type='button'
-              onClick={() => navigate('/login')}
-              className='text-sm text-blue-600 hover:text-blue-500 font-medium'
-            >
-              로그인하기
-            </button>
-          </div>
-        </form>
+            <div className='text-center'>
+              <span className='text-gray-600'>이미 계정이 있으신가요? </span>
+              <button
+                type='button'
+                onClick={() => navigate('/login')}
+                className='text-slate-600 hover:text-slate-500 font-medium ml-1 hover:underline'
+              >
+                로그인하기
+              </button>
+            </div>
+          </form>
+        </Card>
       </div>
     </div>
   )
