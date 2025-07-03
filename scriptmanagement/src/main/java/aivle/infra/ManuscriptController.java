@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -51,11 +52,37 @@ public class ManuscriptController {
     }
 
     @GetMapping
-    public List<ManuscriptPage> getAllManuscript() {
-        Iterable<ManuscriptPage> pages = manuscriptPageRepository.findAll();
-        List<ManuscriptPage> result = new ArrayList<>();
-        pages.forEach(result::add);
-        return result;
+    public List<ManuscriptPage> getAllManuscripts(
+            @RequestHeader(value = "X-User-Id", required = false) String userId,
+            @RequestHeader(value = "X-User-Role", required = false) String userRole) {
+        
+        // ROLE_AUTHOR가 아닌 경우
+        if (!"ROLE_AUTHOR".equals(userRole)) {
+            throw new RuntimeException("Unauthorized");
+        }
+        
+        // userId가 null이거나 빈 문자열인 경우
+        if (userId == null || userId.trim().isEmpty()) {
+            throw new RuntimeException("Unauthorized");
+        }
+        
+        try {
+            Long authorId = Long.parseLong(userId);
+            Iterable<ManuscriptPage> pages = manuscriptPageRepository.findAll();
+            List<ManuscriptPage> result = new ArrayList<>();
+            
+            // authorId로 필터링
+            pages.forEach(page -> {
+                if (authorId.equals(page.getAuthorId())) {
+                    result.add(page);
+                }
+            });
+            
+            return result;
+        } catch (NumberFormatException e) {
+
+            throw new RuntimeException("Unauthorized");
+        }
     }
 
     @GetMapping("/{id}")
