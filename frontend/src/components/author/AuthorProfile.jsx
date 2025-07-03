@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
-
-import { userInfoApi } from '../api/userInfo'
-
+import { userInfoApi } from '../../api/userInfo'
+import CardContainer from './common/CardContainer'
+import Label from './common/Label'
+import TextInput from './common/TextInput'
+import TextArea from './common/TextArea'
+import ActionButton from './common/ActionButton'
+import ReadOnlyField from './common/ReadOnlyField'
 
 function AuthorProfile() {
-
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [basicInfo, setBasicInfo] = useState('')
@@ -47,31 +50,20 @@ function AuthorProfile() {
   }
 
   return (
-    <div style={{border: '4px solid #ccc', borderRadius: '20px', padding: '50px', marginBottom: '52px', maxWidth: '1000px', marginRight: 'auto', marginLeft: 'auto', position: 'relative'}}>
-        <button 
-          style={{
-            position: 'absolute',
-            right: '48px',
-            fontSize: '28px',
-            padding: '8px 16px',
-            backgroundColor: isEditing ? '#28a745' : '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '10px',
-            cursor: 'pointer',
-            marginTop: '32px'
-          }}
+    <CardContainer style={{marginBottom: '52px'}}>
+        <ActionButton 
+          style={{position: 'absolute', right: '48px', fontSize: '28px', padding: '8px 16px', marginTop: '32px'}}
+          color={isEditing ? '#28a745' : '#007bff'}
           onClick={isEditing ? handleSave : handleEdit}
         >
           {isEditing ? '저장' : '수정'}
-        </button>
+        </ActionButton>
         <h1 style={{fontSize: '52px'}}>작가 프로필</h1>
         
         {/* 이름 섹션 */}
         <h2 style={{fontSize: '48px'}}>
           {isEditing ? (
-            <input 
-              type="text" 
+            <TextInput 
               value={name} 
               onChange={(e) => setName(e.target.value)}
               style={{fontSize: '48px', border: 'none', borderBottom: '2px solid #ccc', outline: 'none'}}
@@ -81,62 +73,54 @@ function AuthorProfile() {
           )}
           <span style={{fontSize: '32px', color: '#888', marginLeft: '8px'}}>작가</span>
         </h2>
-        <p style={{ fontSize: '24px', color: '#555', marginTop: '24px' }}>
+        <p style={{ fontSize: '24px', color: '#555'}}>
              {email}
         </p>
         
         {/* 기본 정보 섹션 */}
-        <p style={{ fontSize: '32px' }}><strong>기본 정보</strong></p>
+        <Label>기본 정보</Label>
         <div style={{border: '1px solid #ccc', borderRadius: '20px', display: 'flex', flexDirection: 'column'}}>
           {isEditing ? (
-            <input 
-              type="text" 
+            <TextInput 
               value={basicInfo} 
               onChange={(e) => setBasicInfo(e.target.value)}
-              style={{padding: '24px', marginBottom: '12px', fontSize: '32px', border: 'none', outline: 'none'}}
             />
           ) : (
-            <p style={{padding: '24px' , marginBottom: '12px', fontSize: '32px'}}>{basicInfo}</p>
+            <ReadOnlyField>{basicInfo}</ReadOnlyField>
           )}
         </div>
         
         {/* 자기소개 섹션 */}
-        <p style={{marginBottom: '12px', fontSize: '32px'}}><strong>자기소개</strong></p>
+        <Label style={{marginBottom: '12px'}}>자기소개</Label>
         <div style={{border: '1px solid #ccc', borderRadius: '20px', display: 'flex', flexDirection: 'column'}}>
           {isEditing ? (
-            <textarea 
+            <TextArea 
               value={introduction} 
               onChange={(e) => setIntroduction(e.target.value)}
-              style={{padding: '24px', marginBottom: '12px', fontSize: '32px', border: 'none', outline: 'none', resize: 'vertical', minHeight: '100px'}}
             />
           ) : (
-            <p style={{padding: '24px' , marginBottom: '12px', fontSize: '32px'}}>{introduction}</p>
+            <ReadOnlyField>{introduction}</ReadOnlyField>
           )}
         </div>
         
-        <p style={{marginBottom: '12px', fontSize: '32px'}}><strong>포트폴리오</strong></p>
+        <Label style={{marginBottom: '12px'}}>포트폴리오</Label>
         {isEditing && 
             <div style={{border: '1px solid #ccc', borderRadius: '20px', display: 'flex', flexDirection: 'column'}}>
-            {isEditing ? (
-              <input 
+              <TextInput 
                 type="url" 
                 value={portfolioUrl} 
                 onChange={(e) => setPortfolioUrl(e.target.value)}
-                style={{padding: '24px', marginBottom: '12px', fontSize: '32px', border: 'none', outline: 'none'}}
                 placeholder="포트폴리오 URL을 입력하세요"
               />
-            ) : (
-              <p style={{padding: '24px' , marginBottom: '12px', fontSize: '32px'}}>{portfolioUrl}</p>
-            )}
-          </div>
+            </div>
         }
         
         {!isEditing && (
           <a href={portfolioUrl} target="_blank" rel="noopener noreferrer">
-              <button style={{marginTop: '36px', fontSize: '24px', padding: '16px 32px'}}>포트폴리오 보기</button>
+              <ActionButton color={'#adadad'}>포트폴리오 보기</ActionButton>
           </a>
         )}
-    </div>
+    </CardContainer>
   )
 }
 

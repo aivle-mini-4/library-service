@@ -1,5 +1,5 @@
-import AuthorProfile from '../components/AuthorProfile'
-import ManuscriptList from '../components/ManuscriptList'
+import AuthorProfile from '../components/author/AuthorProfile'
+import ManuscriptList from '../components/author/ManuscriptList'
 
 function AuthorPage() {
   return (

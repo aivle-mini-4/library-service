@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import {manuscriptsApi} from '../api/manuscripts'
+import {manuscriptsApi} from '../../api/manuscripts'
 
 
 function ManuscriptList() {
