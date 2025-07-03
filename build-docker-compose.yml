@@ -8,7 +8,7 @@ services:
     ports:
       - 2181:2181
   kafka:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.4.3
     container_name: my-kafka
     depends_on:
       - zookeeper
@@ -18,6 +18,8 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://my-kafka:29092,PLAINTEXT_HOST://my-kafka:9092
+      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      # KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -31,7 +33,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8082:8082
+      - 8082:8080
     working_dir: /usr/src
     volumes:
       - ./admintask:/usr/src
@@ -45,7 +47,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8083:8083
+      - 8083:8080
     working_dir: /usr/src
     volumes:
       - ./monthlysubscriptionmanagement:/usr/src
@@ -59,7 +61,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8084:8084
+      - 8084:8080
     working_dir: /usr/src
     volumes:
       - ./userinfomanagement:/usr/src
@@ -73,7 +75,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8085:8085
+      - 8085:8080
     working_dir: /usr/src
     volumes:
       - ./authidentity:/usr/src
@@ -87,7 +89,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8086:8086
+      - 8086:8080
     working_dir: /usr/src
     volumes:
       - ./pointmanagement:/usr/src
@@ -101,7 +103,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8087:8087
+      - 8087:8080
     working_dir: /usr/src
     volumes:
       - ./scriptmanagement:/usr/src
@@ -115,7 +117,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8088:8088
+      - 8088:8080
     working_dir: /usr/src
     volumes:
       - ./userhistorymanagement:/usr/src
@@ -129,7 +131,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8089:8089
+      - 8089:8080
     working_dir: /usr/src
     volumes:
       - ./aiservice:/usr/src
@@ -143,7 +145,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8090:8090
+      - 8090:8080
     working_dir: /usr/src
     volumes:
       - ./booksmanagement:/usr/src
@@ -157,7 +159,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8091:8091
+      - 8091:8080
     working_dir: /usr/src
     volumes:
       - ./booksubstriptionmanagement:/usr/src
@@ -181,9 +183,8 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     command: mvn spring-boot:run
     ports:
-      - 8092:8092
+      - 8080:8080
     working_dir: /usr/src
     volumes:
       - ./gateway:/usr/src
       - ./maven-repo:/root/.m2
-      

@@ -27,10 +27,22 @@ public class SubscribeController {
     }
 
     @DeleteMapping("/{id}/unsubscriberequest")
-    public Subscribe unsubscribe(@PathVariable Long id,
-                                 @RequestBody UnsubscribeRequestCommand command) {
-        command.setId(id);
-        return unsubscribeCommandHandler.handle(command);
+    public Subscribe unsubscribe(
+            @RequestHeader(value = "X-User-Id", required = true) String userId,
+            @RequestHeader(value = "X-User-Role", required = true) String userRole,
+            @RequestBody UnsubscribeRequestCommand command) {
+        
+        if (!"ROLE_USER".equals(userRole)) {
+            throw new RuntimeException("일반유저가 아닙니다");
+        }
+
+        try {
+            Long id = Long.parseLong(userId);
+            command.setId(id);
+            return unsubscribeCommandHandler.handle(command);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("유효하지 않은 사용자 ID입니다");
+        }
     }
 }
 //>>> Clean Arch / Inbound Adaptor

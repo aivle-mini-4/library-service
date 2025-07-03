@@ -341,11 +341,83 @@ AI 서비스는 Kafka 이벤트 기반으로 동작하며, REST API 엔드포인
 
 ## 9. Point Management Service (포인트 관리 서비스)
 
-포인트 관리 서비스는 현재 REST API 엔드포인트가 구현되지 않았습니다.
+Point Management Service는 Spring Data REST를 통해 자동으로 REST API가 생성됩니다.
+
+### 9.1 포인트 정보 조회
+- **URL**: `GET /points`
+- **Description**: 전체 포인트 정보 목록 조회
+- **Response**: Point 객체 배열
+
+### 9.2 특정 사용자 포인트 조회
+- **URL**: `GET /points/{id}`
+- **Description**: 특정 사용자의 포인트 정보 조회
+- **Path Parameters**: `id` (number)
+- **Response**: Point 객체
+
+### 9.3 포인트 뷰 정보 조회
+- **URL**: `GET /pointViews`
+- **Description**: 전체 포인트 뷰 정보 목록 조회
+- **Response**: PointView 객체 배열
+
+### 9.4 특정 사용자 포인트 뷰 조회
+- **URL**: `GET /pointViews/{id}`
+- **Description**: 특정 사용자의 포인트 뷰 정보 조회
+- **Path Parameters**: `id` (number)
+- **Response**: PointView 객체
+
+### 9.5 사용자별 포인트 뷰 조회
+- **URL**: `GET /pointViews/search/findByUserId?userId={userId}`
+- **Description**: 특정 사용자 ID로 포인트 뷰 정보 조회
+- **Query Parameters**: `userId` (number)
+- **Response**: PointView 객체 배열
 
 ## 10. User History Management Service (사용자 히스토리 관리 서비스)
 
-사용자 히스토리 관리 서비스는 현재 REST API 엔드포인트가 구현되지 않았습니다.
+User History Management Service는 Spring Data REST를 통해 자동으로 REST API가 생성됩니다.
+
+### 10.1 즐겨찾기 목록 조회
+- **URL**: `GET /favorites`
+- **Description**: 전체 즐겨찾기 목록 조회
+- **Response**: Favorite 객체 배열
+
+### 10.2 특정 즐겨찾기 조회
+- **URL**: `GET /favorites/{id}`
+- **Description**: 특정 즐겨찾기 정보 조회
+- **Path Parameters**: `id` (number)
+- **Response**: Favorite 객체
+
+### 10.3 조회 히스토리 목록 조회
+- **URL**: `GET /viewHistories`
+- **Description**: 전체 조회 히스토리 목록 조회
+- **Response**: ViewHistory 객체 배열
+
+### 10.4 특정 조회 히스토리 조회
+- **URL**: `GET /viewHistories/{id}`
+- **Description**: 특정 조회 히스토리 정보 조회
+- **Path Parameters**: `id` (number)
+- **Response**: ViewHistory 객체
+
+### 10.5 쿼리 즐겨찾기 목록 조회
+- **URL**: `GET /queryFavoriteLists`
+- **Description**: 쿼리용 즐겨찾기 목록 조회
+- **Response**: QueryFavoriteList 객체 배열
+
+### 10.6 특정 쿼리 즐겨찾기 조회
+- **URL**: `GET /queryFavoriteLists/{id}`
+- **Description**: 특정 쿼리 즐겨찾기 정보 조회
+- **Path Parameters**: `id` (number)
+- **Response**: QueryFavoriteList 객체
+
+### 10.7 쿼리 조회 히스토리 목록 조회
+- **URL**: `GET /queryViewHistories`
+- **Description**: 쿼리용 조회 히스토리 목록 조회
+- **Response**: QueryViewHistory 객체 배열
+
+### 10.8 특정 쿼리 조회 히스토리 조회
+- **URL**: `GET /queryViewHistories/{id}`
+- **Description**: 특정 쿼리 조회 히스토리 정보 조회
+- **Path Parameters**: `id` (number)
+- **Response**: QueryViewHistory 객체
 
 ## 공통 응답 형식
 

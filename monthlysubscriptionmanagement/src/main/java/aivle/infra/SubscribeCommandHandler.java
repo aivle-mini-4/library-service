@@ -13,7 +13,13 @@ public class SubscribeCommandHandler {
 
     @Transactional
     public Subscribe handle(SubscribeRequestCommand command) {
-        Subscribe subscribe = new Subscribe();
+        // 이미 구독 중인지 확인
+        Subscribe existing = repository.findByUserId(command.getUserId());
+        if (existing != null && existing.getIsSubscribed()) {
+            throw new RuntimeException("이미 구독 중입니다.");
+        }
+
+        Subscribe subscribe = (existing != null) ? existing : new Subscribe();
         subscribe.setUserId(command.getUserId());
         subscribe.subscribeRequest(command);
         return repository.save(subscribe);
