@@ -29,13 +29,12 @@ public class BookSubscriptionController {
     @PostMapping("/bookSubscriptions/subscribebook")
     public BookSubscription subscribeBook(
         @RequestHeader("X-User-Id") String userId,
-
         HttpServletRequest request,
         HttpServletResponse response,
         @RequestBody SubscribeBookCommand subscribeBookCommand
 
     ) throws Exception {
-        System.out.println("##### /bookSubscription/subscribeBook  called #####");
+        System.out.println("##### /bookSubscription/subscribeBook called #####");
         
         subscribeBookCommand.setUserId(userId);
 
@@ -55,11 +54,13 @@ public class BookSubscriptionController {
     @PostMapping("/bookSubscriptions/viewbook")
     public BookSubscription viewBook(
         @RequestHeader("X-User-Id") String userId,
+
         HttpServletRequest request,
         HttpServletResponse response,
         @RequestBody ViewBookCommand viewBookCommand
+
     ) throws Exception {
-        System.out.println("##### /bookSubscription/viewBook  called #####");
+        System.out.println("##### /bookSubscription/viewBook called #####");
 
         viewBookCommand.setUserId(userId);
         
