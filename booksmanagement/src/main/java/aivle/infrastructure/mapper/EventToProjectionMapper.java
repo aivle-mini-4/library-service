@@ -28,6 +28,7 @@ public class EventToProjectionMapper {
                 .authorId(bookUpdated.getAuthorId())
                 .title(bookUpdated.getTitle())
                 .category(bookUpdated.getCategory())
+                .summary(bookUpdated.getSummary())
                 .coverImageUrl(bookUpdated.getCoverImageUrl())
                 .price(bookUpdated.getPrice())
                 .views(bookUpdated.getViews())
