@@ -10,6 +10,7 @@ public class BestSellerViewDto {
     private Long authorId;
     private String title;
     private String category;
+    private String summary;
     private String coverImageUrl;
     private Integer price;
     private Long views;
