@@ -38,7 +38,7 @@ export const userInfoApi = {
     },
   },
 
-  // 프로필 관련
+  // 프로필 관련 (User Info Management Service)
   profiles: {
     // 관리자 프로필
     adminProfiles: {
@@ -49,22 +49,14 @@ export const userInfoApi = {
       delete: id => api.delete(`${ADMIN_PROFILES_URL}/${id}`),
     },
 
-    // 작가 프로필
+    // 작가 프로필 수정
     writerProfiles: {
-      getAll: (params = {}) => api.get(WRITER_PROFILES_URL, { params }),
-      getById: id => api.get(`${WRITER_PROFILES_URL}/${id}`),
-      create: data => api.post(WRITER_PROFILES_URL, data),
       update: (id, data) => api.put(`${WRITER_PROFILES_URL}/${id}`, data),
-      delete: id => api.delete(`${WRITER_PROFILES_URL}/${id}`),
     },
 
-    // 회원 프로필
+    // 회원 프로필 수정
     memberProfiles: {
-      getAll: (params = {}) => api.get(MEMBER_PROFILES_URL, { params }),
-      getById: id => api.get(`${MEMBER_PROFILES_URL}/${id}`),
-      create: data => api.post(MEMBER_PROFILES_URL, data),
       update: (id, data) => api.put(`${MEMBER_PROFILES_URL}/${id}`, data),
-      delete: id => api.delete(`${MEMBER_PROFILES_URL}/${id}`),
     },
   },
 }
