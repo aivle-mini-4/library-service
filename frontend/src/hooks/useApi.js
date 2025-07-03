@@ -3,15 +3,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 /**
  * API 함수를 래핑하는 커스텀 훅
  * @param {Function} apiFunction - API 함수
- * @param {Array} initialParams - 초기 파라미터
- * @param {Object} options - 기본 옵션
+ * @param {Object} options - 옵션
  * @returns {Object} 래핑된 API 함수와 상태
  */
-export const useApi = (apiFunction, initialParams = [], options = {}) => {
-  const [loading, setLoading] = useState(false)
+export const useApi = (apiFunction, options = {}) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [data, setData] = useState(null)
-  const [params, setParams] = useState(initialParams)
+  const [params, setParams] = useState(options.params || [])
 
   const debounceTimerRef = useRef(null)
 
@@ -30,9 +29,11 @@ export const useApi = (apiFunction, initialParams = [], options = {}) => {
       timeout: 10000,
       retries: 0,
       debounce: 0, // debounce 시간 (ms)
+      runOnMount: false, // 마운트 시 자동 실행 여부
+      params: [], // 초기 파라미터
       ...options,
     }),
-    [options.timeout, options.retries, options.debounce],
+    [options.timeout, options.retries, options.debounce, options.runOnMount, options.params],
   )
 
   // Debounce 처리
@@ -62,7 +63,7 @@ export const useApi = (apiFunction, initialParams = [], options = {}) => {
 
   // 실제 API 호출 실행
   const executeApiCall = async (apiFunc, params) => {
-    setLoading(true)
+    setIsLoading(true)
     setError(null)
 
     try {
@@ -75,34 +76,56 @@ export const useApi = (apiFunction, initialParams = [], options = {}) => {
       setError(errorMessage)
       throw err
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
   // API 실행 함수 (설정된 파라미터 사용)
-  const execute = useCallback(async () => {
-    // Debounce 처리
-    if (stableOptions.debounce > 0) {
-      return new Promise((resolve, reject) => {
-        debounceRequest(async () => {
-          try {
-            const result = await executeWithRetry(() => executeApiCall(apiFunction, params), stableOptions.retries)
-            resolve(result)
-          } catch (error) {
-            reject(error)
-          }
-        }, stableOptions.debounce)
-      })
-    }
+  const execute = useCallback(
+    async newParams => {
+      const paramsToUse = newParams || params
 
-    return executeWithRetry(() => executeApiCall(apiFunction, params), stableOptions.retries)
-  }, [apiFunction, params, stableOptions])
+      // Debounce 처리
+      if (stableOptions.debounce > 0) {
+        return new Promise((resolve, reject) => {
+          debounceRequest(async () => {
+            try {
+              const result = await executeWithRetry(
+                () => executeApiCall(apiFunction, paramsToUse),
+                stableOptions.retries,
+              )
+              resolve(result)
+            } catch (error) {
+              reject(error)
+            }
+          }, stableOptions.debounce)
+        })
+      }
+
+      return executeWithRetry(() => executeApiCall(apiFunction, paramsToUse), stableOptions.retries)
+    },
+    [apiFunction, params, stableOptions],
+  )
+
+  // 마운트 시 자동 실행
+  useEffect(() => {
+    if (stableOptions.runOnMount) {
+      execute()
+    }
+  }, [execute, stableOptions.runOnMount])
+
+  // isSuccess 계산
+  const isSuccess = useMemo(() => {
+    if (isLoading || error) return false
+    return data !== null
+  }, [isLoading, error, data])
 
   return {
     // 상태
-    loading,
+    isLoading,
     error,
     data,
+    isSuccess,
     params,
 
     // 실행 함수
