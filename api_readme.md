@@ -460,9 +460,9 @@
 
 ## 5. Book Subscription Management Service (도서 구독 관리 서비스)
 
-### 5.1 도서 구독
+### 5.1 비구독자도서 열람 신청
 - **URL**: `POST /bookSubscriptions/subscribebook`
-- **Description**: 도서 구독
+- **Description**: 비구독자도서열람신청
 - **Request Body**:
 ```json
 {
@@ -483,9 +483,9 @@
 }
 ```
 
-### 5.2 도서 조회
+### 5.2 월구독자도서열람
 - **URL**: `POST /bookSubscriptions/viewbook`
-- **Description**: 도서 조회 (월 구독자용)
+- **Description**: 월구독자도서열람
 - **Request Body**:
 ```json
 {
