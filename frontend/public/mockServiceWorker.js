@@ -7,16 +7,16 @@
  * - Please do NOT modify this file.
  */
 
-const PACKAGE_VERSION = '2.8.5'
-const INTEGRITY_CHECKSUM = '00729d72e3b82faf54ca8b9621dbb96f'
+const PACKAGE_VERSION = '2.10.2'
+const INTEGRITY_CHECKSUM = 'f5825c521429caf22a4dd13b66e243af'
 const IS_MOCKED_RESPONSE = Symbol('isMockedResponse')
 const activeClientIds = new Set()
 
-self.addEventListener('install', function () {
+addEventListener('install', function () {
   self.skipWaiting()
 })
 
-self.addEventListener('activate', function (event) {
+addEventListener('activate', function (event) {
   event.waitUntil(self.clients.claim())
 })
 

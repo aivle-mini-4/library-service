@@ -2,9 +2,8 @@ import api from './axios'
 
 const ADMIN_PAGES_URL = '/adminPages'
 const USER_PAGES_URL = '/userPages'
-const WRITER_PAGES_URL = '/writerPages'
 const ADMIN_PROFILES_URL = '/adminProfiles'
-const WRITER_PROFILES_URL = '/writerProfile'
+const AUTHOR_PROFILE_URL = '/authorProfile'
 const MEMBER_PROFILES_URL = '/memberProfiles'
 
 export const userInfoApi = {
@@ -27,15 +26,6 @@ export const userInfoApi = {
       update: (id, data) => api.put(`${USER_PAGES_URL}/${id}`, data),
       delete: id => api.delete(`${USER_PAGES_URL}/${id}`),
     },
-
-    // 작가 페이지
-    writerPages: {
-      getAll: (params = {}) => api.get(WRITER_PAGES_URL, { params }),
-      get: () => api.get(`${WRITER_PAGES_URL}`),
-      create: data => api.post(WRITER_PAGES_URL, data),
-      update: (id, data) => api.put(`${WRITER_PAGES_URL}/${id}`, data),
-      delete: id => api.delete(`${WRITER_PAGES_URL}/${id}`),
-    },
   },
 
   // 프로필 관련 (User Info Management Service)
@@ -50,8 +40,9 @@ export const userInfoApi = {
     },
 
     // 작가 프로필 수정
-    writerProfiles: {
-      update: (data) => api.put(`${WRITER_PROFILES_URL}`, data),
+    authorProfile: {
+      get: () => api.get(`${AUTHOR_PROFILE_URL}`),
+      update: (data) => api.put(`${AUTHOR_PROFILE_URL}`, data),
     },
 
     // 회원 프로필 수정
