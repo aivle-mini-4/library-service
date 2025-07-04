@@ -7,7 +7,5 @@ import lombok.Data;
 @Data
 public class RegisterFavoriteCommand {
 
-    private Long id;
-    private Long bookId;
     private Long userId;
 }

@@ -10,4 +10,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
     path = "queryViewHistories"
 )
 public interface QueryViewHistoryRepository
-    extends PagingAndSortingRepository<QueryViewHistory, Long> {}
+    extends PagingAndSortingRepository<QueryViewHistory, Long> {
+        List<QueryViewHistory> findByUserId(Long userId);
+}

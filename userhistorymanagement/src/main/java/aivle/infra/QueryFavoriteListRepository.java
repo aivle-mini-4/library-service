@@ -10,4 +10,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
     path = "queryFavoriteLists"
 )
 public interface QueryFavoriteListRepository
-    extends PagingAndSortingRepository<QueryFavoriteList, Long> {}
+    extends PagingAndSortingRepository<QueryFavoriteList, Long> {
+        List<QueryFavoriteList> findByUserId(Long userId);
+}
