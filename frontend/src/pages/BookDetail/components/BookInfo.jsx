@@ -24,16 +24,16 @@ function BookInfo({ bookId }) {
       onRetry={executeBookQuery}
       showLayout={false}
     >
-      {bookData && (
+      {bookData?.result && (
         <Card className='h-fit'>
           <div className='flex flex-col md:flex-row gap-6'>
             {/* 책 표지 */}
             <div className='flex-shrink-0'>
               <div className='w-48 h-64 bg-gray-200 rounded-lg flex items-center justify-center'>
-                {bookData.coverImageUrl ? (
+                {bookData.result.coverImageUrl ? (
                   <img
-                    src={bookData.coverImageUrl}
-                    alt={bookData.title}
+                    src={bookData.result.coverImageUrl}
+                    alt={bookData.result.title}
                     className='w-full h-full object-cover rounded-lg'
                   />
                 ) : (
@@ -57,39 +57,43 @@ function BookInfo({ bookId }) {
 
             <div className='flex-1'>
               <div className='mb-4'>
-                <h2 className='text-2xl font-bold text-gray-900 mb-2'>{bookData.title}</h2>
-                <p className='text-gray-600 mb-3'>저자 ID: {bookData.authorId}</p>
+                <h2 className='text-2xl font-bold text-gray-900 mb-2'>{bookData.result.title}</h2>
+                <p className='text-gray-600 mb-3'>저자 ID: {bookData.result.authorId}</p>
 
                 <div className='flex flex-wrap gap-2 mb-4'>
-                  {bookData.category && <Badge variant='primary'>{bookData.category}</Badge>}
-                  {bookData.price && <Badge variant='success'>{bookData.price.toLocaleString()}원</Badge>}
-                  {bookData.views && <Badge variant='warning'>조회수 {bookData.views}</Badge>}
+                  {bookData.result.category && <Badge variant='primary'>{bookData.result.category}</Badge>}
+                  {bookData.result.price && <Badge variant='success'>{bookData.result.price.toLocaleString()}원</Badge>}
+                  {bookData.result.views && <Badge variant='warning'>조회수 {bookData.result.views}</Badge>}
                 </div>
               </div>
 
               <Divider className='my-4' />
 
               <div className='space-y-3'>
-                {bookData.createdAt && (
+                {bookData.result.createdAt && (
                   <div>
                     <span className='font-semibold text-gray-700'>등록일:</span>
-                    <span className='ml-2 text-gray-600'>{new Date(bookData.createdAt).toLocaleDateString()}</span>
+                    <span className='ml-2 text-gray-600'>
+                      {new Date(bookData.result.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
                 )}
-                {bookData.updatedAt && (
+                {bookData.result.updatedAt && (
                   <div>
                     <span className='font-semibold text-gray-700'>수정일:</span>
-                    <span className='ml-2 text-gray-600'>{new Date(bookData.updatedAt).toLocaleDateString()}</span>
+                    <span className='ml-2 text-gray-600'>
+                      {new Date(bookData.result.updatedAt).toLocaleDateString()}
+                    </span>
                   </div>
                 )}
               </div>
 
-              {bookData.summary && (
+              {bookData.result.summary && (
                 <>
                   <Divider className='my-4' />
                   <div>
                     <h3 className='font-semibold text-gray-700 mb-2'>책 소개</h3>
-                    <p className='text-gray-600 leading-relaxed'>{bookData.summary}</p>
+                    <p className='text-gray-600 leading-relaxed'>{bookData.result.summary}</p>
                   </div>
                 </>
               )}
