@@ -1,6 +1,6 @@
-import {useSelector} from 'react-redux'
-import {Navigate, Outlet, Route, Routes} from 'react-router-dom'
-import BookDetail from '../pages/BookDetail'
+import { useSelector } from 'react-redux'
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
+import BookDetail from '../pages/BookDetail/BookDetail'
 import BookForm from '../pages/BookForm'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
@@ -38,4 +38,4 @@ function AppRoutes() {
   )
 }
 
-export default AppRoutes 
+export default AppRoutes
