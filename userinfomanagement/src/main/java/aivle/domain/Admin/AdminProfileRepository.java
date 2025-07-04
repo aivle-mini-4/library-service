@@ -1,6 +1,6 @@
-package aivle.domain;
+package aivle.domain.Admin;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 //<<< PoEAA / Repository
@@ -9,4 +9,4 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
     path = "adminProfiles"
 )
 public interface AdminProfileRepository
-    extends PagingAndSortingRepository<AdminProfile, Long> {}
+    extends JpaRepository<AdminProfile, Long> {}

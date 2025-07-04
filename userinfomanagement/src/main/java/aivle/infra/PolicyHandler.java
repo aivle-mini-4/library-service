@@ -2,13 +2,18 @@ package aivle.infra;
 
 import aivle.config.kafka.KafkaProcessor;
 import aivle.domain.*;
+import aivle.domain.Admin.AdminProfile;
+import aivle.domain.Admin.AdminProfileRepository;
+import aivle.domain.Author.AuthorProfile;
+import aivle.domain.Author.AuthorProfileRepository;
+import aivle.domain.Member.MemberProfile;
+import aivle.domain.Member.MemberProfileRepository;
+
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
 
 //<<< Clean Arch / Inbound Adaptor
 @Service
@@ -16,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class PolicyHandler {
 
     @Autowired
-    WriterProfileRepository writerProfileRepository;
+    AuthorProfileRepository authorProfileRepository;
 
     @Autowired
     MemberProfileRepository memberProfileRepository;
@@ -24,103 +29,37 @@ public class PolicyHandler {
     @Autowired
     AdminProfileRepository adminProfileRepository;
 
-    @StreamListener(KafkaProcessor.INPUT)
-    public void whatever(@Payload String eventString) {}
+  
 
-
-
-    @StreamListener(
-        value = KafkaProcessor.INPUT,
-        condition = "headers['type']=='CreateWriterProfile'"
-    )
-    public void wheneverCreateWriterProfile_CreateWriterProfile(
-        @Payload CreateWriterProfile createWriterProfile
-    ) {
-        CreateWriterProfile event = createWriterProfile;
-        System.out.println(
-            "\n\n##### listener CreateWriterProfile : " +
-            createWriterProfile +
-            "\n\n"
-        );
-
-        // Sample Logic //
-        WriterProfile.createWriterProfile(event);
-    }
-
-
-
+    // member 회원가입 이벤트 처리 -> MemberProfile 생성
     @StreamListener(
         value = KafkaProcessor.INPUT,
         condition = "headers['type']=='SignedUp' && headers['aggregateType']=='UserAccount'"
     )
-    public void wheneverUserAccountSignedUp_CreateMemberProfile(
-        @Payload SignedUp signedUp
-    ) {
-        SignedUp event = signedUp;
-        System.out.println(
-            "\n\n##### listener CreateMemberProfile : " + signedUp + "\n\n"
-        );
-
-        // Sample Logic //
-        MemberProfile.createMemberProfile(event);
+    public void wheneverUserAccountSignedUp_CreateMemberProfile(@Payload SignedUp signedUp) {
+        MemberProfile.createMemberProfile(signedUp);
     }
 
+    // admin 회원가입 이벤트 처리 -> AdminProfile 생성
     @StreamListener(
         value = KafkaProcessor.INPUT,
         condition = "headers['type']=='SignedUp' && headers['aggregateType']=='AdminAccount'"
     )
-    public void wheneverAdminAccountSignedUp_CreateAdminProfile(
-        @Payload SignedUp signedUp
-    ) {
-        SignedUp event = signedUp;
-        System.out.println(
-            "\n\n##### listener CreateAdminProfile : " + signedUp + "\n\n"
-        );
-
-        // Sample Logic //
-        AdminProfile.createAdminProfile(event);
+    public void wheneverAdminAccountSignedUp_CreateAdminProfile(@Payload SignedUp signedUp) {
+        AdminProfile.createAdminProfile(signedUp);
     }
 
+    // 작가 승인 이벤트 처리 -> AuthorProfile 생성
     @StreamListener(
         value = KafkaProcessor.INPUT,
         condition = "headers['type']=='AuthorApproved'"
     )
-    public void wheneverAuthorApproved_CreateWriterProfile(
-        @Payload Object authorApproved
-    ) {
-        System.out.println(
-            "\n\n##### listener AuthorApproved : " +
-            authorApproved +
-            "\n\n"
-        );
-
-        // JSON 문자열을 파싱하여 authorId 추출
-        try {
-            // ObjectMapper를 사용하여 JSON 파싱
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-            com.fasterxml.jackson.databind.JsonNode jsonNode = mapper.readTree(authorApproved.toString());
-            
-            Long authorId = jsonNode.get("authorId").asLong();
-            
-            // AuthorApproved 이벤트를 CreateWriterProfile 이벤트로 변환
-            CreateWriterProfile createWriterProfile = new CreateWriterProfile();
-            
-            // authorId 설정 (id는 자동 생성됨)
-            createWriterProfile.setAuthorId(authorId);
-            createWriterProfile.setName("작가_" + authorId);
-            createWriterProfile.setEmail("author" + authorId + "@example.com");
-            createWriterProfile.setRoles("WRITER");
-            createWriterProfile.setBasicInformation("작가 기본 정보");
-            createWriterProfile.setSelfIntroduction("작가 자기소개");
-            createWriterProfile.setPortfolio("작가 포트폴리오");
-            
-            // Sample Logic //
-            WriterProfile.createWriterProfile(createWriterProfile);
-            
-        } catch (Exception e) {
-            System.err.println("Error parsing AuthorApproved event: " + e.getMessage());
-            e.printStackTrace();
+    public void wheneverAuthorApproved_CreateAuthorProfile(@Payload AuthorApproved authorApproved) {
+        // ApprovalState가 APPROVED일 때만 작가 프로필 생성
+        if (authorApproved.getState() != null && authorApproved.getState().equals(ApprovalState.APPROVED)) {
+            AuthorProfile.createAuthorProfile(authorApproved);
         }
     }
+
 }
 //>>> Clean Arch / Inbound Adaptor

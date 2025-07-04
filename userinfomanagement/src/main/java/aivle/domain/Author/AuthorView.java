@@ -1,19 +1,16 @@
-package aivle.domain;
+package aivle.domain.Author;
 
-import java.util.Date;
 import javax.persistence.*;
 import lombok.Data;
 
 //<<< EDA / CQRS
 @Entity
-@Table(name = "WriterPage_table")
+@Table(name = "AuthorView_table")
 @Data
-public class WriterPage {
+public class AuthorView {
 
     @Id
-    //@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
     private String name;
     private String email;
     private String basicInformation;
