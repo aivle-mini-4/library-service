@@ -1,17 +1,15 @@
-package aivle.domain;
+package aivle.domain.Admin;
 
 import javax.persistence.*;
 import lombok.Data;
 
 //<<< EDA / CQRS
 @Entity
-@Table(name = "AdminPage_table")
+@Table(name = "AdminView_table")
 @Data
-public class AdminPage {
+public class AdminView {
 
     @Id
-    //@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
     private String name;
 }

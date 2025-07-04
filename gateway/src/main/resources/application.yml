@@ -1,5 +1,79 @@
 server:
+<<<<<<< Updated upstream
   port: 8088
+=======
+  port: 8092
+
+# JWT 설정
+jwt:
+  secret: aivleSecretKeyForJWTTokenGeneration2024WithMoreThan256BitsToMeetSecurityRequirements
+
+# 보안 경로 설정 (선택사항 - 기본값 사용 시 생략 가능)
+security:
+  protected-paths:
+    - "/authorapprovals"
+    - "/pointpolicies"
+    - "/pointPolicyViews"
+    - "/subscribes"
+    - "/subscribeViews"
+    - "/writerProfiles"
+    - "/memberProfiles"
+    - "/adminProfiles"
+    - "/writerPages"
+    - "/adminPages"
+    - "/userPages"
+    - "/points"
+    - "/pointViews"
+    - "/manuscripts"
+    - "/manuscriptPages"
+    - "/viewHistories"
+    - "/favorites"
+    - "/queryViewHistories"
+    - "/queryFavoriteLists"
+    - "/aiServices"
+    - "/books"
+    - "/registeredBestsellerViews"
+    - "/registeredBookViews"
+    - "/bookSubscriptions"
+    - "/auth"
+  role-paths:
+    ADMIN:
+      - "/authorapprovals"
+      - "/pointpolicies"
+      - "/pointPolicyViews"
+      - "/adminProfiles"
+      - "/adminPages"
+      # - "/books"
+      # - "/registeredBestsellerViews"
+    AUTHOR:
+      - "/writerProfiles"
+      - "/writerPages"
+      - "/manuscripts"
+      - "/manuscriptPages"
+      - "/aiServices"
+    USER:
+      # - "/subscribes"
+      # - "/subscribeViews"
+      # - "/points"
+      # - "/pointViews"
+      # - "/memberProfiles"
+      # - "/userPages"
+      # - "/viewHistories"
+      # - "/favorites"
+      # - "/queryViewHistories"
+      # - "/queryFavoriteLists"
+      # - "/bookSubscriptions"
+logging:
+  level:
+    #     org.hibernate.type: trace
+    #     org.springframework.cloud: debug
+    root: ERROR
+    aivle: INFO
+    org.springframework.cloud: ERROR
+    org.hibernate: ERROR
+    org.springframework.boot: ERROR
+    org.springframework.web: ERROR
+>>>>>>> Stashed changes
 ---
 spring:
   profiles: default
@@ -67,6 +141,12 @@ spring:
   profiles: docker
   cloud:
     gateway:
+<<<<<<< Updated upstream
+=======
+      default-filters:
+        - LoggingFilter # 모든 요청 로깅
+        - JwtAuthenticationFilter # 모든 라우트에 기본 적용
+>>>>>>> Stashed changes
       routes:
         - id: admintask
           uri: http://admintask:8080
