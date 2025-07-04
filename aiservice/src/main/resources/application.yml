@@ -92,4 +92,5 @@ spring:
           destination: aivle
           contentType: application/json
 
-
+server:
+  port: 8080
