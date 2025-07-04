@@ -1,7 +1,4 @@
 server:
-<<<<<<< Updated upstream
-  port: 8088
-=======
   port: 8092
 
 # JWT 설정
@@ -16,16 +13,16 @@ security:
     - "/pointPolicyViews"
     - "/subscribes"
     - "/subscribeViews"
-    - "/writerProfiles"
+    - "/authorProfiles"
     - "/memberProfiles"
     - "/adminProfiles"
-    - "/writerPages"
-    - "/adminPages"
-    - "/userPages"
+    - "/authorViews"
+    - "/adminViews"
+    - "/userViews"
     - "/points"
     - "/pointViews"
     - "/manuscripts"
-    - "/manuscriptPages"
+    - "/manuscriptViews"
     - "/viewHistories"
     - "/favorites"
     - "/queryViewHistories"
@@ -42,14 +39,14 @@ security:
       - "/pointpolicies"
       - "/pointPolicyViews"
       - "/adminProfiles"
-      - "/adminPages"
+      - "/adminViews"
       # - "/books"
       # - "/registeredBestsellerViews"
     AUTHOR:
-      - "/writerProfiles"
-      - "/writerPages"
+      - "/authorProfiles"
+      - "/authorViews"
       - "/manuscripts"
-      - "/manuscriptPages"
+      - "/manuscriptViews"
       - "/aiServices"
     USER:
       # - "/subscribes"
@@ -57,7 +54,7 @@ security:
       # - "/points"
       # - "/pointViews"
       # - "/memberProfiles"
-      # - "/userPages"
+      # - "/userViews"
       # - "/viewHistories"
       # - "/favorites"
       # - "/queryViewHistories"
@@ -73,7 +70,6 @@ logging:
     org.hibernate: ERROR
     org.springframework.boot: ERROR
     org.springframework.web: ERROR
->>>>>>> Stashed changes
 ---
 spring:
   profiles: default
@@ -92,7 +88,7 @@ spring:
         - id: userinfomanagement
           uri: http://localhost:8084
           predicates:
-            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, /writerPages/**, /adminPages/**, /memberPages/**
+            - Path=/Profiles/**, /memberProfiles/**, /adminProfiles/**, /authorViews/**, /adminViews/**, /memberViews/**
         - id: authidentity
           uri: http://localhost:8085
           predicates:
@@ -141,12 +137,9 @@ spring:
   profiles: docker
   cloud:
     gateway:
-<<<<<<< Updated upstream
-=======
       default-filters:
         - LoggingFilter # 모든 요청 로깅
         - JwtAuthenticationFilter # 모든 라우트에 기본 적용
->>>>>>> Stashed changes
       routes:
         - id: admintask
           uri: http://admintask:8080
@@ -159,7 +152,7 @@ spring:
         - id: userinfomanagement
           uri: http://userinfomanagement:8080
           predicates:
-            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**,
+            - Path=/authorProfiles/**, /memberProfiles/**, /adminProfiles/**,
         - id: authidentity
           uri: http://authidentity:8080
           predicates:
