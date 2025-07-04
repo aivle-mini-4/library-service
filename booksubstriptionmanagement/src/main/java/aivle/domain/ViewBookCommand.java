@@ -9,5 +9,7 @@ import lombok.Data;
 public class ViewBookCommand {
 
     private Long userId;
+    private Long bookId;
     private Boolean isBookSubscribed;
+    private Integer price;
 }

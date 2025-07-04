@@ -51,9 +51,11 @@ public class BookSubscription {
             throw new IllegalStateException("이미 구독된 도서");
         }
         
+        this.bookId = subscribeBookCommand.getBookId();
         this.userId = subscribeBookCommand.getUserId();
         this.isBookSubscribed = true;
         this.updatedAt = LocalDateTime.now();
+        this.price = subscribeBookCommand.getPrice();
 
         BookSubscribed bookSubscribed = new BookSubscribed(this);
         bookSubscribed.publishAfterCommit();
@@ -68,9 +70,11 @@ public class BookSubscription {
             throw new IllegalStateException("이미 조회된 도서");
         }
 
+        this.bookId = viewBookCommand.getBookId();
         this.userId = viewBookCommand.getUserId();
         this.isBookSubscribed = true;
         this.updatedAt = LocalDateTime.now();
+        this.price = viewBookCommand.getPrice();
 
         MonthlyBookSubscribed monthlyBookSubscribed = new MonthlyBookSubscribed(this);
         monthlyBookSubscribed.publishAfterCommit();

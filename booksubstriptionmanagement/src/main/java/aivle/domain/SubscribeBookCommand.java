@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class SubscribeBookCommand {
 
+    private Long bookId;
     private Long userId;
     private Boolean isBookSubscribed;
+    private Integer price;
 }

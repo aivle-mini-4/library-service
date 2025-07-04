@@ -29,17 +29,33 @@ public class BookSubscriptionController {
     @PostMapping("/bookSubscriptions/subscribebook")
     public BookSubscription subscribeBook(
         @RequestHeader("X-User-Id") Long userId,
-        HttpServletRequest request,
-        HttpServletResponse response,
-        @RequestBody SubscribeBookCommand subscribeBookCommand
-
+        @RequestParam("bookId") Long bookId,
+        @RequestParam("price") Integer price
     ) throws Exception {
-        System.out.println("##### /bookSubscription/subscribeBook called #####");
-        
-        subscribeBookCommand.setUserId(userId);
+        System.out.println("##### /bookSubscription/subscribeBook called (bookId param) #####");
 
-        BookSubscription bookSubscription = new BookSubscription();
-        bookSubscription.subscribeBook(subscribeBookCommand);
+        SubscribeBookCommand subscribeBookCommand = new SubscribeBookCommand();
+        subscribeBookCommand.setUserId(userId);
+        subscribeBookCommand.setBookId(bookId);
+        subscribeBookCommand.setPrice(price);
+
+        Optional<BookSubscription> optionalBookSubscription = bookSubscriptionRepository.findByUserIdAndBookId(userId, bookId);
+
+        BookSubscription bookSubscription;
+        if (optionalBookSubscription.isPresent()) {
+            bookSubscription = optionalBookSubscription.get();
+            
+            if (Boolean.FALSE.equals(bookSubscription.getIsBookSubscribed())) {
+                bookSubscription.subscribeBook(subscribeBookCommand);
+            } else {
+                throw new IllegalStateException("이미 구독된 도서");
+            }
+        } else {
+            
+            bookSubscription = new BookSubscription();
+            bookSubscription.subscribeBook(subscribeBookCommand);
+        }
+
         bookSubscriptionRepository.save(bookSubscription);
 
         return bookSubscription;
@@ -55,22 +71,39 @@ public class BookSubscriptionController {
     @PostMapping("/bookSubscriptions/viewbook")
     public BookSubscription viewBook(
         @RequestHeader("X-User-Id") Long userId,
-
-        HttpServletRequest request,
-        HttpServletResponse response,
-        @RequestBody ViewBookCommand viewBookCommand
+        @RequestParam("bookId") Long bookId,
+        @RequestParam("price") Integer price
 
     ) throws Exception {
         System.out.println("##### /bookSubscription/viewBook called #####");
 
+        ViewBookCommand viewBookCommand = new ViewBookCommand();
+
         viewBookCommand.setUserId(userId);
-        
-        BookSubscription bookSubscription = new BookSubscription();
-        
-        bookSubscription.viewBook(viewBookCommand);
+        viewBookCommand.setBookId(bookId);
+        viewBookCommand.setPrice(price);
+
+        Optional<BookSubscription> optionalBookSubscription = bookSubscriptionRepository.findByUserIdAndBookId(userId, bookId);
+
+        BookSubscription bookSubscription;
+        if (optionalBookSubscription.isPresent()) {
+            bookSubscription = optionalBookSubscription.get();
+            
+            if (Boolean.FALSE.equals(bookSubscription.getIsBookSubscribed())) {
+                bookSubscription.viewBook(viewBookCommand);
+            } else {
+                throw new IllegalStateException("이미 구독된 도서");
+            }
+        } else {
+            
+            bookSubscription = new BookSubscription();
+            bookSubscription.viewBook(viewBookCommand);
+        }
+
         bookSubscriptionRepository.save(bookSubscription);
-        
+
         return bookSubscription;
     }
+
 }
 //>>> Clean Arch / Inbound Adaptor
