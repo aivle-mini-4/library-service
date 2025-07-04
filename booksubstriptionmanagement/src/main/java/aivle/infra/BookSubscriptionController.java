@@ -28,7 +28,7 @@ public class BookSubscriptionController {
 
     @PostMapping("/bookSubscriptions/subscribebook")
     public BookSubscription subscribeBook(
-        @RequestHeader("X-User-Id") String userId,
+        @RequestHeader("X-User-Id") Long userId,
         HttpServletRequest request,
         HttpServletResponse response,
         @RequestBody SubscribeBookCommand subscribeBookCommand
@@ -45,6 +45,7 @@ public class BookSubscriptionController {
         return bookSubscription;
     }
 
+
     @RequestMapping(
         value = "/bookSubscriptions/viewbook",
         method = RequestMethod.POST,
@@ -53,7 +54,7 @@ public class BookSubscriptionController {
 
     @PostMapping("/bookSubscriptions/viewbook")
     public BookSubscription viewBook(
-        @RequestHeader("X-User-Id") String userId,
+        @RequestHeader("X-User-Id") Long userId,
 
         HttpServletRequest request,
         HttpServletResponse response,
