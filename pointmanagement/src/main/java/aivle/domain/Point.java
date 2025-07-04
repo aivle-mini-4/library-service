@@ -46,6 +46,12 @@ public class Point {
     //<<< Clean Arch / Port Method
     public static void grantPoints(SignedUp signedUp) {
 
+        // admin확인
+        if("admin".equals(signedUp.getRoles())){
+            System.out.println("⚠ 관리자 유저입니다(포인트x): " + signedUp.getId());
+            return;
+        }
+
         if (repository().findByUserId(signedUp.getId()).isPresent()) {
             System.out.println("⚠ 이미 포인트가 지급된 유저입니다: " + signedUp.getId());
             return;

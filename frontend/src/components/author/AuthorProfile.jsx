@@ -17,7 +17,7 @@ function AuthorProfile() {
   
   useEffect(() => {
     // API로 작가 정보 받아오기
-    userInfoApi.pages.writerPages.get()
+    userInfoApi.profiles.authorProfile.get()
       .then(res => {
         const data = res.data
         setName(data.name)
@@ -44,7 +44,7 @@ function AuthorProfile() {
         'selfIntroduction': introduction,
         'portfolio': portfolioUrl
     }
-    userInfoApi.profiles.writerProfiles.update(data)
+    userInfoApi.profiles.authorProfile.update(data)
     alert('저장되었습니다!')
     setIsEditing(false)
   }
@@ -52,7 +52,7 @@ function AuthorProfile() {
   return (
     <CardContainer style={{marginBottom: '52px'}}>
         <ActionButton 
-          style={{position: 'absolute', right: '48px', fontSize: '28px', padding: '8px 16px', marginTop: '32px'}}
+          style={{position: 'absolute', right: '48px', fontSize: '28px', padding: '8px 16px', marginTop: '8px'}}
           color={isEditing ? '#28a745' : '#007bff'}
           onClick={isEditing ? handleSave : handleEdit}
         >

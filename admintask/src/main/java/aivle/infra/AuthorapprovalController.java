@@ -24,12 +24,12 @@ public class AuthorapprovalController {
     private AuthorapprovalRepository authorapprovalRepository;
 
     // 작가 승인 요청 생성
-    @PostMapping
-    public Authorapproval createApproval(@RequestBody Authorapproval approval) {
-        approval.setState(ApprovalState.PENDING);
-        approval.setAppliedAt(LocalDateTime.now());
-        return authorapprovalRepository.save(approval);
-    }
+    // @PostMapping
+    // public Authorapproval createApproval(@RequestBody Authorapproval approval) {
+    //     approval.setState(ApprovalState.PENDING);
+    //     approval.setAppliedAt(LocalDateTime.now());
+    //     return authorapprovalRepository.save(approval);
+    // }
 
     // 전체 승인 요청 목록 조회
     @GetMapping

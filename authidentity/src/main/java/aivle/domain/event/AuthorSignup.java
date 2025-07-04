@@ -17,6 +17,10 @@ public class AuthorSignup extends AbstractEvent {
 
     public AuthorSignup(AuthorAccount aggregate) {
         super(aggregate);
+        // this.id = aggregate.getId();
+        // this.email = aggregate.getEmail();
+        // this.selfIntroduction = aggregate.getSelfIntroduction();
+        // this.portfolio = aggregate.getPortfolio();
     }
 
     public AuthorSignup() {

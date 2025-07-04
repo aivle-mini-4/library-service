@@ -18,6 +18,9 @@ public class AuthorApproved extends AbstractEvent {
     private Long authorId;
     private LocalDateTime resultAt;
     private ApprovalState state;
+    private String email;
+    private String selfIntroduction;
+    private String portfolio;
 
     public AuthorApproved(Authorapproval aggregate) {
         super(aggregate);

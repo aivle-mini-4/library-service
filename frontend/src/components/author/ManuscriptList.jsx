@@ -34,14 +34,14 @@ function ManuscriptList() {
   return (
     <CardContainer style={{marginBottom: '52px'}}>
       <ActionButton 
-          style={{position: 'absolute', right: '48px', fontSize: '28px', padding: '8px 16px', marginTop: '32px'}}
+          style={{position: 'absolute', right: '48px', fontSize: '28px', padding: '8px 16px', marginTop: '8px'}}
           color={'#28a745'}
           onClick={() => navigate(`/manuscript`)}
       >
           새 원고 쓰기
       </ActionButton>
       <h1 style={{fontSize: '52px'}}>원고 목록</h1>
-      <ul style={{listStyle: 'none', padding: 0}}>
+      <ul style={{listStyle: 'none', padding: 0, marginTop: '36px'}}>
         {manuscripts.map((m) => (
           <li key={m.id} 
               style={{
