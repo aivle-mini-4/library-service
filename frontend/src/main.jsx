@@ -6,7 +6,9 @@ import { worker } from './mocks/browser'
 
 async function prepare() {
   if (import.meta.env.DEV) {
-    return worker.start()
+    return worker.start({
+      onUnhandledRequest: 'bypass',
+    })
   }
   return Promise.resolve()
 }
