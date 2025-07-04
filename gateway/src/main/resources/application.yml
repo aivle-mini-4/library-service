@@ -13,16 +13,16 @@ security:
     - "/pointPolicyViews"
     - "/subscribes"
     - "/subscribeViews"
-    - "/writerProfiles"
+    - "/authorProfiles"
     - "/memberProfiles"
     - "/adminProfiles"
-    - "/writerPages"
-    - "/adminPages"
-    - "/userPages"
+    - "/authorViews"
+    - "/adminViews"
+    - "/userViews"
     - "/points"
     - "/pointViews"
     - "/manuscripts"
-    - "/manuscriptPages"
+    - "/manuscriptViews"
     - "/viewHistories"
     - "/favorites"
     - "/queryViewHistories"
@@ -39,14 +39,14 @@ security:
       - "/pointpolicies"
       - "/pointPolicyViews"
       - "/adminProfiles"
-      - "/adminPages"
+      - "/adminViews"
       # - "/books"
       # - "/registeredBestsellerViews"
     AUTHOR:
-      - "/writerProfiles"
-      - "/writerPages"
+      - "/authorProfiles"
+      - "/authorViews"
       - "/manuscripts"
-      - "/manuscriptPages"
+      - "/manuscriptViews"
       - "/aiServices"
     USER:
       # - "/subscribes"
@@ -54,7 +54,7 @@ security:
       # - "/points"
       # - "/pointViews"
       # - "/memberProfiles"
-      # - "/userPages"
+      # - "/userViews"
       # - "/viewHistories"
       # - "/favorites"
       # - "/queryViewHistories"
@@ -62,8 +62,8 @@ security:
       # - "/bookSubscriptions"
 logging:
   level:
-#     org.hibernate.type: trace
-#     org.springframework.cloud: debug
+    #     org.hibernate.type: trace
+    #     org.springframework.cloud: debug
     root: ERROR
     aivle: INFO
     org.springframework.cloud: ERROR
@@ -89,7 +89,7 @@ spring:
         - id: userinfomanagement
           uri: http://localhost:8084
           predicates:
-            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, /writerPages/**, /adminPages/**, /userPages/**, /memberPages/**
+            - Path=/Profiles/**, /memberProfiles/**, /adminProfiles/**, /authorViews/**, /adminViews/**, /memberViews/**
         - id: authidentity
           uri: http://localhost:8085
           predicates:
@@ -146,8 +146,8 @@ spring:
   cloud:
     gateway:
       default-filters:
-        - LoggingFilter  # 모든 요청 로깅
-        - JwtAuthenticationFilter  # 모든 라우트에 기본 적용
+        - LoggingFilter # 모든 요청 로깅
+        - JwtAuthenticationFilter # 모든 라우트에 기본 적용
       routes:
         - id: admintask
           uri: http://admintask:8080
@@ -160,7 +160,7 @@ spring:
         - id: userinfomanagement
           uri: http://userinfomanagement:8080
           predicates:
-            - Path=/writerProfiles/**, /memberProfiles/**, /adminProfiles/**, 
+            - Path=/authorProfiles/**, /memberProfiles/**, /adminProfiles/**,
         - id: authidentity
           uri: http://authidentity:8080
           predicates:

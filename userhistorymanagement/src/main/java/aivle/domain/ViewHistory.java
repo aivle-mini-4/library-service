@@ -26,9 +26,8 @@ public class ViewHistory {
 
     @PostPersist
     public void onPostPersist() {
-        ViewHistoryRegistered viewHistoryRegistered = new ViewHistoryRegistered(
-            this
-        );
+        ViewHistoryRegistered viewHistoryRegistered = new ViewHistoryRegistered(this);
+
         viewHistoryRegistered.publishAfterCommit();
     }
 
@@ -48,7 +47,6 @@ public class ViewHistory {
             // new item 
             ViewHistory viewHistory = new ViewHistory();
             
-            // set
             viewHistory.setUserId(monthlyBookSubscribed.getUserId());
             viewHistory.setBookId(monthlyBookSubscribed.getBookId());
 
@@ -76,6 +74,7 @@ public class ViewHistory {
 
             ViewHistoryRegistered event = new ViewHistoryRegistered(viewHistory);
             event.publishAfterCommit();
+            
         } catch (Exception e) {
             throw new RuntimeException("PointUsed 이벤트 적용 실패", e);
         }

@@ -2,24 +2,19 @@ package aivle.domain;
 
 import aivle.infra.AbstractEvent;
 import java.time.LocalDateTime;
-import java.util.*;
 import lombok.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-//<<< DDD / Domain Event
 @Data
 @ToString
+@EqualsAndHashCode(callSuper = true)
 public class AuthorApproved extends AbstractEvent {
-
     private Long id;
     private Long adminId;
     private Long authorId;
     private LocalDateTime resultAt;
-    private String state;
+    private ApprovalState state;
 
     public AuthorApproved() {
         super();
     }
 }
-//>>> DDD / Domain Event 
