@@ -12,7 +12,6 @@ import lombok.Data;
 public class AuthorProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)  // 자동 생성으로 복원
     private Long id;
     private String name;
     private String email;
