@@ -95,6 +95,11 @@ function BookInfo({ bookId }) {
                     <h3 className='font-semibold text-gray-700 mb-2'>책 소개</h3>
                     <p className='text-gray-600 leading-relaxed'>{bookData.result.summary}</p>
                   </div>
+                  <Divider className='my-4' />
+                  <div>
+                    <h3 className='font-semibold text-gray-700 mb-2'>책 내용</h3>
+                    <p className='text-gray-600 leading-relaxed'>{bookData.result.content}</p>
+                  </div>
                 </>
               )}
             </div>
