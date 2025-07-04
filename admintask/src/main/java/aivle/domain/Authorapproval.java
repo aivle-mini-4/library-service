@@ -22,10 +22,7 @@ public class Authorapproval {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-
     private Long authorId;
-
 
     @Enumerated(EnumType.STRING)
     private ApprovalState state;
@@ -33,18 +30,19 @@ public class Authorapproval {
 
     private LocalDateTime appliedAt;
 
-
     private LocalDateTime resultAt;
-
 
     private LocalDateTime rejectedAt;
 
-
     private Long adminId;
-
 
     private String reason;
 
+    private String email;
+    
+    private String selfIntroduction;
+
+    private String portfolio;
 
     // @PostPersist
     // public void onPostPersist() {
