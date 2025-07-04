@@ -374,7 +374,8 @@ export const handlers = [
   }),
 
   // 구독 조회
-  http.get('/subscribesViews', () => {
+  http.get('/subscribesViews', async () => {
+    await new Promise(resolve => setTimeout(resolve, 2000))
     return HttpResponse.json({
       id: 1,
       name: '구독자',
@@ -385,8 +386,9 @@ export const handlers = [
 
   // ===== Book Subscription Management Service =====
 
-  // 도서 구독
+  // 도서 구독 (비구독자 도서 열람신청)
   http.post('/bookSubscriptions/subscribebook', async ({ request }) => {
+    await new Promise(resolve => setTimeout(resolve, 2000))
     const data = await request.json()
 
     return HttpResponse.json({
@@ -401,7 +403,30 @@ export const handlers = [
   }),
 
   // 도서 조회
+  http.get('/books/:bookId', async ({ params }) => {
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    return HttpResponse.json({
+      isSuccess: true,
+      message: '성공입니다.',
+      result: {
+        bookId: params.bookId,
+        authorId: 1,
+        title: '도서 제목',
+        content: '도서 내용',
+        category: '소설',
+        summary: '도서 요약',
+        coverImageUrl: 'https://example.com/cover.jpg',
+        price: 1000,
+        views: 100,
+        createdAt: '2025-01-01T00:00:00',
+        updatedAt: '2025-01-01T00:00:00',
+      },
+    })
+  }),
+
+  // 월구독자 도서 열람
   http.post('/bookSubscriptions/viewbook', async ({ request }) => {
+    await new Promise(resolve => setTimeout(resolve, 2000))
     const data = await request.json()
 
     return HttpResponse.json({
@@ -446,27 +471,6 @@ export const handlers = [
           updatedAt: '2025-01-01T00:00:00',
         },
       ],
-    })
-  }),
-
-  // 특정 도서 조회
-  http.get('/books/:bookId', ({ params }) => {
-    return HttpResponse.json({
-      isSuccess: true,
-      message: '성공입니다.',
-      result: {
-        bookId: params.bookId,
-        authorId: 1,
-        title: '도서 제목',
-        content: '도서 내용',
-        category: '소설',
-        summary: '도서 요약',
-        coverImageUrl: 'https://example.com/cover.jpg',
-        price: 1000,
-        views: 100,
-        createdAt: '2025-01-01T00:00:00',
-        updatedAt: '2025-01-01T00:00:00',
-      },
     })
   }),
 
