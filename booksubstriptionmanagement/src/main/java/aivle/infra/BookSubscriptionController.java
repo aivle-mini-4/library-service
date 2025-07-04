@@ -25,34 +25,51 @@ public class BookSubscriptionController {
         method = RequestMethod.POST,
         produces = "application/json;charset=UTF-8"
     )
+
+    @PostMapping("/bookSubscriptions/subscribebook")
     public BookSubscription subscribeBook(
+        @RequestHeader("X-User-Id") Long userId,
         HttpServletRequest request,
         HttpServletResponse response,
         @RequestBody SubscribeBookCommand subscribeBookCommand
+
     ) throws Exception {
-        System.out.println(
-            "##### /bookSubscription/subscribeBook  called #####"
-        );
+        System.out.println("##### /bookSubscription/subscribeBook called #####");
+        
+        subscribeBookCommand.setUserId(userId);
+
         BookSubscription bookSubscription = new BookSubscription();
         bookSubscription.subscribeBook(subscribeBookCommand);
         bookSubscriptionRepository.save(bookSubscription);
+
         return bookSubscription;
     }
+
 
     @RequestMapping(
         value = "/bookSubscriptions/viewbook",
         method = RequestMethod.POST,
         produces = "application/json;charset=UTF-8"
     )
+
+    @PostMapping("/bookSubscriptions/viewbook")
     public BookSubscription viewBook(
+        @RequestHeader("X-User-Id") Long userId,
+
         HttpServletRequest request,
         HttpServletResponse response,
         @RequestBody ViewBookCommand viewBookCommand
+
     ) throws Exception {
-        System.out.println("##### /bookSubscription/viewBook  called #####");
+        System.out.println("##### /bookSubscription/viewBook called #####");
+
+        viewBookCommand.setUserId(userId);
+        
         BookSubscription bookSubscription = new BookSubscription();
+        
         bookSubscription.viewBook(viewBookCommand);
         bookSubscriptionRepository.save(bookSubscription);
+        
         return bookSubscription;
     }
 }

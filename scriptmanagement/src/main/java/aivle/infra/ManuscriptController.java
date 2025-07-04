@@ -29,13 +29,22 @@ public class ManuscriptController {
     ManuscriptPageRepository manuscriptPageRepository;
 
     @PostMapping
-    public Manuscript createManuscript(@RequestBody Manuscript manuscript) {
+    public Manuscript createManuscript(
+        @RequestHeader(value = "X-User-Id",required = false) Long authorId,
+        @RequestBody Manuscript manuscript
+    ) {
+        manuscript.setAuthorId(authorId);
         return manuscriptRepository.save(manuscript);
     }
 
     @PutMapping("/{id}")
-    public Manuscript putMethodName(@PathVariable Long id, @RequestBody Manuscript manuscript) {
+    public Manuscript putMethodName(
+        @RequestHeader(value = "X-User-Id",required = false) Long authorId,
+        @PathVariable Long id,
+        @RequestBody Manuscript manuscript
+    ) {
         manuscript.setId(id);
+        manuscript.setAuthorId(authorId);
         return manuscriptRepository.save(manuscript);
     }
 

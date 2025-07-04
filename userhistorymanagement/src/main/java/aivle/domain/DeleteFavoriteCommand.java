@@ -8,5 +8,4 @@ import lombok.Data;
 public class DeleteFavoriteCommand {
 
     private Long userId;
-    private Long bookId;
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -23,9 +24,14 @@ public class BookView extends BaseEntity {
     private Long authorId;
 
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
+
     private String category;
     private String summary;
+
+    @Column(length = 1024)
     private String coverImageUrl;
 
     private Integer price;

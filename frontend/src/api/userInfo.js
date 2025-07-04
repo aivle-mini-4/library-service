@@ -4,7 +4,7 @@ const ADMIN_PAGES_URL = '/adminPages'
 const USER_PAGES_URL = '/userPages'
 const WRITER_PAGES_URL = '/writerPages'
 const ADMIN_PROFILES_URL = '/adminProfiles'
-const WRITER_PROFILES_URL = '/writerProfiles'
+const WRITER_PROFILES_URL = '/writerProfile'
 const MEMBER_PROFILES_URL = '/memberProfiles'
 
 export const userInfoApi = {
@@ -31,7 +31,7 @@ export const userInfoApi = {
     // 작가 페이지
     writerPages: {
       getAll: (params = {}) => api.get(WRITER_PAGES_URL, { params }),
-      getById: id => api.get(`${WRITER_PAGES_URL}/${id}`),
+      get: () => api.get(`${WRITER_PAGES_URL}`),
       create: data => api.post(WRITER_PAGES_URL, data),
       update: (id, data) => api.put(`${WRITER_PAGES_URL}/${id}`, data),
       delete: id => api.delete(`${WRITER_PAGES_URL}/${id}`),
@@ -51,7 +51,7 @@ export const userInfoApi = {
 
     // 작가 프로필 수정
     writerProfiles: {
-      update: (id, data) => api.put(`${WRITER_PROFILES_URL}/${id}`, data),
+      update: (data) => api.put(`${WRITER_PROFILES_URL}`, data),
     },
 
     // 회원 프로필 수정
