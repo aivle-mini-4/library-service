@@ -23,19 +23,17 @@ export const useApi = (apiFunction, options = {}) => {
     }
   }, [])
 
-  // 옵션을 useMemo로 안정화
+  // 옵션을 useMemo로 안정화 (params 제외)
   const stableOptions = useMemo(
     () => ({
       timeout: 10000,
       retries: 0,
-      debounce: 0, // debounce 시간 (ms)
+      debounce: 10, // debounce 시간 (ms)
       runOnMount: false, // 마운트 시 자동 실행 여부
-      params: [], // 초기 파라미터
       ...options,
     }),
-    [options.timeout, options.retries, options.debounce, options.runOnMount, options.params],
+    [options.timeout, options.retries, options.debounce, options.runOnMount],
   )
-
   // Debounce 처리
   const debounceRequest = (callback, delay) => {
     if (debounceTimerRef.current) {

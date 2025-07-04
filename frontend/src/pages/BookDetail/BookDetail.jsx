@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { subscriptionApi } from '../../api/subscription'
+import ApiPageLayout from '../../components/ApiPageLayout'
 import { useApi } from '../../hooks/useApi'
-import { ApiPageLayout } from './components/ApiPageLayout'
 import BookAccessRequest from './components/BookAccessRequest'
 import BookReader from './components/BookReader'
 
@@ -20,22 +20,24 @@ function BookDetail() {
       <div className='max-w-4xl mx-auto'>
         <ApiPageLayout
           isLoading={isSubscriptionLoading}
-          error={subscriptionError}
+          error={subscriptionError ? String(subscriptionError) : null}
           data={subscriptionData}
           isSuccess={isSubscriptionSuccess}
         >
-          <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-            <div className='lg:col-span-3'>
-              {subscriptionData?.isSubscribed ? (
-                <BookReader
-                  bookId={id}
-                  isSubscriber={true}
-                />
-              ) : (
-                <BookAccessRequest bookId={id} />
-              )}
+          {subscriptionData && (
+            <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+              <div className='lg:col-span-3'>
+                {subscriptionData?.isSubscribed ? (
+                  <BookReader
+                    bookId={id}
+                    isSubscriber={true}
+                  />
+                ) : (
+                  <BookAccessRequest bookId={id} />
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </ApiPageLayout>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { subscriptionApi } from '../../../api/subscription'
-import { ApiPageLayout } from '../../../components/ApiPageLayout'
+import ApiPageLayout from '../../../components/ApiPageLayout'
 import { useApi } from '../../../hooks/useApi'
 import BookInfo from './BookInfo'
 
@@ -24,16 +24,19 @@ function BookReader({ bookId, isSubscriber }) {
   return (
     <ApiPageLayout
       isLoading={isViewBookLoading}
-      error={null}
+      error={viewBookError ? String(viewBookError) : null}
       isSuccess={true}
       loadingMessage={isSubscriber ? '도서를 열람하는 중입니다...' : '도서 열람을 신청하는 중입니다...'}
       onRetry={executeViewBook}
+      showLayout={false}
     >
-      <div className='grid grid-cols-1 gap-8'>
-        <div>
-          <BookInfo bookId={bookId} />
+      {viewBookData && (
+        <div className='grid grid-cols-1 gap-8'>
+          <div>
+            <BookInfo bookId={bookId} />
+          </div>
         </div>
-      </div>
+      )}
     </ApiPageLayout>
   )
 }
