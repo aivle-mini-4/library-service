@@ -1,6 +1,7 @@
 import React from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import Alert from './Alert'
+import Button from './Button'
 import PageHeader from './PageHeader'
 
 const ApiPageLayout = ({
@@ -8,6 +9,7 @@ const ApiPageLayout = ({
   error,
   isSuccess,
   onBack,
+  onRetry,
   children,
   loadingMessage = '로딩 중...',
   errorMessage,
@@ -42,6 +44,16 @@ const ApiPageLayout = ({
               type='error'
               message={errorMessage || error || '오류가 발생했습니다.'}
             />
+            {onRetry && (
+              <div className='mt-6 text-center'>
+                <Button
+                  onClick={onRetry}
+                  variant='secondary'
+                >
+                  다시 시도
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

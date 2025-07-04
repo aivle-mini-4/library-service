@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { subscriptionApi } from '../../../api/subscription'
 import Alert from '../../../components/Alert'
 import Button from '../../../components/Button'
@@ -7,6 +8,7 @@ import Divider from '../../../components/Divider'
 import { useApi } from '../../../hooks/useApi'
 
 function BookAccessRequest({ bookId, onSuccess, onError }) {
+  const navigate = useNavigate()
   const [actionMessage, setActionMessage] = useState(null)
 
   const { isLoading: isSubscribeBookLoading, execute: executeSubscribeBook } = useApi(
@@ -24,6 +26,11 @@ function BookAccessRequest({ bookId, onSuccess, onError }) {
       if (result.isSuccess) {
         setActionMessage({ type: 'success', text: '도서 열람 신청이 완료되었습니다.' })
         onSuccess?.(result)
+
+        // 성공 시 BookReader로 라우팅 (isSubscriber: false)
+        setTimeout(() => {
+          navigate(`/${bookId}`, { state: { isSubscriber: false } })
+        }, 1500)
       } else {
         throw new Error(result.error || '도서 열람 신청에 실패했습니다.')
       }
