@@ -12,6 +12,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+
 //<<< Clean Arch / Inbound Adaptor
 @Service
 @Transactional
@@ -26,22 +27,22 @@ public class PolicyHandler {
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString) {}
 
+
+
+
+
+
     @StreamListener(
         value = KafkaProcessor.INPUT,
-        condition = "headers['type']=='AuthorRegistrationRequested'"
+        condition = "headers['type']=='AuthorSignup'"
     )
-    public void wheneverAuthorRegistrationRequested_AuthorRouting(
-        @Payload AuthorRegistrationRequested authorRegistrationRequested
+    public void wheneverAuthorSignup_AuthorSignup(
+        @Payload AuthorSignup AuthorSignup
     ) {
-        AuthorRegistrationRequested event = authorRegistrationRequested;
-        System.out.println(
-            "\n\n##### listener AuthorRouting : " +
-            authorRegistrationRequested +
-            "\n\n"
-        );
-
+        System.out.println("\n\n##### listener AuthorSignup : " + authorSignup + "\n\n");
+     
         // Sample Logic //
-        Authorapproval.authorRouting(event);
+        Point.AuthorSignup(event);
     }
 }
 //>>> Clean Arch / Inbound Adaptor

@@ -17,6 +17,9 @@ public class AuthorRejected extends AbstractEvent {
     private Long authorId;
     private Long adminId;
     private ApprovalState state;
+    private String email;
+    private String selfIntroduction;
+    private String portfolio;
 
     public AuthorRejected(Authorapproval aggregate) {
         super(aggregate);

@@ -14,7 +14,6 @@ public class PointPolicyView {
     @Id
     //@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
     private String policyId;
     private String name;
     private String description;
