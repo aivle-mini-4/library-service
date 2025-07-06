@@ -13,26 +13,11 @@ echo "8. 토픽 상세 정보 보기"
 echo "9. 특정 토픽 재생성"
 echo "10. 토픽 생성"
 echo "11. 토픽 제거"
+echo "12. 메뉴 다시 보기"
 echo "=========================="
 
 while true; do
-    echo ""
-    echo "=== Kafka 이벤트 모니터링 ==="
-    echo "0. 종료"
-    echo "1. Docker Compose 시작"
-    echo "2. Docker Compose 정지"
-    echo "3. 모든 토픽 리스트 보기"
-    echo "4. 특정 토픽의 메시지 실시간 모니터링"
-    echo "5. 특정 토픽의 메시지 실시간 모니터링 (처음부터)"
-    echo "6. 특정 토픽의 메시지 히스토리 보기"
-    echo "7. 컨슈머 그룹 리스트 보기"
-    echo "8. 토픽 상세 정보 보기"
-    echo "9. 특정 토픽 재생성"
-    echo "10. 토픽 생성"
-    echo "11. 토픽 제거"
-    echo "12. 메뉴 다시 보기"
-    echo "=========================="
-    read -p "선택하세요 (0-11): " choice
+    read -p "선택하세요 (0-12): " choice
 
     case $choice in
         0)
@@ -210,7 +195,24 @@ while true; do
                 echo "삭제가 취소되었습니다."
             fi
             ;;
-
+        12)
+            # 메뉴 다시 보기
+            echo "=== Kafka 이벤트 모니터링 ==="
+            echo "0. 종료"
+            echo "1. Docker Compose 시작"
+            echo "2. Docker Compose 정지"
+            echo "3. 모든 토픽 리스트 보기"
+            echo "4. 특정 토픽의 메시지 실시간 모니터링"
+            echo "5. 특정 토픽의 메시지 실시간 모니터링 (처음부터)"
+            echo "6. 특정 토픽의 메시지 히스토리 보기"
+            echo "7. 컨슈머 그룹 리스트 보기"
+            echo "8. 토픽 상세 정보 보기"
+            echo "9. 특정 토픽 재생성"
+            echo "10. 토픽 생성"
+            echo "11. 토픽 제거"
+            echo "12. 메뉴 다시 보기"
+            echo "=========================="
+            ;;
         *)
             echo "잘못된 선택입니다."
             ;;
